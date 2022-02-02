@@ -1,8 +1,9 @@
 {
-  "name": "@stoplight/elements-starter-react",
+  "name": "chazki-docs",
   "version": "1.0.0",
-  "description": "Basic React app with embedded Stoplight Elements",
-  "author": "Stoplight <support@stoplight.io>",
+  "description": "API Repository",
+  "homepage": "https://chazki.github.io/chazki-api-bucket/",
+  "author": "",
   "license": "Unlicense",
   "scripts": {
     "start": "react-scripts start",
