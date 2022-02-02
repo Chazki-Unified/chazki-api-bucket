@@ -10,7 +10,7 @@ info:
     # Introduction
     This is a guide and documentation to developers who wants to use the Chazki Chile system's crossdocking features.
     ## Disclaimer
-    This API is deprecated, without support for bugs or new features.
+    <span style="color:red">This API is deprecated, without support for bugs or new features.</span>
 
   # version: 1.0.0
   title: Maximo API

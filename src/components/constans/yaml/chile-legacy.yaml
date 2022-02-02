@@ -11,7 +11,7 @@ info:
     Services that allow maintaining the old integration of Chile with minimal changes.
     To obtain your enterpriseKey you can request it from the commercial area.
     ## Disclaimer
-    This legacy api is available for old clients from Chile, it does not support new features. In case you need more functionalities, it is recommended to use the standard API.
+    <span style="color:red">This legacy api is available for old clients from Chile, it does not support new features. In case you need more functionalities, it is recommended to use the standard API.</span>
 
 
   # version: 1.0.0
