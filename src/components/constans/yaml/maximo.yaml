@@ -1,18 +1,33 @@
 openapi: 3.0.0
 servers:
-  - url: http://api.todovaapp.cl/v3/
+  - url: https://crossdocking.todovaapp.cl/v1
     description: Production server
-  - url: http://apistaging.todovaapp.cl/v2
+  - url: https://crossdocking-staging.todovaapp.cl/v1
     description: Staging server
 info:
   description: |
 
     # Introduction
-    This REST API reference for [Todova.cl Enterprise](http://enterprise.todova.cl) application.  This is a guide and documentation to developers who wants to use the chazki network of drivers for the deliveries. The end point is [http://api.todovaapp.cl/v3](http://api.todovaapp.cl/v3).
-    If you want know how are the services, check [http://api.todovaapp.cl/v3/dependants-ok](http://api.todovaapp.cl/v2/dependants-ok). If you want to test in the development environment you must contact us and use the URL [http://apistaging.todovaapp.cl/v2](http://apistaging.todovaapp.cl/v2).
+    This is a guide and documentation to developers who wants to use the Chazki Chile system's crossdocking features.
+
+    Production service: <a href="https://crossdocking.todovaapp.cl/v1" target="_blank"><code>https://crossdocking.todovaapp.cl/v1</code></a>
+
+    <div
+      style="
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #bce8f1;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;"
+    >
+      If you want to test in the development environment you must contact us and use the
+      URL <a href="https://crossdocking-staging.todovaapp.cl/v1" target="_blank"><code>https://crossdocking-staging.todovaapp.cl/v1</code></a>
+    </div>
 
   # version: 1.0.0
-  title: Aventon API
+  title: Maximo API
   # contact:
   #   name: API Support
   #   email: apiteam@swagger.io
@@ -25,12 +40,60 @@ info:
     url: 'https://opensource.org/licenses/MIT'
 tags:
   - name: Enterprise
-    description: This is the beginning to connect your enterprise with chazki. Enterprise should register with chazki and chazki admin (aventon) will verify and enable the enterprise to use aventon services. Once enterprise are verified, they can consume the API.
+    description: Everything about enterprises
   - name: Packages
     description: Everything about packages
   - name: Warehouses
     description: Everything about Chazki warehouses
+  # - name: Webhook
+  #   description: |
+  #     If you need/want to receive information about package status in real time, the webhook technology is that you need.
 
+  #     <div
+  #       style="
+  #         color: #8a6d3b;
+  #         background-color: #fcf8e3;
+  #         border-color: #bce8f1;
+  #         padding: 15px;
+  #         margin-bottom: 20px;
+  #         border: 1px solid transparent;
+  #         border-radius: 4px;"
+  #     >
+  #       For configuring your <code>webhookUrl</code>, it is necessary to email us to
+  #       <a href="https://crossdocking-staging.todovaapp.cl/v1" target="_blank">random@email.cl</a>
+  #     </div>
+  - name: AddressInfoModel
+    x-displayName: AddressInfo
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/AddressInfo" />
+  - name: DepotModel
+    x-displayName: Depot
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Depot" />
+  - name: WarehouseModel
+    x-displayName: Warehouse
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Warehouse" />
+  - name: PackageModel
+    x-displayName: Package
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Package" />
+  - name: ContactPersonModel
+    x-displayName: ContactPerson
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/ContactPerson" />
+  - name: ImageModel
+    x-displayName: Image
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Image" />
+  - name: ActionModel
+    x-displayName: Action
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Action" />
+  - name: EnterpriseModel
+    x-displayName: Enterprise
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Enterprise" />
 x-tagGroups:
   - name: General
     tags:
@@ -51,32 +114,38 @@ x-tagGroups:
       # - ActionModel
       - EnterpriseModel
 paths:
-  /cloud/shipment/estimate-price/{apiKey}/{roleKey}:
-    post:
+  /cloud/depots/{apiKey}/{roleKey}:
+    get:
       tags:
         - Enterprise
-      summary: Get shipment price
-      description: You can consult prices for a shipment before making it.
-      operationId: getPrice
+      summary: Get depots
+      description: Get all the depots of one enterprise.
+      operationId: getDepots
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - $ref: '#/components/parameters/RoleKey'
-      requestBody:
-        description: ''
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EstimatedPriceRequest'
-
       responses:
         200:
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EstimatedPriceResponse"
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Successful'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Depot'
+        400:
+          $ref: '#/components/requestBodies/Error400'
+        404:
+          $ref: '#/components/requestBodies/Error404'
   /cloud/packages/estimate-price/{apiKey}/{roleKey}:
     post:
       tags:
@@ -415,84 +484,8 @@ components:
               items:
                 type: number
                 format: double
+                length: 2
               example: [-70.7405924, -33.4214201]
-    EstimatedPriceRequest:
-      description: 'Origin enterprise depot'
-      type: object
-      properties:
-        sort:
-          description: 'Return sort order drop off points (found in waypoint_order)'
-          type: boolean
-          example: true
-        pickupCoordinates:
-          description: 'Pickup point [lat, lng]'
-          type: array
-          items:
-            type: number
-            format: float
-          example: [-33.404299, -70.597490]
-        dropoffCoordinates:
-          description: 'Dropoff points [lat, lng]'
-          type: array
-          items:
-            type: array
-            items:
-              type: number
-              format: float
-          example: [[-33.404299, -70.597490], [-33.404299, -70.597490]]
-    EstimatedPriceResponse:
-      description: 'Response of estimate price request'
-      type: object
-      properties:
-        status:
-          type: string
-          example: "success"
-        message:
-          type: string
-          example: "Costo de envío estimado con éxito"
-        data:
-          type: object
-          properties:
-            oneway:
-              type: array
-              items:
-                $ref: '#/components/schemas/ShipmentByVehicle'
-    ShipmentByVehicle:
-      description: 'Shipment calculate by vehicle'
-      type: object
-      properties:
-        deliveryType:
-          description: 'Vehicle'
-          type: string
-          example: 'car'
-          enum:
-            - car
-            - motorcycle
-            - bicycle
-            - walk
-        distance:
-         description: 'shipment distance in meters'
-         type: integer
-         example: 7936
-        duration:
-          description: 'shipment duration in minutes'
-          type: integer
-          example: 6066
-        netPrice:
-          description: 'shipment price'
-          type: integer
-          example: 8879
-        polyline:
-          description: 'shipment route'
-          type: string
-          example: zg{jEjq{mL|BRTFN?PKt@~@zA`Bh@j@VCp@`@t@z@hCtC`Av@d@h@nBxBf@p@tC~C`A`@l@b@^?bATpCv@f@ThCl@xH`B`Bd@hAZB@JBJ@TFZHj@NjBd@r@RD@t@VjAf@pBbAHDUh@cC~FWhAId@`FnE|@x@lCfCbB~Al@r@dAvApD`Gz@tAl@pAt@|Az@xBt@~BzBfKp@~EZfBd@nBr@`Cr@tBdA`ChC`Ej@l@f@Zn@VhGfBvCl@xEjAh@P\\XXRX\\jAxAzBjCPRnBlAhAv@lCdCfAhAvErFzA|BzAhDvA`E|GlQX~@Nz@NnADv@ErCGbBR?P?x@Kj@OVpAn@bDRr@p@hBjBnDZd@tGzJPXD@JAbExGlArBhA`Cb@hAd@dBp@|CTlAx@pF^GRCRbBLjA|BlNPxAZhAh@Ir@Ms@LaAPh@~Bl@zBj@~CNhAmBZt@`GmE`@sAL
-        waypoint_order:
-          description: ''
-          type: array
-          items:
-            type: integer
-          example: [0,2,1]
-
     Depot:
       description: 'Origin enterprise depot'
       type: object
@@ -993,7 +986,7 @@ components:
           example: 'CAJA'
         packageWeight:
           description: 'Package weight '
-          type:number
+          type: float
           example: 0.3
         packageSizeID:
           description: 'Package size  (S, M, L , XL) '
