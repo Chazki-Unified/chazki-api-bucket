@@ -13,7 +13,6 @@ info:
     ## Disclaimer
     <span style="color:red">This legacy api is available for old clients from Chile, it does not support new features. In case you need more functionalities, it is recommended to use the standard API.</span>
 
-
   # version: 1.0.0
   title: Chile Legacy API
   contact:
@@ -967,85 +966,6 @@ components:
               description: 'Email of the user'
               type: string
               example: 'foo@bar.cl'
-    Enterprise:
-      description: 'The enterprise that owns the package'
-      type: object
-      properties:
-        id:
-          description: 'ID of the enterprise'
-          type: string
-          example: '5b4dec48cd811a00014b02d0'
-        rut:
-          description: 'RUT of the enterprise'
-          type: string
-          example: '8214717-9'
-        name:
-          description: 'Name of the enterprise'
-          type: string
-          example: 'enterprise name'
-        phone:
-          description: 'Phone of the enterprise'
-          type: string
-          example: '56223456780'
-        depots:
-          description: 'All the depots that the enterprise has'
-          type: array
-          items:
-            $ref: '#/components/schemas/Depot'
-        crossdockingEnabled:
-          description: 'If the enterprise has crossdocking enabled or not'
-          type: boolean
-          example: true
-        createdAt:
-          description: 'Creation date of the enterprise'
-          type: string
-          example: '2018-07-17T13:16:56.974Z'
-        updatedAt:
-          description: 'Last update date of the enterprise'
-          type: string
-          example: '2021-04-06T14:45:59.734Z'
-    Warehouse:
-      description: 'Chazki warehouse'
-      type: object
-      properties:
-        id:
-          description: 'ID of the warehouse'
-          type: string
-          example: '5b4dec48cd811a00014b02d0'
-        totalArea:
-          description: 'Total area of the warehouse'
-          type: number
-          format: integer
-          example: 50
-        totalVolume:
-          description: 'Total volume of the warehouse'
-          type: number
-          format: integer
-          example: 150
-        createdAt:
-          description: 'Creation date of the warehouse'
-          type: string
-          example: '2020-12-24T11:59:54.791Z'
-        updateAt:
-          description: 'Last update date of the warehouse'
-          type: string
-          example: '2020-12-24T11:59:54.791Z'
-        depot:
-          description: 'Depot information'
-          type: object
-          properties:
-            name:
-              type: string
-              example: 'nombre de la bodega'
-              description: 'Depot name'
-            description:
-              type: string
-              example: 'descripción de la bodega'
-              description: 'Depot description'
-            contactPerson:
-              $ref: '#/components/schemas/ContactPerson'
-            addressInfo:
-              $ref: '#/components/schemas/AddressInfo'
     PersonInfo:
       description: 'Contact person information'
       type: object

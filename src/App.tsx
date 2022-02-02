@@ -22,13 +22,12 @@ class App extends Component {
                         <main className="main-content">
                             <Switch>
                                 <Route exact path="/">
-                                    <Redirect to="/stoplight-docs"/>
+                                    <Redirect to="/tonny"/>
                                 </Route>
                                 <Route path="/maximo" component={MaximoAPI}/>
                                 <Route path="/aventon" component={AventonAPI}/>
                                 <Route path="/chile" component={ChileAPI}/>
                                 <Route path="/tonny" component={TonnyAPI}/>
-                                <Route path="/stoplight-docs" component={StoplightProjectDocs}/>
                                 <Route component={NotFound}/>
                             </Switch>
                         </main>
