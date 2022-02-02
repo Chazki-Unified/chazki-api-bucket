@@ -5,7 +5,7 @@
   "author": "Stoplight <support@stoplight.io>",
   "license": "Unlicense",
   "scripts": {
-    "start": "PORT=4200 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "serve": "serve -s -l 4200 build"
   },
