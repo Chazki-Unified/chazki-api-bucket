@@ -1,0 +1,1173 @@
+openapi: 3.0.0
+servers:
+  - url: http://api.todovaapp.cl/v3/
+    description: Production server
+  - url: http://apistaging.todovaapp.cl/v2
+    description: Staging server
+info:
+  version: 1.0.0
+  description:
+
+    # Introduction
+    This REST API reference for [Todova.cl Enterprise](http://enterprise.todova.cl) application.  This is a guide and documentation to developers who wants to use the chazki network of drivers for the deliveries. The end point is [http://api.todovaapp.cl/v3](http://api.todovaapp.cl/v3).
+    If you want know how are the services, check [http://api.todovaapp.cl/v3/dependants-ok](http://api.todovaapp.cl/v2/dependants-ok). If you want to test in the development environment you must contact us and use the URL [http://apistaging.todovaapp.cl/v2](http://apistaging.todovaapp.cl/v2).
+
+  # version: 1.0.0
+  title: Aventon API
+  contact:
+    name: API Support
+    email: apiteam@swagger.io
+    url: https://github.com/Redocly/redoc
+  x-logo:
+    url: 'https://images.squarespace-cdn.com/content/5beb6423aa49a118ca9e258b/1593202375633-996814ZG57001139V3Z6/Logo-Chazki.png?format=500w&content-type=image%2Fpng'
+    altText: Chazki Logo
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+
+x-tagGroups:
+  - name: General
+    tags:
+      - Shipment
+      - Enterprise
+
+  - name: Webhooks
+    tags:
+      - Webhook
+
+paths:
+  /cloud/shipment/estimate-price/{apiKey}/{roleKey}:
+    post:
+      tags:
+      - Enterprise
+      summary: Get shipment price
+      description: You can consult prices for a shipment before making it.
+      operationId: getPrice
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - $ref: '#/components/parameters/RoleKey'
+      requestBody:
+        description: ''
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstimatedPriceRequest'
+
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EstimatedPriceResponse"
+  /cloud/shipment/create/{apiKey}/{roleKey}:
+    post:
+      tags:
+        - Shipment
+      summary: Create shipment via API
+      description: Once shipment is created successfully, the enterprise client will recieve an tracking email to view shipment tracking which are limited to specific data. And also the success response of shipment will return tracking URL for enterprise to view the shipment tracking. To view full details of tracking and order, enterprise should pass his/her apiKey and roleKey as query params. Read about tracking end point about more details and example of request.
+      operationId: estimatePrice
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - $ref: '#/components/parameters/RoleKey'
+      requestBody:
+        description: ''
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipment'
+
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentDetails'
+  /cloud/shipment/cancel/{shipmentId}/{apiKey}/{roleKey}:
+    delete:
+      tags:
+        - Shipment
+      summary: Cancel shipment
+      description: You can cancel shipment before driver is at pick up location.
+      operationId: cancelPackage
+      parameters:
+        - $ref: '#/components/parameters/shipmentId'
+        - $ref: '#/components/parameters/ApiKey'
+        - $ref: '#/components/parameters/RoleKey'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Cancelación exitosa'
+                  data:
+                    type: string
+                    example: ''
+  /package/{apiKey}/{roleKey}:
+    post:
+      tags:
+        - Shipment
+      summary: Create order via API
+      description: You can also create shipments in an accumulated manner. That is, add them and after a date these are released so that the drivers take it.
+      operationId: packageOrder
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - $ref: '#/components/parameters/RoleKey'
+      requestBody:
+        description: ''
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                communeName:
+                  type: string
+                  example: vitacura,
+                dropoffDirection:
+                  type: string
+                  example: Juan de Escaray 6799, Vitacura, Región Metropolitana, Chile
+                dropoffLandmark:
+                  type: string
+                  example: Al frente de la heladeria,
+                ifUnDeliveredOwnSelf:
+                  type: boolean
+                  example: true
+                invoiceNumber:
+                  type: string
+                  example: 1111111
+                packageReturnCoordinates:
+                  description: 'Coords array in specific order [latitude, longitude] '
+                  type: array
+                  example: [ -33.4214201,-70.7405924 ]
+                pickupCoordinates:
+                  description: 'Coords array in specific order [latitude, longitude] '
+                  type: array
+                  example: [ -33.4214201,-70.7405924 ]
+                requestedDeliveryTypes:
+                  type: array
+                  description: Wished delivery types
+                  items:
+                    type: string
+                    enum:
+                      - motorcycle
+                      - car
+                  example: [ "motorcycle","car" ]
+                packageReturnDirection:
+                  type: string
+                  example: Sancho de la hoz 3431, Vitacura
+                pickupDirection:
+                  type: string
+                  example: Sancho de la hoz 3999, Vitacura
+                pickupLandmark:
+                  type: string
+                  example: Preguntar por Andres
+                pickupScheduledDate:
+                  type: string
+                  example: 2019-09-29T18:37:01-00:00
+                productId:
+                  type: string
+                  example: 1
+                productName:
+                  type: string
+                  example: 1
+                productWeight:
+                  type: string
+                  example: 1
+                receiverEmail:
+                  type: string
+                  example: example@todova.cl
+                receiverName:
+                  type: string
+                  example: Hector
+                receiverPhone:
+                  type: string
+                  example: +56999999999
+                receiverRut:
+                  type: string
+                  example: 2699999999-k
+                requestType:
+                  type: string
+                  example: oneway
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentDetails'
+
+  /{webhookUrl}/:state:
+    post:
+      tags:
+        - Webhook
+      summary: Webhook for order events
+      description: Webhook for order events
+      operationId: getDepots
+      parameters:
+        - $ref: '#/components/parameters/WebhookUrl'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customer:
+                    $ref: '#/components/schemas/Profile'
+                  driver:
+                    $ref: '#/components/schemas/Profile'
+                  shipment:
+                    $ref: '#/components/schemas/Shipment'
+components:
+  parameters:
+    shipmentId:
+      in: path
+      name: "packageId"
+      description: "ID of the package that you want to get"
+      required: true
+      schema:
+        type: string
+        example: "601570ffe0f18cc238de813f"
+    ApiKey:
+      in: path
+      name: "apiKey"
+      description: "Your api key as enterprise"
+      required: true
+      schema:
+        type: string
+        example: "bz1oah290g8hp53h2pq9"
+    RoleKey:
+      in: path
+      name: "roleKey"
+      description: "Your role key as enterprise"
+      required: true
+      schema:
+        type: string
+        example: "b0av4ith0g8mp1tr9q93"
+    WebhookUrl:
+      in: path
+      name: "webhookUrl"
+      description: "Your webhook url"
+      required: true
+      schema:
+        type: string
+        example: 'https://someurl.webhook.com/event'
+  schemas:
+    AddressInfo:
+      description: 'Address information'
+      type: object
+      properties:
+        fullname:
+          description: 'Full depot address'
+          type: string
+          example: 'Huelen, Cerro Navia, Región Metropolitana, Chile'
+        h3:
+          description: 'H3 related to the depot address'
+          type: string
+          example: '87eee459effffff'
+        shortname:
+          description: 'Short depot address'
+          type: string
+          example: 'Huelen'
+        street:
+          description: 'The street where is located the depot address'
+          type: string
+          example: 'Huelen'
+        number:
+          description: 'Number of the street'
+          type: number
+          format: integer
+          example: 3431
+        country:
+          description: 'The country where is located the depot address'
+          type: string
+          example: 'CL'
+        municipality:
+          description: 'The commune where is located the depot address'
+          type: string
+          example: 'Cerro Navia'
+        province:
+          description: 'The city where is located the depot address'
+          type: string
+          example: 'Santiago'
+        location:
+          description: 'Coordinates related to the depot address [LNG, LAT]'
+          type: object
+          properties:
+            type:
+              type: string
+              example: 'Point'
+            coordinates:
+              type: array
+              items:
+                type: number
+                format: double
+              example: [-70.7405924, -33.4214201]
+    EstimatedPriceRequest:
+      description: 'Origin enterprise depot'
+      type: object
+      properties:
+        sort:
+          description: 'Return sort order drop off points (found in waypoint_order)'
+          type: boolean
+          example: true
+        pickupCoordinates:
+          description: 'Pickup point [lat, lng]'
+          type: array
+          items:
+            type: number
+            format: float
+          example: [-33.404299, -70.597490]
+        dropoffCoordinates:
+          description: 'Dropoff points [lat, lng]'
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+              format: float
+          example: [[-33.404299, -70.597490], [-33.404299, -70.597490]]
+    EstimatedPriceResponse:
+      description: 'Response of estimate price request'
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        message:
+          type: string
+          example: "Costo de envío estimado con éxito"
+        data:
+          type: object
+          properties:
+            oneway:
+              type: array
+              items:
+                $ref: '#/components/schemas/ShipmentByVehicle'
+    ShipmentByVehicle:
+      description: 'Shipment calculate by vehicle'
+      type: object
+      properties:
+        deliveryType:
+          description: 'Vehicle'
+          type: string
+          example: 'car'
+          enum:
+            - car
+            - motorcycle
+            - bicycle
+            - walk
+        distance:
+         description: 'shipment distance in meters'
+         type: integer
+         example: 7936
+        duration:
+          description: 'shipment duration in minutes'
+          type: integer
+          example: 6066
+        netPrice:
+          description: 'shipment price'
+          type: integer
+          example: 8879
+        polyline:
+          description: 'shipment route'
+          type: string
+          example: zg{jEjq{mL|BRTFN?PKt@~@zA`Bh@j@VCp@`@t@z@hCtC`Av@d@h@nBxBf@p@tC~C`A`@l@b@^?bATpCv@f@ThCl@xH`B`Bd@hAZB@JBJ@TFZHj@NjBd@r@RD@t@VjAf@pBbAHDUh@cC~FWhAId@`FnE|@x@lCfCbB~Al@r@dAvApD`Gz@tAl@pAt@|Az@xBt@~BzBfKp@~EZfBd@nBr@`Cr@tBdA`ChC`Ej@l@f@Zn@VhGfBvCl@xEjAh@P\\XXRX\\jAxAzBjCPRnBlAhAv@lCdCfAhAvErFzA|BzAhDvA`E|GlQX~@Nz@NnADv@ErCGbBR?P?x@Kj@OVpAn@bDRr@p@hBjBnDZd@tGzJPXD@JAbExGlArBhA`Cb@hAd@dBp@|CTlAx@pF^GRCRbBLjA|BlNPxAZhAh@Ir@Ms@LaAPh@~Bl@zBj@~CNhAmBZt@`GmE`@sAL
+        waypoint_order:
+          description: ''
+          type: array
+          items:
+            type: integer
+          example: [0,2,1]
+
+    Depot:
+      description: 'Origin enterprise depot'
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'nombre de la bodega'
+          description: 'Depot name'
+        description:
+          type: string
+          example: 'descripción de la bodega'
+          description: 'Depot description'
+        contactPerson:
+          $ref: '#/components/schemas/ContactPerson'
+        addressInfo:
+          $ref: '#/components/schemas/AddressInfo'
+    PackageWebhook:
+      type: object
+      properties:
+        id:
+          description: 'Package ID'
+          type: string
+          example: '601570ffe0f18cc238de813f'
+        enterpriseId:
+          description: 'ID of the enterprise who owns the package'
+          type: string
+          example: '5b4dec48cd811a00014b02d0'
+        warehouseId:
+          description: 'ID of the Chazki warehouse where will arrive'
+          type: string
+          example: '5fe4b142ed6cc2af9bf82d7b'
+        shipmentId:
+          description: 'ID of the shipment that will deliver the package'
+          type: string
+          example: '601570ffe0f18d2238de813a'
+        warehouseLocation:
+          description: 'The location where is the package in our warehouse'
+          type: string
+          example: 'a345'
+        inputSource:
+          description: 'The way of how Chazki received the package'
+          type: string
+          example: 'csv'
+        invoiceNumber:
+          description: 'Invoice number of the package. If there is more than one package with the same `originalInvoiceNumber` this value will have a suffix separated by a dash'
+          type: string
+          example: '13345-1'
+        originalInvoiceNumber:
+          description: 'Invoice number of the package'
+          type: string
+          example: '13345'
+        productName:
+          description: 'Name of the product'
+          type: string
+          example: 'CAJA'
+        productDescription:
+          description: 'Description of the product'
+          type: string
+          example: ''
+        productWeight:
+          description: 'Weight of the product'
+          type: number
+          format: float
+          example: 12.1
+        productSize:
+          description: 'Size of the product'
+          type: string
+          example: 'S'
+        productVolume:
+          description: 'Volume of the product'
+          type: string
+          format: float
+          example: 2.3
+        productQty:
+          description: 'Quantity of products'
+          type: number
+          format: integer
+          example: 1
+        ifUnDeliveredOwnSelf:
+          description: 'Set true if driver need to return package in case failed to deliver package'
+          type: boolean
+          example: false
+        packageType:
+          description: 'Type of package'
+          type: string
+          example: 'normal-logistic'
+        state:
+          description: 'Current state of the package'
+          type: string
+          example: 'canceled_by_customer'
+        withdrawalDate:
+          description: 'Withdraw date of the package'
+          type: string
+          example: '2021-01-20T05:00:00Z'
+        deliveryDate:
+          description: 'Delivery date of the package'
+          type: string
+          example: '2021-01-20T05:00:00Z'
+        metadata:
+          description: 'Extra data. If you need to add some data for your system like AUTH, use this field'
+          type: object
+          example: null
+        createdAt :
+          description: 'Creation date of the package'
+          type: string
+          example: '2021-01-30T14:45:19.889Z'
+        updatedAt:
+          description: 'Last update date of the package'
+          type: string
+          example: '2021-04-04T17:37:40.256Z'
+        actionHistory:
+          description: 'All the states of the package'
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        receiverContact:
+          $ref: '#/components/schemas/ContactPerson'
+        packageReceiver:
+          $ref: '#/components/schemas/ReceiverInfo'
+        dropoffInfo:
+          $ref: '#/components/schemas/DropoffInfo'
+        depotOrigin:
+          $ref: '#/components/schemas/Depot'
+    DropoffInfo:
+      description: 'Dropoff info of the package'
+      type: object
+      properties:
+        originalFullname:
+          type: string
+          example: 'Pasaje Catipay 465 MAIPU'
+        fullname:
+          description: 'Full depot address'
+          type: string
+          example: 'Catipay 465, Maipú, Región Metropolitana, Chile'
+        h3:
+          description: 'H3 related to the depot address'
+          type: string
+          example: '87b2c540dffffff'
+        shortname:
+          description: 'Short depot address'
+          type: string
+          example: 'Catipay 465, Maipú, Región Metropolitana, Chile'
+        street:
+          description: 'The street where is located the depot address'
+          type: string
+          example: 'Catipay'
+        number:
+          description: 'Number of the street'
+          type: number
+          format: integer
+          example: 465
+        country:
+          description: 'The country where is located the depot address'
+          type: string
+          example: 'CL'
+        municipality:
+          description: 'The commune where is located the depot address'
+          type: string
+          example: 'Maipú'
+        province:
+          description: 'The city where is located the depot address'
+          type: string
+          example: 'Santiago'
+        region:
+          description: 'The region where is located the depot address'
+          type: string
+          example: 'Región Metropolitana'
+        location:
+          description: 'Coordinates related to the depot address'
+          type: object
+          properties:
+            type:
+              type: string
+              example: 'Point'
+            coordinates:
+              type: array
+              items:
+                type: number
+                format: double
+              example: [-70.7405924, -33.4214201]
+    CreateShipment:
+      type: object
+      properties:
+        pickupScheduledDate:
+          type: string
+          description: pickup scheduled date in utc
+          example: ""
+        shipmentBillingCase:
+          type: string
+          description: Set plan different from the default
+          example: ""
+        pickupCoordinates:
+          type: array
+          description: Pick up location [Lat, Lng]
+          example: [-33.4002761, -70.5753999]
+        requestedDeliveryTypes:
+          type: array
+          description: Wished delivery types
+          items:
+            type: string
+            enum:
+            - motorcycle
+            - car
+          example: ["motorcycle","car"]
+        shipmentImage:
+          type: string
+          description: Shipment description image (url)
+          example: http://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
+        pickupDirection:
+          type: string
+          description: Pick up location address
+          example: Portage Circle 95
+        requestType:
+          type: string
+          description: Request type for shipment
+          example: oneway
+        shipmentDesc:
+          type: string
+          description: Shipment description text
+          example: some items
+        pickupLandmark:
+          type: string
+          description: Pick up land mark information to find easily
+          example: some door 1234
+        metadata:
+          type: object
+          description: If you need to add some data for your system like AUTH, use this field
+          example: {}
+        packages:
+          description: Product weight in grams
+          type: array
+          items:
+            type: object
+            properties:
+              invoiceNumber:
+                description: Invoice number of the product
+                type: string
+                example: 56746873470
+              productName:
+                description: Product name
+                type: string
+                example: Remote Tag Adapter
+              receiverName:
+                description: Receiver name
+                type: string
+                example: Noemi L Ramirez
+              receiverRut:
+                description: Receiver chilean RUT
+                type: string
+                example: 11.372.238-k
+              dropoffLandmark:
+                description: Drop off land mark information to find easily
+                type: string
+                example: some door number 294
+              dispatchOrder:
+                description: Dispatch order to package send
+                type: integer
+                example: 1
+              productQty:
+                description: Product quantity
+                type: integer
+                example: 2
+              receiverPhone:
+                description: Receiver phone
+                type: string
+                example: 56287654321
+              receiverEmail:
+                description: Receiver email(optional but is recommended to send tracking url)
+                type: string
+                example: nPorter@Bubblemix.mil,anotheremail@domain.com
+              dropoffDirection:
+                description: Drop off location address
+                type: string
+                example: Anderson Crossing 31
+              pickupCoordinates:
+                type: array
+                description: Drop off location [Lat, Lng]
+                example: [-33.4524225, -70.6241109]
+              ifUnDeliveredOwnSelf:
+                description: Drop off location address
+                type: boolean
+                example: false
+    ShipmentDetails:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Successfull
+        data:
+          type: object
+          properties:
+            customer:
+              $ref: '#/components/schemas/Profile'
+            driver:
+              $ref: '#/components/schemas/Profile'
+            shipment:
+              $ref: '#/components/schemas/Shipment'
+    Shipment:
+      type: object
+      properties:
+        activeDeliveryType:
+          type: string
+          example: ""
+        createdTime:
+          type: string
+          example: 2018-07-18T10:59:21.536432809-04:00
+        customerPrice:
+          type: integer
+          example: 0
+        id:
+          type: string
+          example: 5b4f55c92487061e6cb1cf46
+        packageReturnInfo:
+          $ref: '#/components/schemas/PackageReturnInfo'
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Packages'
+        pickupInfo:
+          $ref: '#/components/schemas/PackageReturnInfo'
+        pickupScheduledDate:
+          type: string
+          example: 0001-01-01T00:00:00Z
+        requestState:
+          type: string
+          example: pending
+        requestType:
+          type: string
+          example: oneway
+        shipmentImage:
+          type: string
+          example: http://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
+        travelDistance:
+          type: number
+          format: float
+          example: 0,
+        travelTime:
+          type: number
+          format: float
+          example: 0
+    Profile:
+      type: object
+      properties:
+        email:
+          type: string
+          example: a@a.com
+        firstName:
+          type: string
+          example: Enterprise TodoVa
+        lastName:
+          type: string
+          example: ""
+        phone:
+          type: string
+          example: +56987654321
+        profileImage:
+          type: string
+          example: https://todovadocs.s3-sa-east-1.amazonaws.com/docs/b8a2fd21hljg00a3ujl0.jpeg
+        rating:
+          type: object
+          properties:
+            average:
+              type: number
+              example: 4.4
+            itemsCount:
+              type: integer
+              example: 406
+    Packages:
+      type: object
+      properties:
+        createdBy:
+          type: string
+          example: customer
+        dispatchOrder:
+          type: integer
+          example: 1
+        invoiceNumber:
+          type: string
+          example: 56746873470
+        productId:
+          type: string
+          example: ''
+        productName:
+          type: string
+          example: Remote Tag Adapter
+        productWeight:
+          type: number
+          format: float
+          example: 0
+        productQty:
+          type: number
+          example: 1
+        productDelicacy:
+          type: string
+          example: ''
+        productPriority:
+          type: string
+          example: ''
+        receiverContact:
+          $ref: '#/components/schemas/ContactPerson'
+        packageReceiver:
+          $ref: '#/components/schemas/ContactPerson'
+        dropoffInfo:
+          $ref: '#/components/schemas/PackageReturnInfo'
+        requestState:
+          type: string
+          example: queued_up
+        timeAtPackageEnded:
+          type: string
+          example: 0001-01-01T00:00:00Z
+        actionHistory:
+          type: array
+          example: null
+        ifUnDeliveredOwnSelf:
+          type: boolean
+          example: false
+        comments:
+          type: string
+          example: ''
+        supportImages:
+          type: string
+          example: ''
+        driverAccounting:
+          $ref: '#/components/schemas/AccountingInfo'
+        customerAccounting:
+          $ref: '#/components/schemas/AccountingInfo'
+        driverReview:
+          $ref: '#/components/schemas/ReviewInfo'
+        serviceReview:
+          $ref: '#/components/schemas/ReviewInfo'
+    ReviewInfo:
+      type: object
+      properties:
+        rating:
+          type: number
+          format: float
+          example: 0
+        comment:
+          type: string
+          example: ''
+    AccountingInfo:
+      type: object
+      properties:
+        waitingTime:
+          type: number
+          format: float
+          example: 0,
+        parkingValue:
+          type: number
+          format: float
+          example: 0,
+        tollValue:
+          type: number
+          format: float
+          example: 0,
+        adjustment:
+          type: number
+          format: float
+          example: 0,
+        notes:
+          type: string
+          example: ""
+    PackageReturnInfo:
+      type: object
+      properties:
+        uniqueId:
+          type: string
+          example: ''
+        shortName:
+          type: string
+          example: ''
+        direction:
+          type: string
+          example: Portage Circle 95
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              example: "Point"
+            coordinates:
+              type: array
+              items:
+                type: integer
+              example: [ -70.5753948,-33.4002761 ]
+        landMark:
+          type: string
+          example: some door 1234
+        placeId:
+          type: string
+          example: ''
+        time:
+          type: string
+          example: '0001-01-01T00:00:00Z'
+
+    ContactPerson:
+      description: 'Contact person information'
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Foo Bar'
+          description: 'Contact person name'
+        phone:
+          type: string
+          example: '56123456789'
+          description: 'Contact person phone'
+        email:
+          type: string
+          example: 'foo@bar.cl'
+          description: 'Contact person email'
+        rut:
+          type: string
+          example: '13001067-9'
+          description: 'Contact person RUT'
+    ReceiverInfo:
+      description: 'Receiver info of the package'
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Foo Bar'
+          description: 'Contact person name'
+        phone:
+          type: string
+          example: '56123456789'
+          description: 'Contact person phone'
+        email:
+          type: string
+          example: 'foo@bar.cl'
+          description: 'Contact person email'
+        rut:
+          type: string
+          example: '13001067-9'
+          description: 'Contact person RUT'
+        supportImages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+    Image:
+      type: object
+      properties:
+        imageType:
+          type: string
+          example: 'other_image'
+        imageUrl:
+          type: string
+          example: 'https://todovadocs.s3.sa-east-1.amazonaws.com/docs/other_image.jpeg'
+    Action:
+      type: object
+      properties:
+        action:
+          description: 'State type of the package'
+          type: string
+          example: 'created'
+        time:
+          description: 'Date when was changed to the state'
+          type: string
+          example: '2021-01-30T14:45:19.889Z'
+        whichParticularUser:
+          description: 'User responsible for changing status'
+          type: object
+          properties:
+            userId:
+              description: 'The user ID'
+              type: string
+              example: '5faaa770c5686640f8319cec'
+            userType:
+              description: 'The user type'
+              type: string
+              example: 'admin'
+            firstname:
+              description: 'First name of the user'
+              type: string
+              example: 'Foo'
+            lastname:
+              description: 'Last name of the user'
+              type: string
+              example: 'Bar'
+            email:
+              description: 'Email of the user'
+              type: string
+              example: 'foo@bar.cl'
+    Enterprise:
+      description: 'The enterprise that owns the package'
+      type: object
+      properties:
+        id:
+          description: 'ID of the enterprise'
+          type: string
+          example: '5b4dec48cd811a00014b02d0'
+        rut:
+          description: 'RUT of the enterprise'
+          type: string
+          example: '8214717-9'
+        name:
+          description: 'Name of the enterprise'
+          type: string
+          example: 'enterprise name'
+        phone:
+          description: 'Phone of the enterprise'
+          type: string
+          example: '56223456780'
+        depots:
+          description: 'All the depots that the enterprise has'
+          type: array
+          items:
+            $ref: '#/components/schemas/Depot'
+        crossdockingEnabled:
+          description: 'If the enterprise has crossdocking enabled or not'
+          type: boolean
+          example: true
+        createdAt:
+          description: 'Creation date of the enterprise'
+          type: string
+          example: '2018-07-17T13:16:56.974Z'
+        updatedAt:
+          description: 'Last update date of the enterprise'
+          type: string
+          example: '2021-04-06T14:45:59.734Z'
+    Warehouse:
+      description: 'Chazki warehouse'
+      type: object
+      properties:
+        id:
+          description: 'ID of the warehouse'
+          type: string
+          example: '5b4dec48cd811a00014b02d0'
+        totalArea:
+          description: 'Total area of the warehouse'
+          type: number
+          format: integer
+          example: 50
+        totalVolume:
+          description: 'Total volume of the warehouse'
+          type: number
+          format: integer
+          example: 150
+        createdAt:
+          description: 'Creation date of the warehouse'
+          type: string
+          example: '2020-12-24T11:59:54.791Z'
+        updateAt:
+          description: 'Last update date of the warehouse'
+          type: string
+          example: '2020-12-24T11:59:54.791Z'
+        depot:
+          description: 'Depot information'
+          type: object
+          properties:
+            name:
+              type: string
+              example: 'nombre de la bodega'
+              description: 'Depot name'
+            description:
+              type: string
+              example: 'descripción de la bodega'
+              description: 'Depot description'
+            contactPerson:
+              $ref: '#/components/schemas/ContactPerson'
+            addressInfo:
+              $ref: '#/components/schemas/AddressInfo'
+    PersonInfo:
+      description: 'Contact person information'
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Foo Bar'
+          description: 'Contact person name'
+        phone:
+          type: string
+          example: '56123456789'
+          description: 'Contact person phone'
+        email:
+          type: string
+          example: 'foo@bar.cl'
+          description: 'Contact person email'
+  requestBodies:
+    Error400:
+      description: 'Bad request'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: 'error'
+              message:
+                type: string
+                example: 'Error message (why was a bad request)'
+              data:
+                type: object
+    Error404:
+      description: 'Not found'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: 'error'
+              message:
+                type: string
+                example: 'Error message (why was not found)'
+              data:
+                type: object
+x-webhooks:
+  updateState:
+    get:
+      summary: Webhook Receive
+      description: |
+        If you need/want to receive information about package status in real time, the webhook technology is that you need.
+
+        <div
+          style="
+            color: #8a6d3b;
+            background-color: #fcf8e3;
+            border-color: #bce8f1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;"
+        >
+          For configuring your <code>webhookUrl</code>, it is necessary send an email to Chazki
+        </div>
+
+        Once your api url is configured in the Chazki system, every
+        time the status of a package has changed, you should receive
+        an http request from our system, which will contain the
+        latest information for the package.
+
+        ### Package states
+
+        | State                   | Description                                |
+        | :---------------------: | ----------------------------------------------------------------------- |
+        |  to_witndrawal          | The package will be withdrawn                                           |
+        |  to_assign_location     | The package is being located in our warehouse                           |
+        |  warehouse_queue_up     | The package is in our warehouse and has an incidence                    |
+        |  returning_to_customer  | The package is returning to customer                                    |
+        |  returned_to_customer   | The package was returned to customer                                    |
+        |  warehouse_stored       | The package was stored in our warehouse                                 |
+        |  queued_up              | The package was assigned to one shipment and is waiting to be delivered |
+        |  dispatched             | The package was dispatched and it's ready to start the shipment         |
+        |  shipping_initiated     | The package started to be delivered                                     |
+        |  failed_at_reception    | The package failed at reception                                         |
+        |  discarded_at_reception | The package was discarded at reception                                  |
+        |  inventory_queue_up     | The package is in inventory and has an incidence                        |
+        |  failed_and_returned    | The package failed and was returned                                     |
+        |  delivered_liquidated   | The package delivery has been confirmed                                               |
+        |  cancelled_by_customer  | The package was cancelled by customer                                   |
+        |  at_dropoff             | The package has arrived to its drop off point                           |
+        |  delivered              | The package was delivered successfully                                  |
+        |  failed_to_deliver      | The package failed and couldn't be delivered                            |
+
+        ### Chazki HTTP Request
+
+        `POST {webhookUrl}/:state`
+
+      operationId: updateState
+      tags:
+        - Webhook
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackageWebhook'
+        400:
+          $ref: '#/components/requestBodies/Error400'
+        404:
+          $ref: '#/components/requestBodies/Error404'
