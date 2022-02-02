@@ -1,9 +1,9 @@
 openapi: 3.0.0
 servers:
-  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations/api/legacy/chile/shipment/create
-    description: Production server
-  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/chile/shipment/create
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/chile
     description: Development server
+  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations/api/legacy/chile
+    description: Production server
 info:
   version: 1.0.0
   description:
@@ -36,13 +36,15 @@ x-tagGroups:
       - Webhook
 
 paths:
-  /cloud/shipment/estimate-price/{apiKey}/{roleKey}:
+  /shipment/estimate-price:
     post:
       tags:
       - Enterprise
       summary: Get shipment price
       description: You can consult prices for a shipment before making it.
       operationId: getPrice
+      parameters:
+        - $ref: '#/components/parameters/enterpiseKey'
       requestBody:
         description: ''
         required: true
@@ -58,13 +60,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EstimatedPriceResponse"
-  /cloud/shipment/create/{apiKey}/{roleKey}:
+  /shipment/create:
     post:
       tags:
         - Shipment
       summary: Create shipment via API
       description: Once shipment is created successfully, the enterprise client will recieve an tracking email to view shipment tracking which are limited to specific data. And also the success response of shipment will return tracking URL for enterprise to view the shipment tracking. To view full details of tracking and order, enterprise should pass his/her apiKey and roleKey as query params. Read about tracking end point about more details and example of request.
-      operationId: estimatePrice
+      operationId: createShipment
+      parameters:
+        - $ref: '#/components/parameters/enterpiseKey'
       requestBody:
         description: ''
         required: true
@@ -80,7 +84,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShipmentDetails'
-  /cloud/shipment/cancel/{shipmentId}/{apiKey}/{roleKey}:
+  /shipment/cancel/{invoiceNumber}:
     delete:
       tags:
         - Shipment
@@ -88,9 +92,9 @@ paths:
       description: You can cancel shipment before driver is at pick up location.
       operationId: cancelPackage
       parameters:
-        - $ref: '#/components/parameters/shipmentId'
-        - $ref: '#/components/parameters/ApiKey'
-        - $ref: '#/components/parameters/RoleKey'
+        - $ref: '#/components/parameters/enterpiseKey'
+        - $ref: '#/components/parameters/trackCodeId'
+
       responses:
         200:
           description: Successful operation
@@ -108,96 +112,96 @@ paths:
                   data:
                     type: string
                     example: ''
-  /package/{apiKey}/{roleKey}:
-    post:
-      tags:
-        - Shipment
-      summary: Create order via API
-      description: You can also create shipments in an accumulated manner. That is, add them and after a date these are released so that the drivers take it.
-      operationId: packageOrder
-      requestBody:
-        description: ''
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                communeName:
-                  type: string
-                  example: vitacura,
-                dropoffDirection:
-                  type: string
-                  example: Juan de Escaray 6799, Vitacura, Región Metropolitana, Chile
-                dropoffLandmark:
-                  type: string
-                  example: Al frente de la heladeria,
-                ifUnDeliveredOwnSelf:
-                  type: boolean
-                  example: true
-                invoiceNumber:
-                  type: string
-                  example: 1111111
-                packageReturnCoordinates:
-                  description: 'Coords array in specific order [latitude, longitude] '
-                  type: array
-                  example: [ -33.4214201,-70.7405924 ]
-                pickupCoordinates:
-                  description: 'Coords array in specific order [latitude, longitude] '
-                  type: array
-                  example: [ -33.4214201,-70.7405924 ]
-                requestedDeliveryTypes:
-                  type: array
-                  description: Wished delivery types
-                  items:
-                    type: string
-                    enum:
-                      - motorcycle
-                      - car
-                  example: [ "motorcycle","car" ]
-                packageReturnDirection:
-                  type: string
-                  example: Sancho de la hoz 3431, Vitacura
-                pickupDirection:
-                  type: string
-                  example: Sancho de la hoz 3999, Vitacura
-                pickupLandmark:
-                  type: string
-                  example: Preguntar por Andres
-                pickupScheduledDate:
-                  type: string
-                  example: 2019-09-29T18:37:01-00:00
-                productId:
-                  type: string
-                  example: 1
-                productName:
-                  type: string
-                  example: 1
-                productWeight:
-                  type: string
-                  example: 1
-                receiverEmail:
-                  type: string
-                  example: example@todova.cl
-                receiverName:
-                  type: string
-                  example: Hector
-                receiverPhone:
-                  type: string
-                  example: +56999999999
-                receiverRut:
-                  type: string
-                  example: 2699999999-k
-                requestType:
-                  type: string
-                  example: oneway
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShipmentDetails'
+#  /package:
+#    post:
+#      tags:
+#        - Shipment
+#      summary: Create order via API
+#      description: You can also create shipments in an accumulated manner. That is, add them and after a date these are released so that the drivers take it.
+#      operationId: packageOrder
+#      requestBody:
+#        description: ''
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              properties:
+#                communeName:
+#                  type: string
+#                  example: vitacura,
+#                dropoffDirection:
+#                  type: string
+#                  example: Juan de Escaray 6799, Vitacura, Región Metropolitana, Chile
+#                dropoffLandmark:
+#                  type: string
+#                  example: Al frente de la heladeria,
+#                ifUnDeliveredOwnSelf:
+#                  type: boolean
+#                  example: true
+#                invoiceNumber:
+#                  type: string
+#                  example: 1111111
+#                packageReturnCoordinates:
+#                  description: 'Coords array in specific order [latitude, longitude] '
+#                  type: array
+#                  example: [ -33.4214201,-70.7405924 ]
+#                pickupCoordinates:
+#                  description: 'Coords array in specific order [latitude, longitude] '
+#                  type: array
+#                  example: [ -33.4214201,-70.7405924 ]
+#                requestedDeliveryTypes:
+#                  type: array
+#                  description: Wished delivery types
+#                  items:
+#                    type: string
+#                    enum:
+#                      - motorcycle
+#                      - car
+#                  example: [ "motorcycle","car" ]
+#                packageReturnDirection:
+#                  type: string
+#                  example: Sancho de la hoz 3431, Vitacura
+#                pickupDirection:
+#                  type: string
+#                  example: Sancho de la hoz 3999, Vitacura
+#                pickupLandmark:
+#                  type: string
+#                  example: Preguntar por Andres
+#                pickupScheduledDate:
+#                  type: string
+#                  example: 2019-09-29T18:37:01-00:00
+#                productId:
+#                  type: string
+#                  example: 1
+#                productName:
+#                  type: string
+#                  example: 1
+#                productWeight:
+#                  type: string
+#                  example: 1
+#                receiverEmail:
+#                  type: string
+#                  example: example@todova.cl
+#                receiverName:
+#                  type: string
+#                  example: Hector
+#                receiverPhone:
+#                  type: string
+#                  example: +56999999999
+#                receiverRut:
+#                  type: string
+#                  example: 2699999999-k
+#                requestType:
+#                  type: string
+#                  example: oneway
+#      responses:
+#        200:
+#          description: Successful operation
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/ShipmentDetails'
 
   /{webhookUrl}/:state:
     post:
@@ -205,7 +209,7 @@ paths:
         - Webhook
       summary: Webhook for order events
       description: Webhook for order events
-      operationId: getDepots
+      operationId: sendEvent
       parameters:
         - $ref: '#/components/parameters/WebhookUrl'
       responses:
@@ -224,30 +228,21 @@ paths:
                     $ref: '#/components/schemas/Shipment'
 components:
   parameters:
-    shipmentId:
+    enterpiseKey:
+      in: header
+      name: enterprise-key
+      required: true
+      schema:
+          type: string
+          example: "e0ecd4a1-bbb2-4753-8862-2fb3572aa8ae"
+    trackCodeId:
       in: path
-      name: "packageId"
-      description: "ID of the package that you want to get"
+      name: "invoiceNumber"
+      description: "Invoice number of the package that you want to get"
       required: true
       schema:
         type: string
         example: "601570ffe0f18cc238de813f"
-    ApiKey:
-      in: path
-      name: "apiKey"
-      description: "Your api key as enterprise"
-      required: true
-      schema:
-        type: string
-        example: "bz1oah290g8hp53h2pq9"
-    RoleKey:
-      in: path
-      name: "roleKey"
-      description: "Your role key as enterprise"
-      required: true
-      schema:
-        type: string
-        example: "b0av4ith0g8mp1tr9q93"
     WebhookUrl:
       in: path
       name: "webhookUrl"
