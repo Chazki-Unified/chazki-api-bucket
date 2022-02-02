@@ -7,6 +7,7 @@ import { NotFound } from './components/NotFound';
 import { StoplightProjectDocs } from './components/StoplightProject';
 import {MaximoAPI} from "./components/MaximoAPI";
 import {AventonAPI} from "./components/AventonAPI";
+import {ChileAPI} from "./components/ChileLegacyAPI";
 
 class App extends Component {
   render() {
@@ -22,9 +23,9 @@ class App extends Component {
                 <Route exact path="/">
                   <Redirect to="/stoplight-docs" />
                 </Route>
-                {/*<Route path="/zoom-api" component={Zoom} />*/}
                 <Route path="/maximo" component={MaximoAPI} />
                 <Route path="/aventon" component={AventonAPI} />
+                <Route path="/chile" component={ChileAPI} />
                 <Route path="/stoplight-docs" component={StoplightProjectDocs} />
                 <Route component={NotFound} />
               </Switch>
