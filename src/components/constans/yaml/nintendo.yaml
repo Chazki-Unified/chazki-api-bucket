@@ -1,0 +1,1475 @@
+---
+openapi: 3.0.0
+info:
+  title: API Chazki
+  description: |
+    In order to place orders for Chazki's services, endpoints were enabled to record the delivery and check the orders status. These services are registered in the domain owned by chazki and are detailed in the section below.
+    Find out more about [Chazki here](https://chazki.com/#/).
+    See also our
+  termsOfService: https://chazki.com/tyc.html
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net
+    description: Chazki server
+tags:
+  - name: WebServices
+    description: List of endpoints for register and consult of the orders status.
+  - name: PDFServices
+    description: PDF creator endpoints.
+  - name: CSVEndpoints
+    description: List of endpoints for CSV file processing methods
+  - name: PDFAtariServices
+    description: PDF creator endpoints.
+paths:
+  "/fnTrackOrderChazkiPosition":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to see all the Chazki movements and the delivery
+        state.
+      operationId: fnTrackOrderChazkiPosition
+      parameters:
+        - name: code
+          in: query
+          description: Delivery track code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseKey
+          in: query
+          description: Client unique authorization code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  position:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                        example: -12.046502
+                      longitude:
+                        type: number
+                        example: -77.042716
+                  status:
+                    type: number
+                    example: ASSIGNED
+                  timestamp:
+                    type: string
+                    example: "2020-04-30T00:00:00.000Z"
+                  rd:
+                    type: string
+                    example: Nombre repartidor
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  "/fnOrderHistorialPublic":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to see all the states the delivery passed group
+        by services.The services group reference the number of attempts made to deliver
+        the delivery.
+      operationId: fnOrderHistorialPublic
+      parameters:
+        - name: code
+          in: query
+          description: Delivery track code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseKey
+          in: query
+          description: Client unique authorization code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  descriptionResponse:
+                    type: string
+                    example: SUCCESS
+                  message:
+                    type: string
+                    example: ""
+                  service:
+                    type: array
+                    items:
+                      type: object
+                      "$ref": "#/components/schemas/Service"
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  "/fnOrderHistorialPrivate":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to see all the states the delivery passed through.The
+        number of the attempt made to deliver the delivery is shown in each change
+        of status.
+      operationId: fnOrderHistorialPrivate
+      parameters:
+        - name: code
+          in: query
+          description: Delivery track code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseKey
+          in: query
+          description: Client unique authorization code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  descriptionResponse:
+                    type: string
+                    example: SUCCESS
+                  message:
+                    type: string
+                    example: ""
+                  service:
+                    type: array
+                    items:
+                      type: object
+                      "$ref": "#/components/schemas/Service"
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  "/fnOrderImages":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allow us to see the pictures taken by the chazki at the
+        delivery momment.
+      operationId: fnOrderImages
+      parameters:
+        - name: code
+          in: query
+          description: Delivery track code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseKey
+          in: query
+          description: Client unique authorization code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  deliveryResponse:
+                    type: string
+                    example: SUCCESS
+                  orderImages:
+                    type: array
+                    items:
+                      type: string
+                      example: iVBORw0KGgoAAAANSUhEUgAAAl8AAAQ4CAIAAAC4
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailfnOrderImages"
+  "/uploadClientOrders":
+    post:
+      tags:
+        - WebServices
+      description:
+        "This endpoint allows to register a delivery. Since the data can
+        be grouped into an array, multiple deliveries can be registered.Note: The
+        objects structure in the 'orders' array is the same as the one provided
+        in the schema for CSV loading. The following list of parameters may have more
+        or fewer fields. In any case, use the fields from the CSV scheme."
+      operationId: uploadClientOrders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Orders"
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  ordersWithErrors:
+                    type: number
+                    example: 0
+                  ordersWithoutErrors:
+                    type: number
+                    example: 1
+  "/uploadOriginalOrdersFromIntegration":
+    post:
+      tags:
+        - WebServices
+      description:
+        Este endpoint permite registrar un originalOrder from Integration.
+        Dado que en el los datos se puegen agrupar en un arreglo, se pueden registrar
+        varios originalOrder
+      operationId: uploadOriginalOrdersFromIntegration
+      parameters:
+        - name: enterpriseKey
+          in: query
+          description:
+            Unique authorization code that identifies the customer.If the
+            enterpriseKey or the tags correct name is not provided, the orders will
+            not be created.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: orders
+          in: query
+          description:
+            Objects array containing the orders information required for
+            the client.
+          required: true
+          style: form
+          explode: false
+          schema:
+            "$ref": "#/components/schemas/Orders"
+      responses:
+        "200":
+          description:
+            Response object with ordersWithErrors, ordersWithoutErrors
+            and errorsDetails.
+  "/orderStatusUpdateFun":
+    post:
+      tags:
+        - WebServices
+      description: This API allows us to UPDATE the Order status.
+      operationId: orderStatusUpdateFun
+      parameters:
+        - name: enterpriseKey
+          in: query
+          description: Enterprise Key.
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: trackCode
+          in: query
+          description: Trackcode
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: statusClient
+          in: query
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: statusID
+          in: query
+          description: Order status
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: incidenceID
+          in: query
+          description: Order status Incidence
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: typeUserID
+          in: query
+          description: Type user driver
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: Client's email
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: commentary
+          in: query
+          description: Order commentaries
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: orderImage
+          in: query
+          description: URL orderImage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: receptorAcuse
+          in: query
+          description: The person who receive the package
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: relationShipAcuse
+          in: query
+          description: Relationship with the client
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: rutAcuse
+          in: query
+          description: Receptor's RUT
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response object with ordersWithErrors, ordersWithoutErrors.
+  "/createPDFByCSV":
+    post:
+      tags:
+        - PDFServices
+      description:
+        This endpoint allows to create a PDF from a CSV file. The file
+        to be generated is in PDF extension.
+      operationId: createPDFByCSV
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Object with the PDF URL address.
+  "/createPDFByOrders":
+    post:
+      tags:
+        - PDFServices
+      description:
+        This endpoint allows to generate tickets using the standar Chazki
+        format.The file to be generated is in PDF extension.
+      operationId: createPDFByOrders
+      parameters:
+        - name: enterpriseKey
+          in: query
+          description: Unique authorization code that identifies the customer.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filters
+          in: query
+          description: Object with filters to generate tickets in PDF format.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: object
+            properties:
+              trackCodes:
+                type: array
+                description: Order Tracking code.
+                items:
+                  type: string
+                  example: XXXXXXXX
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  file:
+                    type: string
+                    example: https://storage.googleapis.com/download/storage/v1/b/xxxxxxxxxxxxx/yyyyyyy
+  "/createPDFByRoute":
+    post:
+      tags:
+        - PDFServices
+      description:
+        This endpoint allows to create PDF From a route. The file to be
+        generated is in PDF extension.
+      operationId: createPDFByRoute
+      parameters:
+        - name: routeID
+          in: query
+          description: Unique authorization code that identifies the customer.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Object with the PDF URL address.
+  "/createPDFbyLocations":
+    post:
+      tags:
+        - PDFServices
+      description:
+        This endpoint allows to create PDF From locations. The file to
+        be generated is in PDF extension.
+      operationId: createPDFbyLocations
+      parameters:
+        - name: locationBranchIDs
+          in: query
+          description: The Location Branch Identificator
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filters
+          in: query
+          description: Object with filters to generate tickets in PDF format.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: object
+            properties:
+              wareHouseID:
+                type: string
+                description: warehouse Identificator
+              slot:
+                type: string
+              level:
+                type: string
+              position:
+                type: string
+      responses:
+        "200":
+          description: Object with the PDF URL address.
+  "/createPDFAcuseOrder":
+    post:
+      tags:
+        - PDFServices
+      description:
+        This endpoint allows to create PDF From Acuse Order. The file to
+        be generated is in PDF extension.
+      operationId: createPDFAcuseOrder
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Object ordersData with orderID and urlFile .
+  "/processCSV":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to process a CSV.
+      operationId: processCSV
+      parameters:
+        - name: enterpriseID
+          in: query
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: number
+            example: 2763
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: csv/2021-06-02T14-24-33-038Z.csv
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: https://firebasestorage.googleapis.com/v0/b/chazki-link-dev.appspot.com/o/csv%2F2021-06-02T14-24-33-038Z.csv
+        - name: userID
+          in: query
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: 6dc84cb7-305c-48a2-9076-6e3deb3d2c44
+      responses:
+        "200":
+          description:
+            Response Object with the validatedOrderIDs and number of Failed
+            Orders
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/processCSV"
+  "/validateCSVErrors":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to make a CSV Errors validations.
+      operationId: validateCSVErrors
+      parameters:
+        - name: enterpriseID
+          in: query
+          description: It's the name that was saved into the Firebase Storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: number
+            example: 2763
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: csv/2021-06-02T14-24-33-038Z.csv
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: https://firebasestorage.googleapis.com/v0/b/chazki-link-dev.appspot.com/o/csv%2F2021-06-02T14-24-33-038Z.csv
+        - name: originalOrderID
+          in: query
+          description: For only one by one check of Trackcodes
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: "42903"
+      responses:
+        "200":
+          description: Status response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+  "/sendEmailWithErrors":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to send email with errors
+      operationId: sendEmailWithErrors
+      parameters:
+        - name: originalOrderIDs
+          in: query
+          description: It's the name that was saved into the Firebase Storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: emails
+          in: query
+          description: Array of emails
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Status response.
+        "400":
+          description:
+            If the csv file does not exist into the Firebase Storage or
+            the token was invalid.
+  "/createLocationBranch":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to create a Location Branch
+      operationId: createLocationBranch
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description:
+            Response Object with validatedOrderIDs and errors array if
+            exist.
+  "/updateLocationStock":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to update the Location of Stock in Orders
+      operationId: updateLocationStock
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response Object with ordersUpdated and errors array if exist.
+  "/updatePackage":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to update a Package
+      operationId: updatePackage
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseID
+          in: query
+          description: Enterprise identificator
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description:
+            Response Object with validatedOrderIDs and errors array if
+            exist.
+  "/createAffiliates":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to create Affiliates
+      operationId: createAffiliates
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: userID
+          in: query
+          description: User identificator
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: cityID
+          in: query
+          description: City identificator
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description:
+            Response Object with the number of Failed and Successed Users
+            created. It also throws an errors array if exist.
+  "/createStaffingAffiliates":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to create Staffing Affiliates
+      operationId: createStaffingAffiliates
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: type of Staffing
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response Object with noFailedStaffing, errors and validatedNewStaffingIDs.
+  "/CSVreportGenerator":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to Generate a CSV Report
+      operationId: CSVreportGenerator
+      parameters:
+        - name: enterpriseID
+          in: query
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: branchOfficeID
+          in: query
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response Object with contents and errors attributes.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CSVreportGenerator"
+  "/createAsignedStaffing":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to create Staffing Affiliates
+      operationId: createAsignedStaffing
+      parameters:
+        - name: enterpriseID
+          in: query
+          description: Enterprise identificator.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: branchOfficeID
+          in: query
+          description: Branch Office identificator
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response Object with contents and errors attributes.
+  "/CSVtemplateOrdersNoLocated":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to get a template with Orders No Located
+      operationId: CSVtemplateOrdersNoLocated
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseID
+          in: query
+          description: It's the enterprise identificator as a known code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: ordersIDs
+          in: query
+          description: send only if you don't have a filename, filenameUrl csv
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filters
+          in: query
+          description: Object that contains filters to find Orders No located
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: object
+            properties:
+              enterpriseID:
+                type: string
+              trackCode:
+                type: string
+              cityID:
+                type: string
+              rangeDate:
+                type: string
+      responses:
+        "200":
+          description: Response Object with an urlTemplate and status response.
+  "/CSVprocessOrdersNoLocated":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to process CSV with Orders No Located
+      operationId: CSVprocessOrdersNoLocated
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseID
+          in: query
+          description: It's the enterprise identificator as a known code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: ordersIDs
+          in: query
+          description: send if you don't have a filename, filenameUrl csv
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filters
+          in: query
+          description: Object that contains filters to find Orders No located
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: object
+            properties:
+              enterpriseID:
+                type: string
+              trackCode:
+                type: string
+              cityID:
+                type: string
+              rangeDate:
+                type: string
+      responses:
+        "200":
+          description:
+            Response Object with an array that contains ordersCreatedID
+            and number of Failed Orders.
+  "/updateDropAddressInFallabellaReturnOrders":
+    post:
+      tags:
+        - CSVEndpoints
+      description:
+        "This endpoint allows to update Drop Addresses in Return Orders
+        from Falabella Enterprise.Data must be sent in POST protocol and in the body
+        request format in JSON. The csv file must had been saved with an extra column
+        as 'CODIGO ALMACEN' so the BranchCode. "
+      operationId: updateDropAddressInFallabellaReturnOrders
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: csv/2021-11-24T18-35-32-846Zreturn_orders_falabella.csv
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            example: csv/2021-11-24T18-35-32-846Zreturn_orders_falabella.csv
+      responses:
+        "200":
+          description:
+            Response Object with an array with validatedOrderTrackCodes
+            and the number of the ordersUpdated.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/updateDropAddressInFallabellaReturnOrders"
+  "/CSVManifestValidation":
+    post:
+      tags:
+        - CSVEndpoints
+      description: This endpoint allows to make a CSV Manifest Validation
+      operationId: CSVManifestValidation
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseID
+          in: query
+          description: Enterprise identificator
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description:
+            Response Object with an array with a counter of existing and
+            missing Track codes. If exist missing trackCodes it gets an urlFileMissingTrackcodes.
+  "/createAtariPDFFromCSV":
+    post:
+      tags:
+        - PDFAtariServices
+      description: This endpoint allows to create PDF From CSV file
+      operationId: createAtariPDFFromCSV
+      parameters:
+        - name: filename
+          in: query
+          description: It's the name that was saved into the Firebase Storage.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: filenameUrl
+          in: query
+          description: Position on the storage
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Object with the PDF URL address.
+components:
+  schemas:
+    Orders:
+      type: object
+      properties:
+        trackCode:
+          type: string
+          description: Order code
+          example: ABCDEFI
+        paymentMethodID:
+          type: string
+          description:
+            Order payment method, It can take the next values COD, PAGADO,
+            CCOD, PAY.
+          example: PAGADO
+        paymentProofID:
+          type: string
+          description:
+            Payment document, It can take the next values BOLETA, GUIA
+            and FACTURA.
+          example: BOLETA
+        serviceID:
+          type: string
+          description:
+            Service code. It can take the next values "REGULAR", "EXPRESS"
+            or "PROGRAMMED", depending on the desired service type.
+          example: REGULAR
+        packageEnvelope:
+          type: string
+          description: Package wrap type.
+          example: Caja
+        packageWeight:
+          type: integer
+          description: Package weight.
+          example: 1
+        packageSizeID:
+          type: string
+          description: Order measure unit (XS, S, M, L).
+          example: XL
+        packageQuantity:
+          type: string
+          description: Order packages Quantity.
+        productDescription:
+          type: string
+          description: Products description.
+        productPrice:
+          type: number
+          description: Approximate product price.
+        reverseLogistic:
+          type: string
+          description: It can take the next values 'YES' or 'NO'
+        crossdocking:
+          type: string
+          description:
+            Field indicating if the order is crossdocking. It can take
+            the next values "YES" or "NO".
+        pickUpBranchID:
+          type: string
+          description: Warehouse code where the packages are collected.
+        pickUpAddress:
+          type: string
+          description: Client address.
+        pickUpPostalCode:
+          type: string
+          description: Recolection address postal code.
+        pickUpAddressReference:
+          type: string
+          description: Client address references.
+        pickUpPrimaryReference:
+          type: string
+          description: Client address district.
+        pickUpSecondaryReference:
+          type: string
+          description: Client address province.
+        pickUpNotes:
+          type: string
+          description: Package recollection notes.
+        pickUpContactName:
+          type: string
+          description: Contact Names for the recollection.
+        pickUpContactPhone:
+          type: string
+          description: Contact phone number for the recollection.
+        pickUpContactDocumentTypeID:
+          type: string
+          description:
+            Contact document type for the recollection. It can take the
+            next values "DNI", "PAS", "PTP", "CR" and "CE".
+        pickUpContactDocumentNumber:
+          type: string
+          description: Contact ID for the recollection.
+        pickUpContactEmail:
+          type: string
+          description: Email for recollection notification.
+        dropBranchID:
+          type: string
+          description: Delivery warehouse code.
+        dropAddress:
+          type: string
+          description: Final client delivery address.
+        dropPostalCode:
+          type: string
+          description: Recollection address's postal code.
+        dropAddressReference:
+          type: string
+          description: Final client address's references.
+        dropPrimaryReference:
+          type: string
+          description: Final client address's district.
+        dropSecondaryReference:
+          type: string
+          description: Final client address's province.
+        dropNotes:
+          type: string
+          description: Package delivery notes.
+        dropContactName:
+          type: string
+          description: Person's contact names for delivery.
+        dropContactPhone:
+          type: string
+          description: Person's phone number for delivery
+        dropContactDocumentTypeID:
+          type: string
+          description:
+            Person's document type for delivery. It can take the next values
+            "DNI", "PAS", "PTP","CR" and "CE".
+        dropContactDocumentNumber:
+          type: string
+          description: Person's ID document for delivery.
+        dropContactEmail:
+          type: string
+          description: Delivery notification Email.
+        pickUpPoint:
+          type: array
+          description:
+            Coordinates array of picking address. Must have at least two
+            elements (longitude and latitude.)
+          items:
+            type: number
+        dropPoint:
+          type: array
+          description:
+            Coordinates array of delivery address. Must have at least two
+            elements (longitude and latitude)
+          items:
+            type: number
+        packages:
+          type: array
+          description: Order's packages list.
+          items:
+            "$ref": "#/components/schemas/Packages"
+    Packages:
+      type: object
+      properties:
+        ClientPackageID:
+          type: string
+          description: Package code.
+        envelope:
+          type: string
+          description: Package envelop type.
+        weight:
+          type: number
+          description: Package weight.
+        weightUnit:
+          type: string
+          description: Weight unit.
+        size:
+          type: number
+          description: Package size.
+        quantity:
+          type: number
+          description: Number of packages.
+        name:
+          type: string
+          description: Package description.
+        currency:
+          type: string
+          description: Currency type.
+        unitaryProductPrice:
+          type: number
+          description: Unitary package price.
+    Service:
+      type: object
+      properties:
+        status:
+          type: string
+          example: NEW
+        date:
+          type: string
+          example: "2020-04-30T00:00:00.000Z"
+        reason:
+          type: string
+          example: ""
+    FailFnResponse:
+      type: object
+      properties:
+        response:
+          type: number
+          example: 0
+        descriptionResponse:
+          type: string
+          example: El trackcode no existe o el enterpriseKey no es correcto
+        message:
+          type: string
+          example: ""
+    FailfnOrderImages:
+      type: object
+      properties:
+        response:
+          type: number
+          example: 0
+        deliveryResponse:
+          type: string
+          example: No se encuentra el trackCode o el codigo de empresa
+    processCSV:
+      type: object
+      properties:
+        sucess:
+          type: boolean
+          example: true
+        validateOrderIDs:
+          type: array
+          items:
+            type: string
+            example: ""
+        noFailedOrders:
+          type: number
+          example: 0
+    CSVreportGenerator:
+      type: object
+      properties:
+        idReport:
+          type: string
+          example: liquidationReport
+        argsQuery:
+          type: object
+          properties:
+            startDate:
+              type: string
+              example: "2020-11-01"
+            endDate:
+              type: string
+              example: "2020-11-20"
+            enterprisesIDs:
+              type: array
+              items:
+                type: number
+                example: 1
+            servicesIDs:
+              type: array
+              items:
+                type: number
+                example: 2
+            statesIDsOrders:
+              type: array
+              items:
+                type: number
+                example: 176
+            liquidationStatesIDs:
+              type: array
+              items:
+                type: number
+                example: 201
+        emailSendInfo:
+          type: object
+          properties:
+            emails:
+              type: array
+              items:
+                type: string
+                example: anthony@chazki.com
+            subject:
+              type: string
+              example: Reporte de Liquidaciones
+    updateDropAddressInFallabellaReturnOrders:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        errors:
+          type: array
+          items:
+            type: string
+            example: " "
+        validatedOrderTrackCodes:
+          type: number
+          example: 0
+        ordersUpdated:
+          type: number
+          example: 1
+  requestBodies:
+    uploadClientOrders:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Orders"
+      required: true
