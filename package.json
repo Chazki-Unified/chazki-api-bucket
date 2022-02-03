@@ -6,7 +6,8 @@
   "license": "Unlicense",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "fix-netlify": "cp public/.htaccess build/ && cp public/_redirects build/",
+    "build": "react-scripts build && yarn fix-netlify ",
     "serve": "serve -s -l 4200 build"
   },
   "dependencies": {
