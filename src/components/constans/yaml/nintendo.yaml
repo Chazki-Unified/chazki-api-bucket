@@ -15,7 +15,11 @@ info:
   version: 1.0.0
 servers:
   - url: https://us-central1-chazki-link-dev.cloudfunctions.net
-    description: Chazki server
+    description: Tonny Development
+  - url: https://us-central1-chazki-link-beta.cloudfunctions.net
+    description: Tonny Beta
+  - url: https://us-central1-chazki-link.cloudfunctions.net
+    description: Tonny Production
 tags:
   - name: WebServices
     description: List of endpoints for register and consult of the orders status.

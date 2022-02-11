@@ -19,9 +19,6 @@ info:
     name: API Support
     email: apiteam@swagger.io
     url: https://github.com/Redocly/redoc
-  x-logo:
-    url: https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/resources/logo.png
-    altText: Chazki Logo
   license:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
