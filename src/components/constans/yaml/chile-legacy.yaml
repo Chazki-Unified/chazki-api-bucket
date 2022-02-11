@@ -28,6 +28,7 @@ x-tagGroups:
     tags:
       - Shipment
       - Enterprise
+      - Booz Services
 
   - name: Webhooks
     tags:
@@ -109,11 +110,11 @@ paths:
                   data:
                     type: string
                     example: ''
-  /shipment/{routeCode}:
+  /booz/shipment/{routeCode}:
     get:
       summary: Get shipment details
       tags:
-      - Enterprise
+      - Booz Services
       operationId: getshipment
       deprecated: false
       parameters:
@@ -126,11 +127,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RouteDetails'
-  /package/{trackCode}:
+  /booz/package/{trackCode}:
     get:
       summary: Get package details
       tags:
-      - Enterprise
+      - Booz Services
       operationId: getorder
       deprecated: false
       parameters:
@@ -625,7 +626,7 @@ components:
         shipmentImage:
           type: string
           description: Shipment description image (url)
-          example: http://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
+          example: https://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
         pickupDirection:
           type: string
           description: Pick up location address
@@ -752,7 +753,7 @@ components:
           example: oneway
         shipmentImage:
           type: string
-          example: http://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
+          example: https://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
         travelDistance:
           type: number
           format: float
@@ -1113,22 +1114,6 @@ components:
             timeAtPackageEnded:
               type: string
               example: 2021-02-27T16:56:54.000Z
-    PersonInfo:
-      description: 'Contact person information'
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'Foo Bar'
-          description: 'Contact person name'
-        phone:
-          type: string
-          example: '56123456789'
-          description: 'Contact person phone'
-        email:
-          type: string
-          example: 'foo@bar.cl'
-          description: 'Contact person email'
   requestBodies:
     Error400:
       description: 'Bad request'
