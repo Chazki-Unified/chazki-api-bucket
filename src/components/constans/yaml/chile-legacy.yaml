@@ -1,8 +1,8 @@
 openapi: 3.0.0
 servers:
-  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/chile
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api
     description: Development server
-  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations/api/legacy/chile
+  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations/api
     description: Production server
 info:
   version: 1.0.0
@@ -11,7 +11,7 @@ info:
     Services that allow maintaining the old integration of Chile with minimal changes.
     To obtain your enterpriseKey you can request it from the commercial area.
     ## Disclaimer
-    <span style="color:red">This legacy api is available for old clients from Chile, it does not support new features. In case you need more functionalities, it is recommended to use the standard API.</span>
+    <span style="color:red">This legacy api is available for old clients from Chile, it does not support new features. In case you need more functionalities, it is recommended to use the Tonny API.</span>
 
   # version: 1.0.0
   title: Chile Legacy API
@@ -34,7 +34,7 @@ x-tagGroups:
       - Webhook
 
 paths:
-  /shipment/estimate-price:
+  /legacy/chile/shipment/estimate-price:
     post:
       tags:
       - Enterprise
@@ -58,7 +58,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EstimatedPriceResponse"
-  /shipment/create:
+  /legacy/chile/shipment/create:
     post:
       tags:
         - Shipment
@@ -82,7 +82,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShipmentDetails'
-  /shipment/cancel/{invoiceNumber}:
+  /legacy/chile/shipment/cancel/{routeCode}:
     delete:
       tags:
         - Shipment
@@ -91,8 +91,7 @@ paths:
       operationId: cancelPackage
       parameters:
         - $ref: '#/components/parameters/enterpiseKey'
-        - $ref: '#/components/parameters/trackCodeId'
-
+        - $ref: '#/components/parameters/routeCode'
       responses:
         200:
           description: Successful operation
@@ -110,6 +109,84 @@ paths:
                   data:
                     type: string
                     example: ''
+  /shipment/{routeCode}:
+    get:
+      summary: get shipment
+      tags:
+      - Enterprise
+      operationId: getshipment
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/enterpiseKey'
+        - $ref: '#/components/parameters/routeCode'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Cancelación exitosa'
+                  data:
+                    type: string
+                    example: ''
+  /package/{trackCode}:
+    get:
+      summary: get order
+      tags:
+      - Enterprise
+      operationId: getorder
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/enterpiseKey'
+        - $ref: '#/components/parameters/trackCodeId'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      invoiceNumber:
+                        type: string
+                        example: 459778
+                      packageReceiver:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: carolina tapia
+                          rut:
+                            type: string
+                            example: 13.482.688-6
+                          email:
+                            type: string
+                            example: ''
+                          phone:
+                            type: string
+                            example: ''
+                      requestState:
+                        type: string
+                        example: delivered
+                      supportImages:
+                        type: array
+                        example: []
+                      shipmentId:
+                        type: string
+                        example: 68fc3a91
+                      timeAtPackageEnded:
+                        type: string
+                        example: 2021-02-27T16:56:54.000Z
 #  /package:
 #    post:
 #      tags:
@@ -241,6 +318,14 @@ components:
       schema:
         type: string
         example: "601570ffe0f18cc238de813f"
+    routeCode:
+      in: path
+      name: "routeCode"
+      description: "Route code of the package that you want to get"
+      required: true
+      schema:
+        type: string
+        example: "2g41570f"
     WebhookUrl:
       in: path
       name: "webhookUrl"
