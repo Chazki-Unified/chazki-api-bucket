@@ -111,7 +111,7 @@ paths:
                     example: ''
   /shipment/{routeCode}:
     get:
-      summary: get shipment
+      summary: Get shipment details
       tags:
       - Enterprise
       operationId: getshipment
@@ -125,20 +125,10 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'success'
-                  message:
-                    type: string
-                    example: 'Cancelación exitosa'
-                  data:
-                    type: string
-                    example: ''
+                $ref: '#/components/schemas/RouteDetails'
   /package/{trackCode}:
     get:
-      summary: get order
+      summary: Get package details
       tags:
       - Enterprise
       operationId: getorder
@@ -152,41 +142,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      invoiceNumber:
-                        type: string
-                        example: 459778
-                      packageReceiver:
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                            example: carolina tapia
-                          rut:
-                            type: string
-                            example: 13.482.688-6
-                          email:
-                            type: string
-                            example: ''
-                          phone:
-                            type: string
-                            example: ''
-                      requestState:
-                        type: string
-                        example: delivered
-                      supportImages:
-                        type: array
-                        example: []
-                      shipmentId:
-                        type: string
-                        example: 68fc3a91
-                      timeAtPackageEnded:
-                        type: string
-                        example: 2021-02-27T16:56:54.000Z
+                $ref: '#/components/schemas/TrackCodeDetails'
 #  /package:
 #    post:
 #      tags:
@@ -1048,6 +1004,115 @@ components:
               description: 'Email of the user'
               type: string
               example: 'foo@bar.cl'
+    RouteDetails:
+      type: object
+      properties:
+        message:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 10eea546
+            requestState:
+              type: string
+              example: completed
+            driverInfo:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Esteban Luis Mendoza Marambio
+                email:
+                  type: string
+                  example: liesmendozino@gmail.com
+                phone:
+                  type: string
+                  example: 56967310740
+                rut:
+                  type: string
+                  example: 15.607.524-8
+                patent:
+                  type: string
+                  example: Rk1998
+            packages:
+              type: array
+              items:
+                type: object
+                properties:
+                  type: object
+                    properties:
+                      invoiceNumber:
+                        type: string
+                        example: 459778
+                      packageReceiver:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: carolina tapia
+                          rut:
+                            type: string
+                            example: 13.482.688-6
+                          email:
+                            type: string
+                            example: ''
+                          phone:
+                            type: string
+                            example: ''
+                      requestState:
+                        type: string
+                        example: delivered
+                      supportImages:
+                        type: array
+                        example: [ ]
+                      timeAtPackageEnded:
+                        type: string
+                        example: 2021-02-27T16:56:54.000Z
+            pickupScheduledDate:
+              type: string
+              example: ''
+            metadata:
+              type: object
+              properties:
+                routeId:
+                  type: string
+                  example: '23e32nd'
+    TrackCodeDetails:
+      type: object
+      properties:
+        message:
+          type: object
+          properties:
+            invoiceNumber:
+              type: string
+              example: 459778
+            packageReceiver:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: carolina tapia
+                rut:
+                  type: string
+                  example: 13.482.688-6
+                email:
+                  type: string
+                  example: ''
+                phone:
+                  type: string
+                  example: ''
+            requestState:
+              type: string
+              example: delivered
+            supportImages:
+              type: array
+              example: [ ]
+            shipmentId:
+              type: string
+              example: 68fc3a91
+            timeAtPackageEnded:
+              type: string
+              example: 2021-02-27T16:56:54.000Z
     PersonInfo:
       description: 'Contact person information'
       type: object
