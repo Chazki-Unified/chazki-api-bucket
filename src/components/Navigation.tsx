@@ -6,7 +6,7 @@ import { Search } from './Search';
 export const Navigation = () => {
   return (
     <nav className="topnav">
-      <NavLink to="/stoplight-docs">Chazki Docs</NavLink>
+      <NavLink to="/tonny">Chazki Docs</NavLink>
       <NavLink to="/maximo">Maximo API</NavLink>
       <NavLink to="/aventon">Aventon API</NavLink>
       <NavLink to="/chile">Chile Legacy API</NavLink>
