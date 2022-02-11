@@ -11,7 +11,7 @@ info:
     This REST API reference for [Todova.cl Enterprise](http://enterprise.todova.cl) application.  This is a guide and documentation to developers who wants to use the chazki network of drivers for the deliveries. The end point is [http://api.todovaapp.cl/v3](http://api.todovaapp.cl/v3).
     If you want know how are the services, check [http://api.todovaapp.cl/v3/dependants-ok](http://api.todovaapp.cl/v2/dependants-ok). If you want to test in the development environment you must contact us and use the URL [http://apistaging.todovaapp.cl/v2](http://apistaging.todovaapp.cl/v2).
     ## Disclaimer
-    <span style="color:red">This API is nearing the end of its life, no new features will be added to it. In case you want to maintain the integration with a minimum change you can opt for Chile Legacy API or you can integrate with the Standard API</span>.
+    <span style="color:red">This API is nearing the end of its life, no new features will be added to it. In case you want to maintain the integration with a minimum change you can opt for Chile Legacy API or you can integrate with the Tonny API</span>.
 
   # version: 1.0.0
   title: Aventon API
