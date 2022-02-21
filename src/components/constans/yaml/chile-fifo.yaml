@@ -1,0 +1,914 @@
+openapi: 3.0.0
+servers:
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api
+    description: Development server
+  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations/api
+    description: Production server
+info:
+  version: 1.0.0
+  description: |
+    # Introduction
+    Service that allow maintaining Fifo Chile Integration with minimal changes.
+    To obtain your enterpriseKey you can request it from the commercial area.
+    ## Disclaimer
+    <span style="color:red">This api is only available for Tottus.</span>
+  title: Chile Fifo API
+  contact:
+    name: API Support
+    email: apiteam@swagger.io
+    url: https://github.com/Redocly/redoc
+  license:
+    name: MIT
+    url: "https://opensource.org/licenses/MIT"
+
+x-tagGroups:
+  - name: FIFO
+    tags:
+      - Create order
+      - Update order
+      - Cancel order
+
+paths:
+  /fazil/chile/fifo/create:
+    post:
+      tags:
+        - Create order
+      summary: Create FIFO order
+      description: Create an order only with vehicle type and pickup info. The order is offered on app.
+      operationId: createFifoOrder
+      parameters:
+        - $ref: "#/components/parameters/enterpriseKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderRequest"
+
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateOrderResponse"
+
+  /fazil/chile/fifo/update:
+    post:
+      tags:
+        - Update order
+      summary: Update FIFO order
+      description: Update an order with the complete information in order to create the shipment and the driver continue the flow.
+      operationId: updateFifoOrder
+      parameters:
+        - $ref: "#/components/parameters/enterpriseKey"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderRequest"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateOrderResponse"
+
+  /legacy/chile/shipment/cancel:
+    delete:
+      tags:
+        - Cancel order
+      summary: Cancel FIFO order
+      description: Cancel the order completely.
+      operationId: cancelFifoOrder
+      parameters:
+        - $ref: "#/components/parameters/enterpriseKey"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fifoOrderID:
+                  type: number
+                  example: 310
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Cancelación exitosa"
+                  data:
+                    type: string
+                    example: ""
+components:
+  parameters:
+    enterpriseKey:
+      in: header
+      name: enterprise-key
+      required: true
+      schema:
+        type: string
+        example: "e0ecd4a1-bbb2-4753-8862-2fb3572aa8ae"
+
+  schemas:
+    CreateOrderRequest:
+      description: "Pickup and vehicle info from order"
+      type: "object"
+      properties:
+        pickupLandmark:
+          description: "Pick up location reference"
+          type: "string"
+          example: "landmark"
+        requestType:
+          description: "Request type for shipment"
+          type: "string"
+          example: "oneway"
+        pickupCoordinates:
+          description: "Pick up location [Lat, Lng]"
+          type: "array"
+          items:
+            type: "number"
+          example: [-33.4524225, -70.6241109]
+        requestedDeliveryTypes:
+          type: array
+          description: "Wished delivery types"
+          items:
+            type: "string"
+            enum:
+              - "car"
+        pickupDirection:
+          type: "string"
+          description: "Pick up location address"
+          example: "Portage Circle 95"
+
+    CreateOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Successfull
+        data:
+          type: object
+          properties:
+            fifoOrderID:
+              type: integer
+              example: 310
+            customer:
+              $ref: "#/components/schemas/Profile"
+            driver:
+              $ref: "#/components/schemas/Profile"
+            shipment:
+              $ref: "#/components/schemas/Shipment"
+
+    UpdateOrderRequest:
+      description: "Complete information for creating the shipment"
+      type: "object"
+      properties:
+        fifoOrderID:
+          type: "integer"
+          example: 310
+        shipmentId:
+          type: "string"
+          example: ""
+        pickupScheduledDate:
+          type: "string"
+          example: ""
+        shipmentBillingCase:
+          type: "string"
+          example: ""
+        shipmentImage:
+          type: "string"
+          example: ""
+        requestType:
+          type: "string"
+          example: "oneway"
+        pickupLandmark:
+          type: "string"
+          example: ""
+        metadata:
+          type: "object"
+          properties:
+            "Shopper Web":
+              type: "string"
+              example: "https://3pl-app.instaleap.io"
+        packages:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PackageRequest"
+        shipmentDesc:
+          type: "string"
+          example: "description"
+
+    UpdateOrderResponse:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          example: "success"
+        message:
+          type: "string"
+          example: "The order was updated successfully"
+        data:
+          type: "object"
+          properties:
+            fifoOrderID:
+              type: "integer"
+              example: 310
+            uniqueIdentifier:
+              type: "string"
+              example: ""
+            requestedDeliveryTypes:
+              type: "array"
+              description: "Wished delivery types"
+              items:
+                type: "string"
+                enum:
+                  - "car"
+            activeDeliveryType:
+              type: "string"
+              example: "car"
+            estimatedTimeToPickup:
+              type: "number"
+              example: 0
+            fromAcceptToCompleteTime:
+              type: "number"
+              example: 0
+            timeAtShipmentCompleted:
+              type: "number"
+              example: 0
+            pickupInfo:
+              $ref: "#/components/schemas/AddressInfo"
+            pickupSchedulesDate:
+              type: "string"
+              example: ""
+            deletedPackages:
+              type: "array"
+              example: []
+            packageReturnInfo:
+              $ref: "#/components/schemas/AddressInfo"
+            nextPackageToDeliver:
+              type: "string"
+              example: "12345"
+            systemPackages:
+              type: "array"
+              example: []
+            activePackage:
+              type: "string"
+              example: "12345"
+            shipmentQty:
+              type: "integer"
+              example: 1
+            shipmentDesc:
+              type: "string"
+              example: ""
+            shipmentWeight:
+              type: "number"
+              example: 0
+            shipmentImage:
+              type: "string"
+              example: ""
+            packageReadyToHandOver:
+              type: "boolean"
+              example: false
+            shipmentPriority:
+              type: "string"
+              example: ""
+            needToBringBack:
+              type: "boolean"
+              example: false
+            isBroughtBack:
+              type: "boolean"
+              example: false
+            supportImages:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/Image"
+            returnDisFromLastDrop:
+              type: "number"
+              example: 0
+            driverPathToDestination:
+              type: "string"
+              example: ""
+            cumulativePath:
+              type: "array"
+              example: []
+            cumulativePathInfo:
+              type: "object"
+              properties:
+                lastUpdateTime:
+                  type: "string"
+                  example: ""
+                lastTraveledDistance:
+                  type: "number"
+                  example: 0
+                lastToGoDistance:
+                  type: "number"
+                  example: 0
+            createdTime:
+              type: "string"
+              example: ""
+            updatedTime:
+              type: "string"
+              example: ""
+            customerInfo:
+              type: "object"
+              properties:
+                email:
+                  type: "string"
+                  example: ""
+                name:
+                  type: "string"
+                  example: ""
+                phone:
+                  type: "string"
+                  example: ""
+                rut:
+                  type: "string"
+                  example: ""
+            enterpriseInfo:
+              type: "object"
+              properties:
+                comuna:
+                  type: "string"
+                  example: ""
+                contact:
+                  type: "string"
+                  example: ""
+                giro:
+                  type: "string"
+                  example: ""
+                rubro:
+                  type: "string"
+                  example: ""
+                name:
+                  type: "string"
+                  example: ""
+                phone:
+                  type: "string"
+                  example: ""
+                rut:
+                  type: "string"
+                  example: ""
+                web:
+                  type: "string"
+                  example: ""
+            metadata:
+              type: "object"
+              properties:
+                "Shopper Web":
+                  type: "string"
+                  example: "https://3pl-app.instaleap.io"
+            registerTime:
+              type: "string"
+              example: ""
+            isAdminIntervened:
+              type: "boolean"
+              example: false
+            notAcceptedForLongTime:
+              type: "boolean"
+              example: false
+            subscribedUsersPool:
+              type: "array"
+              example: []
+            reassignedRequestId:
+              type: "string"
+              example: ""
+            originalRequestId:
+              type: "string"
+              example: ""
+            firstOriginalRequestId:
+              type: "string"
+              example: ""
+            requestState:
+              type: "string"
+              example: "accepted"
+            requestType:
+              type: "string"
+              example: "oneway"
+            customerReview:
+              $ref: "#/components/schemas/ReviewInfo"
+            driverReview:
+              $ref: "#/components/schemas/ReviewInfo"
+            serviceReview:
+              $ref: "#/components/schemas/ReviewInfo"
+            nextAvailStates:
+              type: "array"
+              example: []
+            customerId:
+              type: "string"
+              example: ""
+            customerType:
+              type: "string"
+              example: "enterprise"
+            driverId:
+              type: "string"
+              example: ""
+            id:
+              type: "string"
+              example: "ace454bf"
+            isRegister:
+              type: "boolean"
+              example: false
+            travelDistance:
+              type: "integer"
+              example: 23524
+            travelTime:
+              type: "integer"
+              example: 23
+            travelPolyline:
+              type: "string"
+              example: ""
+            transbankHistory:
+              type: "array"
+              example: []
+            driverInfo:
+              type: "object"
+              properties:
+                birthate:
+                  type: "string"
+                  example: ""
+                deliveryTypes:
+                  type: "array"
+                  items:
+                    type: "string"
+                    enum:
+                      - "car"
+                deviceType:
+                  type: "string"
+                  example: "android"
+                email:
+                  type: "string"
+                  example: "example@mail.com"
+                incorporationDate:
+                  type: "string"
+                  example: ""
+                name:
+                  type: "string"
+                  example: "test"
+                patent:
+                  type: "string"
+                  example: ""
+                phone:
+                  type: "string"
+                  example: "23522323332"
+                rating:
+                  type: "number"
+                  example: 0
+                rut:
+                  type: "string"
+                  example: "23234"
+            price:
+              $ref: "#/components/schemas/Price"
+            packages:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/Packages"
+
+    PackageRequest:
+      type: "object"
+      properties:
+        invoiceNumber:
+          type: "string"
+          example: "1234"
+        dispatchOrder:
+          type: "integer"
+          example: 1
+        productName:
+          type: "string"
+          example: "product name"
+        receiverName:
+          type: "string"
+          example: "name"
+        receiverEmail:
+          type: "string"
+          example: "email"
+        receiverPhone:
+          type: "string"
+          example: "987654231"
+        receiverRut:
+          type: "string"
+          example: ""
+        ifUnDeliveredOwnSelf:
+          type: "boolean"
+          example: false
+        productQty:
+          type: "integer"
+          example: 1
+        dropoffDirection:
+          type: "string"
+          example: "address"
+        dropoffCoordinates:
+          type: "array"
+          items:
+            type: "number"
+            example: [-70.5753948, -33.4002761]
+        dropoffLandmark:
+          type: "string"
+          example: "landmark"
+
+    AddressInfo:
+      description: "Address information"
+      type: object
+      properties:
+        fullname:
+          description: "Full depot address"
+          type: string
+          example: "Huelen, Cerro Navia, Región Metropolitana, Chile"
+        h3:
+          description: "H3 related to the depot address"
+          type: string
+          example: "87eee459effffff"
+        shortname:
+          description: "Short depot address"
+          type: string
+          example: "Huelen"
+        street:
+          description: "The street where is located the depot address"
+          type: string
+          example: "Huelen"
+        number:
+          description: "Number of the street"
+          type: number
+          format: integer
+          example: 3431
+        country:
+          description: "The country where is located the depot address"
+          type: string
+          example: "CL"
+        municipality:
+          description: "The commune where is located the depot address"
+          type: string
+          example: "Cerro Navia"
+        province:
+          description: "The city where is located the depot address"
+          type: string
+          example: "Santiago"
+        location:
+          description: "Coordinates related to the depot address [LNG, LAT]"
+          type: object
+          properties:
+            type:
+              type: string
+              example: "Point"
+            coordinates:
+              type: array
+              items:
+                type: number
+                format: double
+              example: [-70.7405924, -33.4214201]
+
+    Shipment:
+      type: object
+      properties:
+        activeDeliveryType:
+          type: string
+          example: ""
+        createdTime:
+          type: string
+          example: "2018-07-18T10:59:21.536432809-04:00"
+        customerPrice:
+          type: integer
+          example: 0
+        id:
+          type: string
+          example: 5b4f55c92487061e6cb1cf46
+        packageReturnInfo:
+          $ref: "#/components/schemas/PackageReturnInfo"
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Packages"
+        pickupInfo:
+          $ref: "#/components/schemas/PackageReturnInfo"
+        pickupScheduledDate:
+          type: string
+          example: "0001-01-01T00:00:00Z"
+        requestState:
+          type: string
+          example: pending
+        requestType:
+          type: string
+          example: oneway
+        shipmentImage:
+          type: string
+          example: https://www.digithaigroup.com/wp-engine/wp-content/uploads/2015/09/products.png
+        travelDistance:
+          type: number
+          format: float
+          example: 0,
+        travelTime:
+          type: number
+          format: float
+          example: 0
+        requestedDeliveryTypes:
+          type: array
+          description: "Wished delivery types"
+          items:
+            type: "string"
+            enum:
+              - "car"
+        actionHistory:
+          type: array
+          example: null
+        systemPackages:
+          type: array
+          example: null
+        metadata:
+          type: object
+          example: null
+        price:
+          $ref: "#/components/schemas/Price"
+
+    Price:
+      type: object
+      properties:
+        basePerReturn:
+          type: number
+          example: 0
+        basePriceConsidered:
+          type: boolean
+          example: false
+        couponDescription:
+          type: string
+          example: ""
+        couponDiscAmount:
+          type: number
+          example: 0
+        couponId:
+          type: string
+          example: ""
+        cusBasePriceWithoutInsurance:
+          type: number
+          example: 0
+        customerBasePrice:
+          type: number
+          example: 0
+        customerPrice:
+          type: number
+          example: 0
+        customerReturnPrice:
+          type: number
+          example: 0
+        driverBasePrice:
+          type: number
+          example: 0
+        driverPrice:
+          type: number
+          example: 0
+        driverReturnPrice:
+          type: number
+          example: 0
+        insuranceFee:
+          type: number
+          example: 0
+        netPriceConsidered:
+          type: boolean
+          example: true
+        priceModelSet:
+          type: string
+          example: ""
+        priceModelUsed:
+          type: string
+          example: ""
+        returnLocChargeFailed:
+          type: boolean
+          example: false
+        returnPerKM:
+          type: number
+          example: 0
+
+    Profile:
+      type: object
+      properties:
+        email:
+          type: string
+          example: a@a.com
+        firstName:
+          type: string
+          example: Enterprise TodoVa
+        lastName:
+          type: string
+          example: ""
+        phone:
+          type: string
+          example: +56987654321
+        profileImage:
+          type: string
+          example: https://todovadocs.s3-sa-east-1.amazonaws.com/docs/b8a2fd21hljg00a3ujl0.jpeg
+        rating:
+          type: object
+          properties:
+            average:
+              type: number
+              example: 4.4
+            itemsCount:
+              type: integer
+              example: 406
+
+    Packages:
+      type: object
+      properties:
+        createdBy:
+          type: string
+          example: customer
+        dispatchOrder:
+          type: integer
+          example: 1
+        invoiceNumber:
+          type: string
+          example: 56746873470
+        productId:
+          type: string
+          example: ""
+        productName:
+          type: string
+          example: Remote Tag Adapter
+        productWeight:
+          type: number
+          format: float
+          example: 0
+        productQty:
+          type: number
+          example: 1
+        productDelicacy:
+          type: string
+          example: ""
+        productPriority:
+          type: string
+          example: ""
+        receiverContact:
+          $ref: "#/components/schemas/ContactPerson"
+        packageReceiver:
+          $ref: "#/components/schemas/ContactPerson"
+        dropoffInfo:
+          $ref: "#/components/schemas/PackageReturnInfo"
+        requestState:
+          type: string
+          example: queued_up
+        timeAtPackageEnded:
+          type: string
+          example: 0001-01-01T00:00:00Z
+        actionHistory:
+          type: array
+          example: null
+        ifUnDeliveredOwnSelf:
+          type: boolean
+          example: false
+        comments:
+          type: string
+          example: ""
+        supportImages:
+          type: string
+          example: ""
+        driverAccounting:
+          $ref: "#/components/schemas/AccountingInfo"
+        customerAccounting:
+          $ref: "#/components/schemas/AccountingInfo"
+        driverReview:
+          $ref: "#/components/schemas/ReviewInfo"
+        serviceReview:
+          $ref: "#/components/schemas/ReviewInfo"
+
+    ReviewInfo:
+      type: object
+      properties:
+        rating:
+          type: number
+          format: float
+          example: 0
+        comment:
+          type: string
+          example: ""
+
+    AccountingInfo:
+      type: object
+      properties:
+        waitingTime:
+          type: number
+          format: float
+          example: 0,
+        parkingValue:
+          type: number
+          format: float
+          example: 0,
+        tollValue:
+          type: number
+          format: float
+          example: 0,
+        adjustment:
+          type: number
+          format: float
+          example: 0,
+        notes:
+          type: string
+          example: ""
+
+    PackageReturnInfo:
+      type: object
+      properties:
+        uniqueId:
+          type: string
+          example: ""
+        shortName:
+          type: string
+          example: ""
+        direction:
+          type: string
+          example: Portage Circle 95
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              example: "Point"
+            coordinates:
+              type: array
+              items:
+                type: integer
+              example: [-70.5753948, -33.4002761]
+        landMark:
+          type: string
+          example: some door 1234
+        placeId:
+          type: string
+          example: ""
+        time:
+          type: string
+          example: "0001-01-01T00:00:00Z"
+
+    ContactPerson:
+      description: "Contact person information"
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Foo Bar"
+          description: "Contact person name"
+        phone:
+          type: string
+          example: "56123456789"
+          description: "Contact person phone"
+        email:
+          type: string
+          example: "foo@bar.cl"
+          description: "Contact person email"
+        rut:
+          type: string
+          example: "13001067-9"
+          description: "Contact person RUT"
+
+    Image:
+      type: object
+      properties:
+        imageType:
+          type: string
+          example: "other_image"
+        imageUrl:
+          type: string
+          example: "https://todovadocs.s3.sa-east-1.amazonaws.com/docs/other_image.jpeg"
+
+  requestBodies:
+    Error400:
+      description: "Bad request"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "error"
+              message:
+                type: string
+                example: "Error message (why was a bad request)"
+              data:
+                type: object
+
+    Error404:
+      description: "Not found"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "error"
+              message:
+                type: string
+                example: "Error message (why was not found)"
+              data:
+                type: object

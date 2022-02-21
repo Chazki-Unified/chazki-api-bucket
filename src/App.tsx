@@ -9,6 +9,7 @@ import {MaximoAPI} from "./components/MaximoAPI";
 import {AventonAPI} from "./components/AventonAPI";
 import {ChileAPI} from "./components/ChileLegacyAPI";
 import {TonnyAPI} from "./components/NintendoAPI";
+import { ChileFifoAPI } from "./components/ChileFifoAPI";
 
 class App extends Component {
     render() {
@@ -27,6 +28,7 @@ class App extends Component {
                                 <Route path="/maximo" component={MaximoAPI}/>
                                 <Route path="/aventon" component={AventonAPI}/>
                                 <Route path="/chile" component={ChileAPI}/>
+                                <Route path="/fifo" component={ChileFifoAPI}/>
                                 <Route path="/tonny" component={TonnyAPI}/>
                                 <Route component={NotFound}/>
                             </Switch>
