@@ -75,24 +75,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/UpdateOrderResponse"
 
-  /legacy/chile/shipment/cancel:
+  /legacy/chile/shipment/cancel/{shipmentId}:
     delete:
       tags:
         - Cancel order
       summary: Cancel FIFO order
-      description: Cancel the order completely.
+      description: Cancel the order completely using the shipmentId from creation endpoint.
       operationId: cancelFifoOrder
       parameters:
         - $ref: "#/components/parameters/enterpriseKey"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fifoOrderID:
-                  type: number
-                  example: 310
+        - $ref: "#/components/parameters/shipmentId"
       responses:
         200:
           description: Successful operation
@@ -119,6 +111,14 @@ components:
       schema:
         type: string
         example: "e0ecd4a1-bbb2-4753-8862-2fb3572aa8ae"
+    shipmentId:
+      in: path
+      name: "shipmentId"
+      description: "Shipment ID of the FIFO order that you want to use"
+      required: true
+      schema:
+        type: string
+        example: "320"
 
   schemas:
     CreateOrderRequest:
@@ -163,9 +163,6 @@ components:
         data:
           type: object
           properties:
-            fifoOrderID:
-              type: integer
-              example: 310
             customer:
               $ref: "#/components/schemas/Profile"
             driver:
@@ -177,12 +174,9 @@ components:
       description: "Complete information for creating the shipment"
       type: "object"
       properties:
-        fifoOrderID:
-          type: "integer"
-          example: 310
         shipmentId:
           type: "string"
-          example: ""
+          example: "320"
         pickupScheduledDate:
           type: "string"
           example: ""
@@ -224,9 +218,6 @@ components:
         data:
           type: "object"
           properties:
-            fifoOrderID:
-              type: "integer"
-              example: 310
             uniqueIdentifier:
               type: "string"
               example: ""
@@ -584,7 +575,7 @@ components:
           example: 0
         id:
           type: string
-          example: 5b4f55c92487061e6cb1cf46
+          example: 320
         packageReturnInfo:
           $ref: "#/components/schemas/PackageReturnInfo"
         packages:
