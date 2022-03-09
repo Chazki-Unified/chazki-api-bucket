@@ -139,6 +139,7 @@ paths:
                 properties:
                   position:
                     type: object
+                    description: Latitude and longitude points
                     properties:
                       latitude:
                         type: number
@@ -148,26 +149,31 @@ paths:
                         example: 0
                   status:
                     type: number
+                    description: State in which the delivery is
                     example: ASSIGNED
                   timestamp:
                     type: string
+                    description: Date of the last update of the Chazki position
                     example: "2020-04-30T00:00:00.000Z"
                   rd:
                     type: string
+                    description: Name of the Chazki
                     example: Drive name 
                   cel:
                     type: string
+                    description: Chazki's phone
                     example: Number Phone 
                   motivo: 
                     type: string
-                    example: Reason for cancellation
+                    description: Reason for cancellation
+                    example: Client not available
         "400":
           description: Query response with errors.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  "$ref": "#/components/schemas/FailFnResponse"
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
 components:
   schemas:
     FailFnResponse:
