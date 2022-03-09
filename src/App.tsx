@@ -10,6 +10,7 @@ import {AventonAPI} from "./components/AventonAPI";
 import {ChileAPI} from "./components/ChileLegacyAPI";
 import {TonnyAPI} from "./components/NintendoAPI";
 import { ChileFifoAPI } from "./components/ChileFifoAPI";
+import { PeruAPI } from "./components/PeruLegacyApi";
 
 class App extends Component {
     render() {
@@ -30,6 +31,7 @@ class App extends Component {
                                 <Route path="/chile" component={ChileAPI}/>
                                 <Route path="/fifo" component={ChileFifoAPI}/>
                                 <Route path="/tonny" component={TonnyAPI}/>
+                                <Route path="/peru" component={PeruAPI}/>
                                 <Route component={NotFound}/>
                             </Switch>
                         </main>

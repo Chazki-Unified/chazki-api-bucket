@@ -1,11 +1,15 @@
 ---
 openapi: 3.0.0
 info:
-  title: API Chazki
+  title: Perú Legacy API
   description: |
-    In order to place orders for Chazki's services, endpoints were enabled to record the delivery and check the orders status. These services are registered in the domain owned by chazki and are detailed in the section below.
-    Find out more about [Chazki here](https://chazki.com/#/).
-    See also our
+    This documentation is only valid for Peru. In order to place orders for Chazki services, endpoints were set up to record delivery and check the status of orders.
+    |
+    These services are registered in the domain owned by chazki and are detailed in the section below.
+    |
+    Find more about [Chazki here](https://chazki.com/#/). See also our [Terms and Conditions](https://pe.chazki.com/tyc.html).
+    ## Autenticación
+    To get access to our API we use a key "chazki-api-key" that must be included in the header of each request to the server.
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -14,21 +18,92 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-  - url: https://us-central1-chazki-link-dev.cloudfunctions.net
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
     description: Tonny Development
-  - url: https://us-central1-chazki-link-beta.cloudfunctions.net
+  - url: https://us-central1-chazki-link-beta.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
     description: Tonny Beta
-  - url: https://us-central1-chazki-link.cloudfunctions.net
+  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
     description: Tonny Production
 tags:
   - name: WebServices
     description: List of endpoints for register and consult of the orders status.
-  - name: PDFServices
-    description: PDF creator endpoints.
-  - name: CSVEndpoints
-    description: List of endpoints for CSV file processing methods
-  - name: PDFAtariServices
-    description: PDF creator endpoints.
+  - name: Anexos
+    description: List of tables info.
 paths:
-
+  "/create/delivery-service":
+    post:
+      tags:
+        - WebServices
+      description:
+        This endpoint allows you to register a delivery or route. 
+        Since the shipment is an arrangement, several points can be 
+        registered where you want the Chazki to arrive, therefore, a 
+        route is formed; otherwise, only one arrival point can be registered.
+      operationId: delivery-service
+      parameters:
+        - name: code
+          in: query
+          description: Delivery track code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: enterpriseKey
+          in: query
+          description: Client unique authorization code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  position:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                        example: -12.046502
+                      longitude:
+                        type: number
+                        example: -77.042716
+                  status:
+                    type: number
+                    example: ASSIGNED
+                  timestamp:
+                    type: string
+                    example: "2020-04-30T00:00:00.000Z"
+                  rd:
+                    type: string
+                    example: Nombre repartidor
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
 components:
+  schemas:
+    FailFnResponse:
+      type: object
+      properties:
+        response:
+          type: number
+          example: 0
+        descriptionResponse:
+          type: string
+          example: El trackcode no existe o el enterpriseKey no es correcto
+        message:
+          type: string
+          example: ""
