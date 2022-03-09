@@ -33,7 +33,7 @@ tags:
   - name: Anexos
     description: List of tables info.
 parameters:
-  "chazki-api-key"
+  "chazki-api-key":
     name: "chazki-api-key"
     in: header
     description: Access key for api.
