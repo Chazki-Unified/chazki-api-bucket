@@ -2,17 +2,14 @@
 openapi: 3.0.0
 info:
   title: Perú Legacy API
-  description: |
+  description: |+1
     This documentation is only valid for Peru. In order to place orders 
     for Chazki services, endpoints were set up to record delivery and check 
     the status of orders.
-    \n
     These services are registered in the domain owned by chazki and are 
     detailed in the section below.
-    \n
     Find more about [Chazki here](https://chazki.com/#/). 
     See also our [Terms and Conditions](https://pe.chazki.com/tyc.html).
-    \n
     ## Autenticación
     To get access to our API we use a key "chazki-api-key" that must be 
     included in the header of each request to the server.
