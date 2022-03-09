@@ -96,6 +96,46 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
+  "/tracking/select/delivery-code":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to see the movement of the Chazki and the status of the delivery.
+      operationId: delivery-code
+      parameters:
+        - name: code
+          in: query
+          description: Delivery track code.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: timezone
+          in: query
+          description: Timezone of city.[Anexo Timezone]
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Language for message response.
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: 'chazki-api-key'
+          in: headers
+          description: Language for message response.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
 components:
   schemas:
     FailFnResponse:
