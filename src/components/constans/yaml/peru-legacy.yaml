@@ -32,16 +32,6 @@ tags:
     description: List of endpoints for register and consult of the orders status.
   - name: Anexos
     description: List of tables info.
-parameters:
-  chazkiApiKey":
-    name: "chazki-api-key"
-    in: header
-    description: Access key for api.
-    required: true
-    style: form
-    explode: false
-    schema:
-      type: string
 paths:
   "/create/delivery-service":
     post:
@@ -189,3 +179,13 @@ components:
         descriptionResponse:
           type: string
           example: El trackcode no existe o el enterpriseKey no es correcto
+  parameters:
+    chazkiApiKey":
+      name: "chazki-api-key"
+      in: header
+      description: Access key for api.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
