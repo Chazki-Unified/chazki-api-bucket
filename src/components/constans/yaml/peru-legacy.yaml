@@ -33,7 +33,7 @@ tags:
   - name: Anexos
     description: List of tables info.
 parameters:
-  "chazki-api-key":
+  chazkiApiKey":
     name: "chazki-api-key"
     in: header
     description: Access key for api.
@@ -114,7 +114,7 @@ paths:
         This API allows us to see the movement of the Chazki and the status of the delivery.
       operationId: delivery-code
       parameters:
-        - "$ref": '#/parameters/chazki-api-key'
+        - "$ref": '#/parameters/chazkiApiKey'
         - name: code
           in: query
           description: Delivery track code.
