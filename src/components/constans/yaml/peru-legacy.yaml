@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
   title: Perú Legacy API
-  description: |+1
+  description: |
     This documentation is only valid for Peru. In order to place orders 
     for Chazki services, endpoints were set up to record delivery and check 
     the status of orders.
@@ -104,7 +104,7 @@ paths:
         This API allows us to see the movement of the Chazki and the status of the delivery.
       operationId: delivery-code
       parameters:
-        - "$ref": '#/parameters/chazkiApiKey'
+        - "$ref": '#/components/parameters/chazkiApiKey'
         - name: code
           in: query
           description: Delivery track code.
@@ -180,7 +180,7 @@ components:
           type: string
           example: El trackcode no existe o el enterpriseKey no es correcto
   parameters:
-    chazkiApiKey":
+    chazkiApiKey:
       name: "chazki-api-key"
       in: header
       description: Access key for api.
