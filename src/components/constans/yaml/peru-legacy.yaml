@@ -19,11 +19,11 @@ info:
   version: 1.0.0
 servers:
   - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
-    description: Tonny Development
+    description: Legacy Development
   - url: https://us-central1-chazki-link-beta.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
-    description: Tonny Beta
+    description: Legacy Beta
   - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
-    description: Tonny Production
+    description: Legacy Production
 tags:
   - name: WebServices
     description: List of endpoints for register and consult of the orders status.
