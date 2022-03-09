@@ -32,6 +32,16 @@ tags:
     description: List of endpoints for register and consult of the orders status.
   - name: Anexos
     description: List of tables info.
+parameters:
+  "chazki-api-key"
+    name: "chazki-api-key"
+    in: header
+    description: Access key for api.
+    required: true
+    style: form
+    explode: false
+    schema:
+      type: string
 paths:
   "/create/delivery-service":
     post:
@@ -104,6 +114,7 @@ paths:
         This API allows us to see the movement of the Chazki and the status of the delivery.
       operationId: delivery-code
       parameters:
+        - "$ref": '#/parameters/chazki-api-key'
         - name: code
           in: query
           description: Delivery track code.
@@ -114,7 +125,7 @@ paths:
             type: string
         - name: timezone
           in: query
-          description: Timezone of city.[Anexo Timezone](https://chazki.com/#/)
+          description: Timezone of city. [Anexo Timezone](https://chazki.com/#/)
           required: false
           style: form
           explode: false
@@ -128,14 +139,45 @@ paths:
           explode: false
           schema:
             type: string
-        - name: "chazki-api-key"
-          in: header
-          description: Language for message response.
-          required: true
-          style: form
-          explode: false
-          schema:
-            type: string
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  position:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                        example: 0
+                      longitude:
+                        type: number
+                        example: 0
+                  status:
+                    type: number
+                    example: ASSIGNED
+                  timestamp:
+                    type: string
+                    example: "2020-04-30T00:00:00.000Z"
+                  rd:
+                    type: string
+                    example: Drive name 
+                  cel:
+                    type: string
+                    example: Number Phone 
+                  motivo: 
+                    type: string
+                    example: Reason for cancellation
+        "400":
+          description: Query response with errors.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  "$ref": "#/components/schemas/FailFnResponse"
 components:
   schemas:
     FailFnResponse:
@@ -147,6 +189,3 @@ components:
         descriptionResponse:
           type: string
           example: El trackcode no existe o el enterpriseKey no es correcto
-        message:
-          type: string
-          example: ""
