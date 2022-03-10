@@ -110,23 +110,11 @@ paths:
       operationId: delivery-service
       security:
         - chazki-api-key: []
-      parameters:
-        - name: code
-          in: query
-          description: Delivery track code.
-          required: true
-          style: form
-          explode: false
-          schema:
-            type: string
-        - name: enterpriseKey
-          in: query
-          description: Client unique authorization code.
-          required: true
-          style: form
-          explode: false
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatedBody'
       responses:
         "200":
           description: Successfully response object.
@@ -439,6 +427,127 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
+  "/cancel/order":
+    put:
+      tags:
+        - WebServices
+      description:
+        This API allows us to cancel an order before it is OFFERED.
+      security:
+        - chazki-api-key: []
+      operationId: Cancel Order
+      parameters:
+        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryLanguage'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    description: 'Code response (0: Order could not be cancelled, 1: Order cancelled, 99: ERROR).'
+                    example: 1
+                  deliveryResponse: 
+                    type: string
+                    description: Description of the reason for the response
+                    example: Se canceló correctamente la orden
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  "/coverage/position":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to know if the coordinate is within the Chazki coverage.
+      security:
+        - chazki-api-key: []
+      operationId: Coverage Position
+      parameters:
+        - "$ref": '#/components/parameters/queryLongitude'
+        - "$ref": '#/components/parameters/queryLatitude'
+        - "$ref": '#/components/parameters/queryLanguage'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    description: 'Code response (0: Error, 1: Ok).'
+                    example: 1
+                  deliveryResponse: 
+                    type: string
+                    description: Description of the reason for the response
+                    example: La dirección está dentro de nuestras zonas de cobertura
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailCvResponse"
+  "/coverage/distance":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to obtain a label with the address of the order.
+      security:
+        - chazki-api-key: []
+      operationId: Coverage Distance
+      parameters:
+        - "$ref": '#/components/parameters/queryOLng'
+        - "$ref": '#/components/parameters/queryOLat'
+        - "$ref": '#/components/parameters/queryDLng'
+        - "$ref": '#/components/parameters/queryDLat'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'true: Valid request, false: Invalid request.'
+                    example: true
+                  code:
+                    type: number
+                    description: 'Response code (0: INVALID FIELDS, 1: SUCCESS, 99: SERVER ERROR).'
+                    example : 1
+                  message:
+                    type: string
+                    description: 'Description of the response, including an error message in case the request is invalid.'
+                    example: 'Coordinates found'
+                  distance: 
+                    type: number
+                    format: double
+                    description: 'Distance in kilometers with 2 decimal places of precision'
+                    example: 58.41
+                  untis:
+                    type: string
+                    description: 'Distance measurement unit (km)'
+                    example: 'km'
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailDistanceResponse"
 components:
   schemas:
     FailFnResponse:
@@ -452,6 +561,17 @@ components:
           type: string
           description: Bug Description.
           example: El trackcode no existe o el enterpriseKey no es correcto
+    FailCvResponse:
+      type: object
+      properties:
+        response:
+          type: number
+          description: 'Code response (99: Error query: Error, 1: Ok).'
+          example: 99
+        descriptionResponse:
+          type: string
+          description: Bug Description.
+          example: No se han encontrado coordenadas
     labelsOrders:
       type: object
       properties:
@@ -462,6 +582,206 @@ components:
           items:
             type: string
             example: NroOrden1
+    FailDistanceResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 'true: Valid request, false: Invalid request.'
+          example: false
+        code:
+          type: number
+          description: 'Response code (0: INVALID FIELDS, 1: SUCCESS, 99: SERVER ERROR).'
+          example : 0
+        message:
+          type: string
+          description: 'Description of the response, including an error message in case the request is invalid.'
+          example: 'Origin out of coverage'
+    CreatedBody:
+      type: array
+      items:
+        properties:
+          storeId:
+            type: string
+            description: 'Field referring to the store.'
+            example: 23434j3808e4b04d9cfec50112
+          branchId:
+            type: string
+            description: 'Place or branch from where the order originates.'
+            required: true
+            example: 234kj2l3k4j34e4b04d9cfec50115
+          deliveryTrackCode:
+            type: string
+            required: true
+            description: 'Code that identifies the order, this code must be unique.'
+            example : '0000001061015'
+          proofPayment:
+            type: string
+            required: true
+            description: 'Physical evidence that the packaging will have and will be delivered to the end customer. (BOLETA | FACTURA)'
+            example: 'BOLETA'
+          deliveryCost:
+            type: number
+            format: float
+            required: true
+            description: 'It is 0, unless the customer charges an additional amount for the delivery.'
+            example: 0
+          mode:
+            type: string
+            required: true
+            description: 'Depending on the type of service desired, it can be: REGULAR, EXPRESS, PROGRAMADO, PROGRAMADO_1, PROGRAMADO_2, PROGRAMADO_3'
+            example: 'REGULAR'
+          time: 
+            type: string
+            required: true
+            description: 'If it is "PROGRAMADO", indicate the hours "9-13", "13-17" or "17-21".'
+            example: '9-13'
+          paymentMethod:
+            type: string
+            required: true
+            description: 'It can be pagado or efectivo '
+            example: pagado
+          country:
+            type: string
+            required: true
+            description: 'Country where the delivery is generated (PE: Peru, MX: Mexico, ARG: Argentina)'
+            example: PE
+          listItemSold:
+            type: array
+            description: 'List of items sent as part of the delivery'
+            items:
+              properties:
+                name:
+                  type: string
+                  required: true
+                  description: 'Product description'
+                  example: Asus - Tablet Memo Pad ME70CX-1A022A 7 Android 4.3 1GB 8GB - Negro
+                currency:
+                  type: string
+                  required: true
+                  description: 'Coin. Default "PEN"'
+                  example: PEN
+                price:
+                  type: number
+                  format: float
+                  description: 'Price. If it is effective, it must be the real price, or a reference price if it is paid.'
+                  example: 255
+                weight:
+                  type: number
+                  format: double
+                  description: 'Referential weight of the package.'
+                  example: 0.9
+                volumen:
+                  type: number
+                  format: double
+                  description: 'Referential weight of the package, data for the billing calculation.'
+                  example: 0.9
+                quantity:
+                  type: number
+                  format: integer
+                  required: true
+                  description: 'Quantity of items.'
+                  example: 1
+                unity:
+                  type: string
+                  required: true
+                  description: 'Unit of outer pack.'
+                  example: Paquete
+                size:
+                  type: string
+                  required: true
+                  description: 'Order unit of measure (XS, S, M, L) '
+                  example: S
+          notes:
+            type: string
+            description: 'Additional data, which facilitates delivery. It can be empty'
+            example: El paquete lo deja en la recepción del edificio
+          documentNumber:
+            type: string
+            required: true
+            description: 'Customer document'
+            example: 12345678987
+          name_tmp:
+            type: string
+            required: true
+            description: 'Name of the person receiving the order/Natural Person'
+            example: ''
+          lastName:
+            type: string
+            required: true
+            description: 'Name of the person receiving the order/Natural Person'
+            example: ''
+          companyName:
+            type: string
+            required: true
+            description: 'In case the shipment is made to a Client company '
+            example: 'Zapateria CCE'
+          email:
+            type: string
+            required: true
+            description: 'Client emal'
+            example: 'cce@gmail.co'
+          phone:
+            type: string
+            required: true
+            description: 'Client phone'
+            example: '989555879'
+          documentType:
+            type: string
+            required: true
+            description: 'Tipo de documento del cliente DNI, RUC y CDE (Carnet de extranjería)'
+            example: 'RUC'
+          addressClient:
+            type: array
+            description: 'Info CLient'
+            items:
+              properties:
+                name:
+                  type: string
+                  required: true
+                  description: 'Direction client'
+                  example: Calle Bronzino 501
+                nivel_2:
+                  type: string
+                  required: true
+                  description: 'Department of the client address'
+                  example: LIMA
+                nivel_3:
+                  type: string
+                  required: true
+                  description: 'Province of the client address'
+                  example: LIMA
+                nivel_4:
+                  type: string
+                  required: true
+                  description: 'District of the client address '
+                  example: SAN BORJA
+                reference:
+                  type: string
+                  required: true
+                  description: 'Reference to the address of the client'
+                  example: Alt. Cavallini
+                alias:
+                  type: string
+                  required: true
+                  description: 'Alias of the sending point'
+                  example: Oficina central
+                position:
+                  type: object
+                  required: true
+                  properties:
+                    latitude:
+                      type: number
+                      format: double
+                      required: true
+                      description: 'Latitude, if unknown, place 0'
+                      example: 0
+                    longitude:
+                      type: number
+                      format: double
+                      required: true
+                      description: 'Longitude, if unknown, place 0 '
+                      example: 0
     service:
       type: object
       properties:
@@ -542,6 +862,66 @@ components:
       explode: false
       schema:
         type: string
+    queryLongitude:
+      name: longitude
+      in: query
+      description: Coordinate longitude.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: number
+        format: double
+    queryLatitude:
+      name: latitude
+      in: query
+      description: Coordinate latitude.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: number
+        format: double
+    queryOLat:
+      name: oLat
+      in: query
+      description: Coordinate origin latitude.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: number
+        format: double
+    queryOLng:
+      name: oLng
+      in: query
+      description: Coordinate origin longitude.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: number
+        format: double
+    queryDLat:
+      name: dLat
+      in: query
+      description: Coordinate destination latitude.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: number
+        format: double
+    queryDLng:
+      name: dLng
+      in: query
+      description: Coordinate destination longitude.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: number
+        format: double
   securitySchemes:
     chazki-api-key:
       name: chazki-api-key
