@@ -98,12 +98,11 @@ paths:
                 "$ref": "#/components/schemas/FailFnResponse"
   "/tracking/select/delivery-code":
     get:
-      name: "Order status and position"
       tags:
         - WebServices
       description:
         This API allows us to see the movement of the Chazki and the status of the delivery.
-      operationId: delivery-code
+      operationId: Order-status-position
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -162,7 +161,7 @@ paths:
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
-      operationId: status-record
+      operationId: History-state
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -213,7 +212,7 @@ paths:
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
-      operationId: status-record-all
+      operationId: History-internal-states
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -256,7 +255,7 @@ paths:
         - WebServices
       description:
         This API allows us to see the photos taken by the chazki at the time of delivery.
-      operationId: tracking-images
+      operationId: Images of the Order
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
