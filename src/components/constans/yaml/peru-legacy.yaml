@@ -157,8 +157,10 @@ paths:
     get:
       tags:
         - WebServices
-      description:
-        This API allows us to see the movement of the Chazki and the status of the delivery.
+      description: |
+        This API allows us to see the states through which the delivery passed grouped 
+        by services. The grouping of services refers to the attempts that were made to 
+        deliver the delivery.
       operationId: status-record
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
@@ -171,28 +173,30 @@ paths:
             application/json:
               schema:
                 type: object
-                descriptionResponse: 
-                  type: string
-                  description: Response description
-                  example: SUCCESS
-                message: 
-                  type: string
-                  description: message description
-                  example: ""
-                "service_1":
-                  type: array
-                  description: Services through which the delivery passed
-                  items:
-                      type: object
-                      "$ref": "#/components/schemas/Service"
-                "service_2":
-                  type: array
-                  description: Services through which the delivery passed
-                  items:
-                      type: object
-                      "$ref": "#/components/schemas/Service"
-
-
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  descriptionResponse: 
+                    type: string
+                    description: Response description
+                    example: SUCCESS
+                  message: 
+                    type: string
+                    description: message description
+                    example: ""
+                  "service_1":
+                    type: array
+                    description: Services through which the delivery passed
+                    items:
+                        type: object
+                        "$ref": "#/components/schemas/Service"
+                  "service_2":
+                    type: array
+                    description: Services through which the delivery passed
+                    items:
+                        type: object
+                        "$ref": "#/components/schemas/Service"
         "400":
           description: Query response with errors.
           content:
