@@ -232,19 +232,13 @@ paths:
                     type: string
                     description: Response description
                     example: SUCCESS
-                  message: 
+                  timezone: 
                     type: string
-                    description: message description
-                    example: ""
-                  "service_1":
+                    description: Indicates the timezone used, by default "UTC"
+                    example: "UTC"
+                  statusList:
                     type: array
-                    description: Services through which the delivery passed
-                    items:
-                        type: object
-                        "$ref": "#/components/schemas/service"
-                  "service_2":
-                    type: array
-                    description: Services through which the delivery passed
+                    description: Array with all states of the order (internal states of chazki)
                     items:
                         type: object
                         "$ref": "#/components/schemas/service"
@@ -283,6 +277,41 @@ components:
           type: string
           description: |
             Only for failed states. Reason if the status was "Pickup Failed" 
+            or "Delivery Failed"
+          example: ""
+        reasonCode:
+          type: string
+          description: |
+            Only for failed states. Reason code if the status was "Pickup Failed" 
+            or "Delivery Failed"
+          example: ""
+    serviceAll:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Delivery status
+          example: NEW
+        date:
+          type: string
+          description: Status date
+          example: "2020-04-30T00:00:00.000Z"
+        attemptNumber:
+          type: number
+          description: |
+            Indicates the number of delivery attempts, it increases based on rescheduling. 
+            By default 1
+          example: 1
+        reason:
+          type: string
+          description: |
+            Only for failed states. Reason if the status was "Pickup Failed" 
+            or "Delivery Failed"
+          example: ""
+        reasonCode:
+          type: string
+          description: |
+            Only for failed states. Reason code if the status was "Pickup Failed" 
             or "Delivery Failed"
           example: ""
   parameters:
