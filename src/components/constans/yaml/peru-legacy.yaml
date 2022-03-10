@@ -14,8 +14,12 @@ info:
     Find more about [Chazki here](https://chazki.com/#/). 
     See also our [Terms and Conditions](https://pe.chazki.com/tyc.html).
 
+
     #ANEXO
+
+
     ##States of Orders
+
 
     | Estado                  | Descripción                                |
     | ----------------------- | ----------------------------------------------------------------------- |
@@ -30,7 +34,9 @@ info:
     |  COMPLETED              | The order is delivered successfully                                     |
     |  REPROGRAMMED           | The order is rescheduled                                                |
 
+
     ##Order Types
+
 
     | Estado                  | Descripción                                |
     | ----------------------- | ----------------------------------------------------------------------- |
@@ -40,7 +46,9 @@ info:
     |  FOOD                   | Food order scheduled to be delivered within one hour                    |
     |  FOOD_PROGRAMADO        | Food order scheduled to be delivered at a specific time                 |
     
+
     ##Timezone
+
 
     | Ciudad                  | UTC       | UTC DST (Verano) | Timezone    |
     | ----------------------- | --------- | ---------------- | ------------------------------------------- |
@@ -50,12 +58,18 @@ info:
     |  Monterrey           | UTC -6       | UTC -5       | America/Monterrey                    |
     |  Buenos Aires        | UTC -3       | UTC -3       | America/Argentina/Buenos_Aires       |
 
+
     ###List of all recorded timezones
+
+
     wiki: <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">Lista de todos los timezones</a>
       
 
     ##URL Encode
+
+
     To send the timezone as a query param, it is necessary to encode the timezone.
+
 
     | Timezone                  | Encode              |
     | ------------------------- | -------------------------------------------- |
