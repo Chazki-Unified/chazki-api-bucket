@@ -204,6 +204,57 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
+  "/status/record/all":
+    get:
+      tags:
+        - WebServices
+      description: |
+        This API allows us to see the states through which the delivery passed grouped 
+        by services. The grouping of services refers to the attempts that were made to 
+        deliver the delivery.
+      operationId: status-record-all
+      parameters:
+        - "$ref": '#/components/parameters/chazkiApiKey'
+        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryTimeZone'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    example: 1
+                  descriptionResponse: 
+                    type: string
+                    description: Response description
+                    example: SUCCESS
+                  message: 
+                    type: string
+                    description: message description
+                    example: ""
+                  "service_1":
+                    type: array
+                    description: Services through which the delivery passed
+                    items:
+                        type: object
+                        "$ref": "#/components/schemas/Service"
+                  "service_2":
+                    type: array
+                    description: Services through which the delivery passed
+                    items:
+                        type: object
+                        "$ref": "#/components/schemas/Service"
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
 components:
   schemas:
     FailFnResponse:
@@ -222,12 +273,17 @@ components:
       properties:
         status:
           type: string
+          description: Delivery status
           example: NEW
         date:
           type: string
+          description: Status date
           example: "2020-04-30T00:00:00.000Z"
         reason:
           type: string
+          description: |
+            Only for failed states. Reason if the status was "Pickup Failed" 
+            or "Delivery Failed"
           example: ""
   parameters:
     chazkiApiKey:
