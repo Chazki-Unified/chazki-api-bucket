@@ -259,7 +259,6 @@ paths:
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
-        - "$ref": '#/components/parameters/queryTimeZone'
         - "$ref": '#/components/parameters/queryLanguage'
       responses:
         "200": 
@@ -298,7 +297,81 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
-  
+  "/tracking/label":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to obtain a label with the address of the order.
+      operationId: tracking-label
+      parameters:
+        - "$ref": '#/components/parameters/chazkiApiKey'
+        - "$ref": '#/components/parameters/queryCode'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    description: 'Code response (0: Error, 1: Ok).'
+                    example: 1
+                  deliveryResponse: 
+                    type: string
+                    description: PDF of the order label in base 64
+                    example: iVBORw0KGgoAAAANSUhEUgAAAl8AAAQ4CAIAAAC4
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  "/tracking/label/all":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to obtain a label with the address of the order.
+      operationId: tracking-label-all
+      parameters:
+        - "$ref": '#/components/parameters/chazkiApiKey'
+        - name: trackCodes
+          in: query
+          description: List of registered trackCodes.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    description: 'Code response (0: Error, 1: Ok).'
+                    example: 1
+                  deliveryResponse: 
+                    type: string
+                    description: PDF of the order label in base 64
+                    example: iVBORw0KGgoAAAANSUhEUgAAAl8AAAQ4CAIAAAC4
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
 components:
   schemas:
     FailFnResponse:
