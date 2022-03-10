@@ -6,8 +6,10 @@ info:
     for Chazki services, endpoints were set up to record delivery and check 
     the status of orders.
 
+
     These services are registered in the domain owned by chazki and are 
     detailed in the section below.
+
 
     Find more about [Chazki here](https://chazki.com/#/). 
     See also our [Terms and Conditions](https://pe.chazki.com/tyc.html).
@@ -41,6 +43,8 @@ paths:
         registered where you want the Chazki to arrive, therefore, a 
         route is formed; otherwise, only one arrival point can be registered.
       operationId: delivery-service
+      security:
+        - chazki-api-key: []
       parameters:
         - name: code
           in: query
@@ -101,8 +105,9 @@ paths:
       description:
         This API allows us to see the movement of the Chazki and the status of the delivery.
       operationId: Status-position of the order
+      security:
+        - chazki-api-key: []
       parameters:
-        - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryTimeZone'
         - "$ref": '#/components/parameters/queryLanguage'
@@ -160,8 +165,9 @@ paths:
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
       operationId: History state
+      security:
+        - chazki-api-key: []
       parameters:
-        - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryTimeZone'
       responses:
@@ -211,8 +217,9 @@ paths:
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
       operationId: History internal states
+      security:
+        - chazki-api-key: []
       parameters:
-        - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryTimeZone'
       responses:
@@ -254,8 +261,9 @@ paths:
       description:
         This API allows us to see the photos taken by the chazki at the time of delivery.
       operationId: Images of the Order
+      security:
+        - chazki-api-key: []
       parameters:
-        - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryLanguage'
       responses:
@@ -302,8 +310,9 @@ paths:
       description:
         This API allows us to obtain a label with the address of the order.
       operationId: Single Labels
+      security:
+        - chazki-api-key: []
       parameters:
-        - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
       responses:
         "200": 
