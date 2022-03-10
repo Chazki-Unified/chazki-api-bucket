@@ -102,7 +102,7 @@ paths:
         - WebServices
       description:
         This API allows us to see the movement of the Chazki and the status of the delivery.
-      operationId: Order-status-position
+      operationId: Status-position of the order
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -161,7 +161,7 @@ paths:
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
-      operationId: History-state
+      operationId: History state
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -212,7 +212,7 @@ paths:
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
-      operationId: History-internal-states
+      operationId: History internal states
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -303,7 +303,7 @@ paths:
         - WebServices
       description:
         This API allows us to obtain a label with the address of the order.
-      operationId: tracking-label
+      operationId: Single Labels
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - "$ref": '#/components/parameters/queryCode'
@@ -336,7 +336,7 @@ paths:
         - WebServices
       description:
         This API allows us to obtain a label with the address of the order.
-      operationId: tracking-label-all
+      operationId: Group Labels
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
         - name: trackCodes
