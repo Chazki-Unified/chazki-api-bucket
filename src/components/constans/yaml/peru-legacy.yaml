@@ -341,16 +341,21 @@ paths:
       operationId: Group Labels
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
-        - name: trackCodes
-          in: body
-          description: List of registered trackCodes.
-          required: true
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              - name: trackCodes
+                in: body
+                description: List of registered trackCodes.
+                required: true
+                style: form
+                explode: false
+                schema:
+                  type: array
+                  items:
+                    type: string
+                    example: NroOrden1
       responses:
         "200": 
           description: Successfully response object.
@@ -482,3 +487,4 @@ components:
       type: apiKey
       in: header
       description: SigniFlow API Key
+      example: xxXXxxXX-xXx-xXxX-XxXx-xxXXxxXXxxXX
