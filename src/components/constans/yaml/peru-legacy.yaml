@@ -241,7 +241,7 @@ paths:
                     description: Array with all states of the order (internal states of chazki)
                     items:
                         type: object
-                        "$ref": "#/components/schemas/service"
+                        "$ref": "#/components/schemas/serviceAll"
         "400":
           description: Query response with errors.
           content:
@@ -249,6 +249,56 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
+  "/tracking/images":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to see the photos taken by the chazki at the time of delivery.
+      operationId: tracking-images
+      parameters:
+        - "$ref": '#/components/parameters/chazkiApiKey'
+        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryTimeZone'
+        - "$ref": '#/components/parameters/queryLanguage'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: number
+                    description: 'Code response (0: Error, 1: Ok).'
+                    example: 1
+                  deliveryResponse: 
+                    type: string
+                    description: Code description.
+                    example: SUCCESS
+                  status: 
+                    type: string
+                    description: Status of the order at the time of the request.
+                    example: "UTC"
+                  orderAssociated:
+                    type: string
+                    description: Base64 image of the chazki associated with the order.
+                    example: iVBORw0KGgoAAAANSUhEUgAAAl8AAAQ4CAIAAAC4
+                  orderImages:
+                    type: array
+                    description: Base64 images taken by the chazki associated with the order.
+                    items:
+                      type: string
+                      example: iVBORw0KGgoAAAANSUhEUgAAAl8AAAQ4CAIAAAC4
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  
 components:
   schemas:
     FailFnResponse:
