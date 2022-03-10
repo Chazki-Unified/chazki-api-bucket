@@ -190,13 +190,13 @@ paths:
                     description: Services through which the delivery passed
                     items:
                         type: object
-                        "$ref": "#/components/schemas/Service"
+                        "$ref": "#/components/schemas/service"
                   "service_2":
                     type: array
                     description: Services through which the delivery passed
                     items:
                         type: object
-                        "$ref": "#/components/schemas/Service"
+                        "$ref": "#/components/schemas/service"
         "400":
           description: Query response with errors.
           content:
@@ -241,13 +241,13 @@ paths:
                     description: Services through which the delivery passed
                     items:
                         type: object
-                        "$ref": "#/components/schemas/Service"
+                        "$ref": "#/components/schemas/service"
                   "service_2":
                     type: array
                     description: Services through which the delivery passed
                     items:
                         type: object
-                        "$ref": "#/components/schemas/Service"
+                        "$ref": "#/components/schemas/service"
         "400":
           description: Query response with errors.
           content:
