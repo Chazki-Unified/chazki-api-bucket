@@ -105,30 +105,9 @@ paths:
       operationId: delivery-code
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
-        - name: code
-          in: query
-          description: Delivery track code.
-          required: true
-          style: form
-          explode: false
-          schema:
-            type: string
-        - name: timezone
-          in: query
-          description: Timezone of city. [Anexo Timezone](https://chazki.com/#/)
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: string
-        - name: language
-          in: query
-          description: Language for message response.
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: string
+        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryTimeZone'
+        - "$ref": '#/components/parameters/queryLanguage'
       responses:
         "200": 
           description: Successfully response object.
@@ -139,7 +118,7 @@ paths:
                 properties:
                   position:
                     type: object
-                    description: Latitude and longitude points
+                    description: Latitude and longitude points.
                     properties:
                       latitude:
                         type: number
@@ -149,24 +128,71 @@ paths:
                         example: 0
                   status:
                     type: number
-                    description: State in which the delivery is
+                    description: State in which the delivery.
                     example: ASSIGNED
                   timestamp:
                     type: string
-                    description: Date of the last update of the Chazki position
+                    description: Date of the last update of the Chazki position.
                     example: "2020-04-30T00:00:00.000Z"
                   rd:
                     type: string
-                    description: Name of the Chazki
+                    description: Name of the Chazki.
                     example: Drive name 
                   cel:
                     type: string
-                    description: Chazki's phone
+                    description: Chazki's phone.
                     example: Number Phone 
                   motivo: 
                     type: string
-                    description: Reason for cancellation
+                    description: The reason is displayed if any failure occurred.
                     example: Client not available
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
+  "/status/record":
+    get:
+      tags:
+        - WebServices
+      description:
+        This API allows us to see the movement of the Chazki and the status of the delivery.
+      operationId: status-record
+      parameters:
+        - "$ref": '#/components/parameters/chazkiApiKey'
+        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryTimeZone'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                descriptionResponse: 
+                  type: string
+                  description: Response description
+                  example: SUCCESS
+                message: 
+                  type: string
+                  description: message description
+                  example: ""
+                "service_1":
+                  type: array
+                  description: Services through which the delivery passed
+                  items:
+                      type: object
+                      "$ref": "#/components/schemas/Service"
+                "service_2":
+                  type: array
+                  description: Services through which the delivery passed
+                  items:
+                      type: object
+                      "$ref": "#/components/schemas/Service"
+
+
         "400":
           description: Query response with errors.
           content:
@@ -181,16 +207,57 @@ components:
       properties:
         response:
           type: number
+          description: 'Code response (0: Error, 1: Ok).'
           example: 0
         descriptionResponse:
           type: string
+          description: Bug Description.
           example: El trackcode no existe o el enterpriseKey no es correcto
+    service:
+      type: object
+      properties:
+        status:
+          type: string
+          example: NEW
+        date:
+          type: string
+          example: "2020-04-30T00:00:00.000Z"
+        reason:
+          type: string
+          example: ""
   parameters:
     chazkiApiKey:
       name: "chazki-api-key"
       in: header
       description: Access key for api.
       required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    queryCode:
+      name: code
+      in: query
+      description: Delivery track code.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    queryTimeZone:
+      name: timezone
+      in: query
+      description: Timezone of city. [Anexo Timezone](https://chazki.com/#/)
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: string
+    queryLanguage:
+      name: language
+      in: query
+      description: Language for message response.
+      required: false
       style: form
       explode: false
       schema:
