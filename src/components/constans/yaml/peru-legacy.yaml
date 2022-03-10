@@ -336,6 +336,8 @@ paths:
         - WebServices
       description:
         This API allows us to obtain a label with the address of the order.
+      security:
+        - chazki-api-key: []
       operationId: Group Labels
       parameters:
         - "$ref": '#/components/parameters/chazkiApiKey'
@@ -446,7 +448,7 @@ components:
       style: form
       explode: false
       schema:
-        type: string
+        type: apiKey
     queryCode:
       name: code
       in: query
@@ -475,8 +477,8 @@ components:
       schema:
         type: string
   securitySchemes:
-    x-api-key:
-      name: X-API-Key
+    chazki-api-key:
+      name: chazki-api-key
       type: apiKey
       in: header
       description: SigniFlow API Key
