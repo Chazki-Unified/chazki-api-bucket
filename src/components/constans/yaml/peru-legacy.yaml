@@ -474,3 +474,9 @@ components:
       explode: false
       schema:
         type: string
+  securitySchemes:
+    x-api-key:
+      name: X-API-Key
+      type: apiKey
+      in: header
+      description: SigniFlow API Key
