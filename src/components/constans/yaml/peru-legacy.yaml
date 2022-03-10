@@ -13,6 +13,57 @@ info:
 
     Find more about [Chazki here](https://chazki.com/#/). 
     See also our [Terms and Conditions](https://pe.chazki.com/tyc.html).
+
+    #ANEXO
+    ##States of Orders
+
+    | Estado                  | Descripción                                |
+    | ----------------------- | ----------------------------------------------------------------------- |
+    |  NEW                    | The order is just entered into the system                               |
+    |  PRE_OFFERED            | Status prior to the order being sent to planning and offered            |
+    |  OFFERED                | The request is offered for a Chazki to accept                           |
+    |  WAITING                | The Chazki is on his way to pick up the order                           |
+    |  ARRIVED                | The Chazki arrives at the order pick-up point                           |
+    |  FAILED_PICK            | Error during order pick up                                              |
+    |  IN_PROGRESS            | The Chazki is on his way to deliver the order                           |
+    |  FAILED                 | Failure occurred during the delivery of the order                       |
+    |  COMPLETED              | The order is delivered successfully                                     |
+    |  REPROGRAMMED           | The order is rescheduled                                                |
+
+    ##Order Types
+
+    | Estado                  | Descripción                                |
+    | ----------------------- | ----------------------------------------------------------------------- |
+    |  REGULAR                | Order that can be delivered the next day after being requested          |
+    |  EXPRESS                | Order that is delivered in a maximum of 3 hours the same day it is made |
+    |  PROGRAMADO             | Order delivered according to three schedules: 9-13, 13-17, 17-21        |
+    |  FOOD                   | Food order scheduled to be delivered within one hour                    |
+    |  FOOD_PROGRAMADO        | Food order scheduled to be delivered at a specific time                 |
+    
+    ##Timezone
+
+    | Ciudad                  | UTC       | UTC DST (Verano) | Timezone    |
+    | ----------------------- | --------- | ---------------- | ------------------------------------------- |
+    |  Lima                | UTC -5       | UTC -5       | America/Lima                         |
+    |  Ciudad de Mexico    | UTC -6       | UTC -5       | America/Mexico_City                  |
+    |  Guadalajara         | UTC -6       | UTC -5       | America/Mexico_City                  |
+    |  Monterrey           | UTC -6       | UTC -5       | America/Monterrey                    |
+    |  Buenos Aires        | UTC -3       | UTC -3       | America/Argentina/Buenos_Aires       |
+
+    ###List of all recorded timezones
+    wiki: <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">Lista de todos los timezones</a>
+      
+
+    ##URL Encode
+    To send the timezone as a query param, it is necessary to encode the timezone.
+
+    | Timezone                  | Encode              |
+    | ------------------------- | -------------------------------------------- |
+    |  America/Lima                         | America%2fLima                      |
+    |  America/Mexico_City                  | America%2fMexico_City               |
+    |  America/Mexico_City                  | America%2fMexico_City               |
+    |  America/Monterrey                    | America%2fMonterrey                 |
+    |  America/Argentina/Buenos_Aires       | America%2fArgentina%2fBuenos_Aires  |
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -449,23 +500,6 @@ components:
             Only for failed states. Reason code if the status was "Pickup Failed" 
             or "Delivery Failed"
           example: ""
-    EstadosPedido:
-      name: Estados de un Pedido schema
-      tags: 
-        - Anexos
-      description: |
-        | Estado                  | Descripción                                |
-        | ----------------------- | ----------------------------------------------------------------------- |
-        |  NEW                    | El pedido es recién ingresado al sistema                                |
-        |  PRE_OFFERED            | Estado previo a que el pedido pase a planeamiento y sea ofertado        |
-        |  OFFERED                | El pedido es ofrecido para que un Chazki lo acepte                      |
-        |  WAITING                | El Chazki va camino a recoger el pedido                                 |
-        |  ARRIVED                | El Chazki llega al punto de recojo del pedido                           |
-        |  FAILED_PICK            | Falla durante el recojo del pedido                                      |
-        |  IN_PROGRESS            | El Chazki está camino a entregar el pedido                              |
-        |  FAILED                 | Falla ocurrida durante la entrega del pedido                            |
-        |  COMPLETED              | El pedido es entregado con éxito                                        |
-        |  REPROGRAMMED           | El pedido es reprogramado                                               |
   parameters:
     queryCode:
       name: code
@@ -501,21 +535,3 @@ components:
       in: header
       description: Access key for api.
       example: xxXXxxXX-xXx-xXxX-XxXx-xxXXxxXXxxXX
-  anexos:
-    EstadosPedido:
-      name: Estados de un Pedido
-      tags: 
-        - Anexos
-      description: |
-        | Estado                  | Descripción                                |
-        | ----------------------- | ----------------------------------------------------------------------- |
-        |  NEW                    | El pedido es recién ingresado al sistema                                |
-        |  PRE_OFFERED            | Estado previo a que el pedido pase a planeamiento y sea ofertado        |
-        |  OFFERED                | El pedido es ofrecido para que un Chazki lo acepte                      |
-        |  WAITING                | El Chazki va camino a recoger el pedido                                 |
-        |  ARRIVED                | El Chazki llega al punto de recojo del pedido                           |
-        |  FAILED_PICK            | Falla durante el recojo del pedido                                      |
-        |  IN_PROGRESS            | El Chazki está camino a entregar el pedido                              |
-        |  FAILED                 | Falla ocurrida durante la entrega del pedido                            |
-        |  COMPLETED              | El pedido es entregado con éxito                                        |
-        |  REPROGRAMMED           | El pedido es reprogramado                                               |
