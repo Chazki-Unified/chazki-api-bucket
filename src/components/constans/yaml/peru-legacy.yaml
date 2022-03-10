@@ -345,17 +345,7 @@ paths:
         content:
           application/json:
             schema:
-              - name: trackCodes
-                in: body
-                description: List of registered trackCodes.
-                required: true
-                style: form
-                explode: false
-                schema:
-                  type: array
-                  items:
-                    type: string
-                    example: NroOrden1
+              $ref: '#/components/schemas/labelsOrders'
       responses:
         "200": 
           description: Successfully response object.
@@ -392,6 +382,16 @@ components:
           type: string
           description: Bug Description.
           example: El trackcode no existe o el enterpriseKey no es correcto
+    labelsOrders:
+      type: object
+      properties:
+        trackCodes:
+          type: array
+          description: List of registered trackCodes.
+          required: true
+          items:
+            type: string
+            example: NroOrden1
     service:
       type: object
       properties:
