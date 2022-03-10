@@ -2,6 +2,7 @@ openapi: 3.0.0
 info:
   title: Perú Legacy API
   description: |
+    # Introduction
     This documentation is only valid for Peru. In order to place orders 
     for Chazki services, endpoints were set up to record delivery and check 
     the status of orders.
@@ -15,10 +16,10 @@ info:
     See also our [Terms and Conditions](https://chazki.com/privacidad).
 
 
-    #ANEXO
+    # ANEXO
 
-    ##States of Orders
-    List states
+    ## States of Orders
+    
 
     | Estado                  | Descripción                                |
     | ----------------------- | ----------------------------------------------------------------------- |
@@ -34,7 +35,7 @@ info:
     |  REPROGRAMMED           | The order is rescheduled                                                |
 
 
-    ##Order Types
+    ## Order Types
 
 
     | Estado                  | Descripción                                |
@@ -46,7 +47,7 @@ info:
     |  FOOD_PROGRAMADO        | Food order scheduled to be delivered at a specific time                 |
     
 
-    ##Timezone
+    ## Timezone
 
 
     | Ciudad                  | UTC       | UTC DST (Verano) | Timezone    |
@@ -58,13 +59,13 @@ info:
     |  Buenos Aires        | UTC -3       | UTC -3       | America/Argentina/Buenos_Aires       |
 
 
-    ###List of all recorded timezones
+    ### List of all recorded timezones
 
 
     wiki: <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">Lista de todos los timezones</a>
       
 
-    ##URL Encode
+    ## URL Encode
 
 
     To send the timezone as a query param, it is necessary to encode the timezone.
