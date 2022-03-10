@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Perú Legacy API
-  description: >
+  description: |
     This documentation is only valid for Peru. In order to place orders 
     for Chazki services, endpoints were set up to record delivery and check 
     the status of orders.
