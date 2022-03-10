@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
   title: Perú Legacy API
-  description: |
+  description: >
     This documentation is only valid for Peru. In order to place orders 
     for Chazki services, endpoints were set up to record delivery and check 
     the status of orders.
@@ -339,8 +339,6 @@ paths:
       security:
         - chazki-api-key: []
       operationId: Group Labels
-      parameters:
-        - "$ref": '#/components/parameters/chazkiApiKey'
       requestBody:
         content:
           application/json:
@@ -445,15 +443,6 @@ components:
             or "Delivery Failed"
           example: ""
   parameters:
-    chazkiApiKey:
-      name: "chazki-api-key"
-      in: header
-      description: Access key for api.
-      required: true
-      style: form
-      explode: false
-      schema:
-        type: apiKey
     queryCode:
       name: code
       in: query
@@ -486,5 +475,5 @@ components:
       name: chazki-api-key
       type: apiKey
       in: header
-      description: SigniFlow API Key
+      description: Access key for api.
       example: xxXXxxXX-xXx-xXxX-XxXx-xxXXxxXXxxXX
