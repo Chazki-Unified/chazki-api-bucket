@@ -7,7 +7,7 @@ export const PeruAPI: React.FC = () => {
   return (
     <API
       basePath="peru"
-      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/feature/pe-legacy/src/components/constans/yaml/peru-legacy.yaml"
+      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/components/constans/yaml/peru-legacy.yaml"
     />
   );
 };
