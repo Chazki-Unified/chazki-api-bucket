@@ -93,21 +93,27 @@ servers:
   - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
     description: Legacy Production
 tags:
-  - name: WebServices
-    description: List of endpoints for register and consult of the orders status.
-  - name: Anexos
-    description: List of tables 
+  - name: OrdersService
+    description: List of endpoints for register orders.
+  - name: AffiliatedService
+    description: List of endpoints for status and position 
+  - name: ImagesService
+    description: List of endpoints for images order.
+  - name: CoverageService
+    description: List of endpoints for coverage
+  - name: LabelServices
+    description: List of endpoints for label
 paths:
   "/create/delivery-service":
     post:
       tags:
-        - WebServices
+        - OrdersService
       description:
         This endpoint allows you to register a delivery or route. 
         Since the shipment is an arrangement, several points can be 
         registered where you want the Chazki to arrive, therefore, a 
         route is formed; otherwise, only one arrival point can be registered.
-      operationId: delivery-service
+      operationId: create
       security:
         - chazki-api-key: []
       requestBody:
@@ -154,10 +160,10 @@ paths:
   "/tracking/select/delivery-code":
     get:
       tags:
-        - WebServices
+        - AffiliatedService
       description:
         This API allows us to see the movement of the Chazki and the status of the delivery.
-      operationId: Status-position of the order
+      operationId: Status-position
       security:
         - chazki-api-key: []
       parameters:
@@ -212,7 +218,7 @@ paths:
   "/status/record":
     get:
       tags:
-        - WebServices
+        - OrdersService
       description: |
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
@@ -264,7 +270,7 @@ paths:
   "/status/record/all":
     get:
       tags:
-        - WebServices
+        - OrdersService
       description: |
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
@@ -310,7 +316,7 @@ paths:
   "/tracking/images":
     get:
       tags:
-        - WebServices
+        - ImagesService
       description:
         This API allows us to see the photos taken by the chazki at the time of delivery.
       operationId: Images of the Order
@@ -359,10 +365,10 @@ paths:
   "/tracking/label":
     get:
       tags:
-        - WebServices
+        - LabelServices
       description:
         This API allows us to obtain a label with the address of the order.
-      operationId: Single Labels
+      operationId: Single Label
       security:
         - chazki-api-key: []
       parameters:
@@ -393,7 +399,7 @@ paths:
   "/tracking/label/all":
     post:
       tags:
-        - WebServices
+        - LabelServices
       description:
         This API allows us to obtain a label with the address of the order.
       security:
@@ -430,12 +436,12 @@ paths:
   "/cancel/order":
     put:
       tags:
-        - WebServices
+        - OrdersService
       description:
         This API allows us to cancel an order before it is OFFERED.
       security:
         - chazki-api-key: []
-      operationId: Cancel Order
+      operationId: Cancelation
       parameters:
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryLanguage'
@@ -465,12 +471,12 @@ paths:
   "/coverage/position":
     get:
       tags:
-        - WebServices
+        - CoverageService
       description:
         This API allows us to know if the coordinate is within the Chazki coverage.
       security:
         - chazki-api-key: []
-      operationId: Coverage Position
+      operationId: Position
       parameters:
         - "$ref": '#/components/parameters/queryLongitude'
         - "$ref": '#/components/parameters/queryLatitude'
@@ -501,12 +507,12 @@ paths:
   "/coverage/distance":
     get:
       tags:
-        - WebServices
+        - CoverageService
       description:
         This API allows us to obtain a label with the address of the order.
       security:
         - chazki-api-key: []
-      operationId: Coverage Distance
+      operationId: Distance
       parameters:
         - "$ref": '#/components/parameters/queryOLng'
         - "$ref": '#/components/parameters/queryOLat'
