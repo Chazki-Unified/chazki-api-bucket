@@ -113,7 +113,7 @@ paths:
         Since the shipment is an arrangement, several points can be 
         registered where you want the Chazki to arrive, therefore, a 
         route is formed; otherwise, only one arrival point can be registered.
-      operationId: create
+      operationId: Create Order
       security:
         - chazki-api-key: []
       requestBody:
@@ -157,18 +157,17 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
-  "/tracking/select/delivery-code":
-    get:
+  "/cancel/order":
+    put:
       tags:
-        - AffiliatedService
+        - OrdersService
       description:
-        This API allows us to see the movement of the Chazki and the status of the delivery.
-      operationId: Status-position
+        This API allows us to cancel an order before it is OFFERED.
       security:
         - chazki-api-key: []
+      operationId: Cancel Order
       parameters:
         - "$ref": '#/components/parameters/queryCode'
-        - "$ref": '#/components/parameters/queryTimeZone'
         - "$ref": '#/components/parameters/queryLanguage'
       responses:
         "200": 
@@ -178,36 +177,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  position:
-                    type: object
-                    description: Latitude and longitude points.
-                    properties:
-                      latitude:
-                        type: number
-                        example: 0
-                      longitude:
-                        type: number
-                        example: 0
-                  status:
+                  response:
                     type: number
-                    description: State in which the delivery.
-                    example: ASSIGNED
-                  timestamp:
+                    description: 'Code response (0: Order could not be cancelled, 1: Order cancelled, 99: ERROR).'
+                    example: 1
+                  deliveryResponse: 
                     type: string
-                    description: Date of the last update of the Chazki position.
-                    example: "2020-04-30T00:00:00.000Z"
-                  rd:
-                    type: string
-                    description: Name of the Chazki.
-                    example: Drive name 
-                  cel:
-                    type: string
-                    description: Chazki's phone.
-                    example: Number Phone 
-                  motivo: 
-                    type: string
-                    description: The reason is displayed if any failure occurred.
-                    example: Client not available
+                    description: Description of the reason for the response
+                    example: Se canceló correctamente la orden
         "400":
           description: Query response with errors.
           content:
@@ -223,7 +200,7 @@ paths:
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
-      operationId: History state
+      operationId: History State
       security:
         - chazki-api-key: []
       parameters:
@@ -275,7 +252,7 @@ paths:
         This API allows us to see the states through which the delivery passed grouped 
         by services. The grouping of services refers to the attempts that were made to 
         deliver the delivery.
-      operationId: History internal states
+      operationId: History Internal States
       security:
         - chazki-api-key: []
       parameters:
@@ -313,13 +290,71 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
+  "/tracking/select/delivery-code":
+    get:
+      tags:
+        - AffiliatedService
+      description:
+        This API allows us to see the movement of the Chazki and the status of the delivery.
+      operationId: Status-Position
+      security:
+        - chazki-api-key: []
+      parameters:
+        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryTimeZone'
+        - "$ref": '#/components/parameters/queryLanguage'
+      responses:
+        "200": 
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  position:
+                    type: object
+                    description: Latitude and longitude points.
+                    properties:
+                      latitude:
+                        type: number
+                        example: 0
+                      longitude:
+                        type: number
+                        example: 0
+                  status:
+                    type: number
+                    description: State in which the delivery.
+                    example: ASSIGNED
+                  timestamp:
+                    type: string
+                    description: Date of the last update of the Chazki position.
+                    example: "2020-04-30T00:00:00.000Z"
+                  rd:
+                    type: string
+                    description: Name of the Chazki.
+                    example: Drive name 
+                  cel:
+                    type: string
+                    description: Chazki's phone.
+                    example: Number Phone 
+                  motivo: 
+                    type: string
+                    description: The reason is displayed if any failure occurred.
+                    example: Client not available
+        "400":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/schemas/FailFnResponse"
   "/tracking/images":
     get:
       tags:
         - ImagesService
       description:
         This API allows us to see the photos taken by the chazki at the time of delivery.
-      operationId: Images of the Order
+      operationId: Images Order
       security:
         - chazki-api-key: []
       parameters:
@@ -426,41 +461,6 @@ paths:
                     type: string
                     description: PDF of the order label in base 64
                     example: iVBORw0KGgoAAAANSUhEUgAAAl8AAAQ4CAIAAAC4
-        "400":
-          description: Query response with errors.
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/schemas/FailFnResponse"
-  "/cancel/order":
-    put:
-      tags:
-        - OrdersService
-      description:
-        This API allows us to cancel an order before it is OFFERED.
-      security:
-        - chazki-api-key: []
-      operationId: Cancelation
-      parameters:
-        - "$ref": '#/components/parameters/queryCode'
-        - "$ref": '#/components/parameters/queryLanguage'
-      responses:
-        "200": 
-          description: Successfully response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  response:
-                    type: number
-                    description: 'Code response (0: Order could not be cancelled, 1: Order cancelled, 99: ERROR).'
-                    example: 1
-                  deliveryResponse: 
-                    type: string
-                    description: Description of the reason for the response
-                    example: Se canceló correctamente la orden
         "400":
           description: Query response with errors.
           content:
