@@ -318,6 +318,34 @@ paths:
                   ordersWithoutErrors:
                     type: number
                     example: 1
+  "/cancelOrderForIntegration":
+    post:
+      tags:
+        - WebServices
+      description:
+        The endpoint allows to cancel an order by integration. 
+        As long as the order is not in a completed state
+      operationId: cancelOrderForIntegration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/cancelOrderForIntegration"
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Cancelled Order"
   "/orderStatusUpdateFun":
     post:
       tags:
@@ -1170,6 +1198,17 @@ components:
                 example:
                   - -99.17644241
                   - 19.509946148
+    cancelOrderForIntegration:
+      type: object
+      properties:
+        enterpriseKey:
+          type: string
+          description: Enterprise Identificator
+          example: 1fb07e7c-eca2-45c1-b743-16130ff3212e
+        trackCode:
+          type: string
+          description: Order code
+          example: ABCDEFI
     uploadOriginalOrdersFromIntegration:
       type: object
       properties:
