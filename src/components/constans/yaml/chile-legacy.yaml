@@ -43,7 +43,7 @@ paths:
       description: You can consult prices for a shipment before making it.
       operationId: getPrice
       parameters:
-        - $ref: "#/components/parameters/enterpiseKey"
+        - $ref: "#/components/parameters/enterpriseKey"
       requestBody:
         description: ""
         required: true
@@ -67,7 +67,7 @@ paths:
       description: Once shipment is created successfully, the enterprise can get the shipment information
       operationId: getShipment
       parameters:
-        - $ref: "#/components/parameters/enterpiseKey"
+        - $ref: "#/components/parameters/enterpriseKey"
 
       responses:
         200:
@@ -84,7 +84,7 @@ paths:
       description: Once shipment is created successfully, the enterprise client will recieve an tracking email to view shipment tracking which are limited to specific data. And also the success response of shipment will return tracking URL for enterprise to view the shipment tracking. To view full details of tracking and order, enterprise should pass his/her apiKey and roleKey as query params. Read about tracking end point about more details and example of request.
       operationId: createShipment
       parameters:
-        - $ref: "#/components/parameters/enterpiseKey"
+        - $ref: "#/components/parameters/enterpriseKey"
       requestBody:
         description: ""
         required: true
@@ -108,7 +108,7 @@ paths:
       description: You can cancel shipment before driver is at pick up location.
       operationId: cancelPackage
       parameters:
-        - $ref: "#/components/parameters/enterpiseKey"
+        - $ref: "#/components/parameters/enterpriseKey"
         - $ref: "#/components/parameters/routeCode"
       responses:
         200:
@@ -135,7 +135,7 @@ paths:
       operationId: getshipment
       deprecated: false
       parameters:
-        - $ref: "#/components/parameters/enterpiseKey"
+        - $ref: "#/components/parameters/enterpriseKey"
         - $ref: "#/components/parameters/routeCode"
       responses:
         200:
@@ -152,7 +152,7 @@ paths:
       operationId: getorder
       deprecated: false
       parameters:
-        - $ref: "#/components/parameters/enterpiseKey"
+        - $ref: "#/components/parameters/enterpriseKey"
         - $ref: "#/components/parameters/trackCodeId"
       responses:
         200:
@@ -277,7 +277,7 @@ paths:
                     $ref: "#/components/schemas/Shipment"
 components:
   parameters:
-    enterpiseKey:
+    enterpriseKey:
       in: header
       name: enterprise-key
       required: true
@@ -710,7 +710,7 @@ components:
                 description: Drop off location address
                 type: string
                 example: Anderson Crossing 31
-              pickupCoordinates:
+              dropoffCoordinates:
                 type: array
                 description: Drop off location [Lat, Lng]
                 example: [-33.4524225, -70.6241109]
