@@ -88,9 +88,9 @@ info:
 servers:
   - url: https://us-central1-chazki-link-dev.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
     description: Legacy Development
-  - url: https://us-central1-chazki-link-beta.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
+  - url: https://us-central1-chazki-link-beta.cloudfunctions.net/cf-custom-integrations-beta/api/legacy/peru
     description: Legacy Beta
-  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations-dev/api/legacy/peru
+  - url: https://us-central1-chazki-link.cloudfunctions.net/cf-custom-integrations/api/legacy/peru
     description: Legacy Production
 tags:
   - name: OrdersService
