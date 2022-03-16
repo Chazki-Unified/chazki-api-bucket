@@ -132,24 +132,19 @@ paths:
                   response:
                     type: number
                     example: 1
-                  position:
-                    type: object
-                    properties:
-                      latitude:
-                        type: number
-                        example: -12.046502
-                      longitude:
-                        type: number
-                        example: -77.042716
-                  status:
-                    type: number
-                    example: ASSIGNED
-                  timestamp:
+                  descriptionResponse:
                     type: string
-                    example: "2020-04-30T00:00:00.000Z"
-                  rd:
-                    type: string
-                    example: Nombre repartidor
+                    example: "Order created succesfully"
+                  codeDelivery:
+                    type: array
+                    items:
+                      type: string
+                      example: TP22932
+                  relatedTrackCode:
+                    type: array
+                    items:
+                      type: string
+                      example: TP22932        
         "400":
           description: Query response with errors.
           content:
@@ -229,8 +224,9 @@ paths:
                     type: array
                     description: Services through which the delivery passed
                     items:
-                        type: object
-                        "$ref": "#/components/schemas/service"
+                      oneOf:
+                        - "$ref": "#/components/schemas/service"
+                        - "$ref": "#/components/schemas/service_inc"
                   "service_2":
                     type: array
                     description: Services through which the delivery passed
@@ -509,7 +505,8 @@ paths:
       tags:
         - CoverageService
       description:
-        This API allows us to obtain a label with the address of the order.
+        This API allows us to know the distance that the Chazki must travel when delivering an order based 
+        on the origin and destination coordinates.
       security:
         - chazki-api-key: []
       operationId: Distance
@@ -794,7 +791,7 @@ components:
         status:
           type: string
           description: Delivery status
-          example: NEW
+          example: Nuevo
         date:
           type: string
           description: Status date
@@ -811,6 +808,29 @@ components:
             Only for failed states. Reason code if the status was "Pickup Failed" 
             or "Delivery Failed"
           example: ""
+    service_inc:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Delivery status
+          example: Fallo Recojo
+        date:
+          type: string
+          description: Status date
+          example: "2020-04-30T00:00:00.000Z"
+        reasonCode:
+          type: string
+          description: |
+            Only for failed states. Reason code if the status was "Pickup Failed" 
+            or "Delivery Failed"
+          example: "FT"
+        reason:
+          type: string
+          description: |
+            Only for failed states. Reason if the status was "Pickup Failed" 
+            or "Delivery Failed"
+          example: "Falta de Tiempo"
     serviceAll:
       type: object
       properties:
