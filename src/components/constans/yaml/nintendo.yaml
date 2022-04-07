@@ -286,28 +286,6 @@ paths:
                   ordersWithoutErrors:
                     type: number
                     example: 1
-        "400":
-          description: Failed response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  response:
-                    type: string
-                    description: "Message obtained from the response."
-                    example: 'Server Internal Error'
-                  errors:
-                    type: object
-                    properties: 
-                      type: 
-                        type: string
-                        description: "Bug type."
-                        example: "Error General"
-                      message:
-                        type: string
-                        description: "Short message of the error obtained."
-                        example: 'TypeError: Cannot read property 'cityID' of null'
   "/uploadOriginalOrdersFromIntegration":
     post:
       tags:
@@ -1233,7 +1211,10 @@ components:
                 example:
                   "Tienda ABCD #0000"
               packages:
-                "$ref": "#/components/schemas/Packages"
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Packages"
+
     cancelOrderForIntegration:
       type: object
       properties:
