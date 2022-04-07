@@ -1220,9 +1220,20 @@ components:
                 example:
                   - -99.17644241
                   - 19.509946148
+              shipmentPrice:
+                type: number
+                description: 
+                  Shipping Price Amount
+                example:
+                  0.0
+              pickUpLandMark:
+                type: string
+                description:
+                  Brief description of the store inside the warehouse or branch.
+                example:
+                  "Tienda ABCD #0000"
               packages:
-                schema: 
-                  "$ref": "#/components/schemas/Packages"
+                "$ref": "#/components/schemas/Packages"
     cancelOrderForIntegration:
       type: object
       properties:
