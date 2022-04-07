@@ -286,6 +286,22 @@ paths:
                   ordersWithoutErrors:
                     type: number
                     example: 1
+        "400":
+          description: Failed response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    example: 'Server Internal Error'
+                  errors:
+                    type: object
+                    properties: 
+                      type: 
+                        type: string
+                        description: 
   "/uploadOriginalOrdersFromIntegration":
     post:
       tags:
