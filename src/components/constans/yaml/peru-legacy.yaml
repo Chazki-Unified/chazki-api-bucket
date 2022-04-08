@@ -115,7 +115,7 @@ paths:
         route is formed; otherwise, only one arrival point can be registered.
       operationId: Create Order
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       requestBody:
         content:
           application/json:
@@ -159,10 +159,10 @@ paths:
       description:
         This API allows us to cancel an order before it is OFFERED.
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       operationId: Cancel Order
       parameters:
-        - "$ref": '#/components/parameters/queryCode'
+        - "$ref": '#/components/parameters/queryTrackCode'
         - "$ref": '#/components/parameters/queryLanguage'
       responses:
         "200": 
@@ -197,7 +197,7 @@ paths:
         deliver the delivery.
       operationId: History State
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       parameters:
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryTimeZone'
@@ -250,7 +250,7 @@ paths:
         deliver the delivery.
       operationId: History Internal States
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       parameters:
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryTimeZone'
@@ -294,7 +294,7 @@ paths:
         This API allows us to see the movement of the Chazki and the status of the delivery.
       operationId: Status-Position
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       parameters:
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryTimeZone'
@@ -352,7 +352,7 @@ paths:
         This API allows us to see the photos taken by the chazki at the time of delivery.
       operationId: Images Order
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       parameters:
         - "$ref": '#/components/parameters/queryCode'
         - "$ref": '#/components/parameters/queryLanguage'
@@ -401,7 +401,7 @@ paths:
         This API allows us to obtain a label with the address of the order.
       operationId: Single Label
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       parameters:
         - "$ref": '#/components/parameters/queryCode'
       responses:
@@ -434,7 +434,7 @@ paths:
       description:
         This API allows us to obtain a label with the address of the order.
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       operationId: Group Labels
       requestBody:
         content:
@@ -471,7 +471,7 @@ paths:
       description:
         This API allows us to know if the coordinate is within the Chazki coverage.
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       operationId: Position
       parameters:
         - "$ref": '#/components/parameters/queryLongitude'
@@ -508,7 +508,7 @@ paths:
         This API allows us to know the distance that the Chazki must travel when delivering an order based 
         on the origin and destination coordinates.
       security:
-        - chazki-api-key: []
+        - enterprise-key: []
       operationId: Distance
       parameters:
         - "$ref": '#/components/parameters/queryOLng'
@@ -870,6 +870,15 @@ components:
       explode: false
       schema:
         type: string
+    queryTrackCode:
+      name: trackCode
+      in: query
+      description: Delivery track code.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
     queryTimeZone:
       name: timezone
       in: query
@@ -949,8 +958,8 @@ components:
         type: number
         format: double
   securitySchemes:
-    chazki-api-key:
-      name: chazki-api-key
+    enterprise-key:
+      name: enterprise-key
       type: apiKey
       in: header
       description: Access key for api.
