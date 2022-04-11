@@ -1044,8 +1044,7 @@ components:
               paymentProofID:
                 type: string
                 description: |
-                  Payment document, It can take the next values BOLETA,
-                  GUIA and FACTURA.
+                  Payment document, It can take the next values :
 
                   | paymentProof | Description  |
                   | ------------- | ------------ |
@@ -1059,23 +1058,55 @@ components:
                   Code of the delivery service type will be carried out. 
                   It can take the following values :
 
-                  | service | Description  |
+                  | Service (All the countries) | Description |
                   | ------------- | ------------ |
                   | EXPRESS | The order will be shipped the same day. |
-                  | PROGRAMADO | The order will be shipped the next day according to the indicated schedule. |
-                  | REGULAR | The order will be shipped the next day. |
-                example: REGULAR
+                  | NEXT DAY | The order will be shipped the next day. |
+                  | SAME DAY | |
+
+                  Special services by country:
+
+                  | Service (Argentina) | Description  |
+                  | ------------- | ------------ |
+                  | REGULAR_ARG | d |
+                  | SAME DAY | d |
+                  | SCHEDULED_ARG | s |
+
+                  | Service (Chile) | Description  |
+                  | ------------- | ------------ |
+                  | CONSOLIDADO | d. |
+                  | IDA Y VUELTA | d |
+
+                  | Service (Mexico) | Description  |
+                  | ------------- | ------------ |
+                  | DIA SIGUIENTE | d |
+                  | ECONOMICO | d |
+                  | MISMO DIA | d |
+                  | REGULAR | d |
+                example: SAME DAY
               packageEnvelope:
                 type: string
-                description: Package wrap type.
+                description: Short description of the type of package wrapper.
                 example: Caja
               packageWeight:
                 type: integer
-                description: Package weight.
+                description: Package weight, if the detail of the packages is sent, then it is the sum of them in the same unit.
                 example: 1
               packageSizeID:
                 type: string
-                description: Order measure unit (XS, S, M, L).
+                description: |
+                  Unit of measure of the order, it can take the following values: (the dimensions are agreed with the commercial area).
+
+                  |   Argentina   |     Chile     |    Colombia   |     Mexico    |      Perú     |
+                  | ------------- | ------------- | ------------- | ------------- | ------------- |
+                  | XS_ARG | XS    | SOBRE       | XS    | XS    |
+                  | S_ARG  | S     | CAJA5KG     | S     | S     |
+                  | M_ARG  | SOBRE | CAJA15-10KG | SOBRE | SOBRE |
+                  | L_ARG  | M     | CAJA20KG    | M     | M     |
+                  | XL_ARG | L     | CAJA25KG    | L     | L     |
+                  |        | XL    | CAJA30KG    | XL    | XL    |
+                  |        | XXL   |             | XXL   | XXL   |
+                  |        | JUMBO |             | JUMBO | JUMBO |
                 example: XL
               packageQuantity:
                 type: number
