@@ -1032,27 +1032,38 @@ components:
               paymentMethodID:
                 type: string
                 description: | 
-                  Order payment method, It can take the next values COD,
-                  PAGADO, CCOD, PAY.
+                  Order payment method, It can take the next values :
 
                   | PaymentMethod | Description  |
                   | ------------- | ------------ |
                   | COD | d |
-                  | PAGADO | d |
+                  | PAGADO | The order is paid and only the products are delivered. |
                   | CCOD | d |
                   | PAY | d |
                 example: PAGADO
               paymentProofID:
                 type: string
-                description:
+                description: |
                   Payment document, It can take the next values BOLETA,
                   GUIA and FACTURA.
+
+                  | paymentProof | Description  |
+                  | ------------- | ------------ |
+                  | BOLETA | Proof of payment assigned to the order. |
+                  | FACTURA | Proof of payment assigned to the order. |
+                  | GUIA | Document used to support the transfer. |
                 example: BOLETA
               serviceID:
                 type: string
-                description:
-                  Service code. It can take the next values "REGULAR",
-                  "EXPRESS" or "PROGRAMMED", depending on the desired service type.
+                description: |
+                  Code of the delivery service type will be carried out. 
+                  It can take the following values :
+
+                  | service | Description  |
+                  | ------------- | ------------ |
+                  | EXPRESS | The order will be shipped the same day. |
+                  | PROGRAMADO | The order will be shipped the next day according to the indicated schedule. |
+                  | REGULAR | The order will be shipped the next day. |
                 example: REGULAR
               packageEnvelope:
                 type: string
