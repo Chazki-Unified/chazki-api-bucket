@@ -30,6 +30,115 @@ tags:
   - name: PDFAtariServices
     description: PDF creator endpoints.
 paths:
+  "/uploadClientOrders":
+    post:
+      tags:
+        - WebServices
+      description:
+        "This endpoint allows to register a delivery. Since the data can
+        be grouped into an array, multiple deliveries can be registered.Note: The
+        objects structure in the 'orders' array is the same as the one provided
+        in the schema for CSV loading. The following list of parameters may have more
+        or fewer fields. In any case, use the fields from the CSV scheme."
+      operationId: uploadClientOrders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Orders"
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  ordersWithErrors:
+                    type: number
+                    example: 0
+                  ordersWithoutErrors:
+                    type: number
+                    example: 1
+  "/uploadOriginalOrdersFromIntegration":
+    post:
+      tags:
+        - WebServices
+      description:
+        Este endpoint permite registrar un originalOrder from Integration.
+        Dado que en el los datos se puegen agrupar en un arreglo, se pueden registrar
+        varios originalOrder
+      operationId: uploadOriginalOrdersFromIntegration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/uploadOriginalOrdersFromIntegration"
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  ordersWithErrors:
+                    type: number
+                    example: 0
+                  ordersWithoutErrors:
+                    type: number
+                    example: 1
+  "/cancelOrderForIntegration":
+    post:
+      tags:
+        - WebServices
+      description:
+        The endpoint allows to cancel an order by integration. 
+        As long as the order is not in a completed state
+      operationId: cancelOrderForIntegration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/cancelOrderForIntegration"
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Cancelled Order"
+  "/orderStatusUpdateFun":
+    post:
+      tags:
+        - WebServices
+      description: This API allows us to UPDATE the Order status.
+      operationId: orderStatusUpdateFun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/orderStatusUpdateFun"
+      responses:
+        "200":
+          description: Response object with ordersWithErrors, ordersWithoutErrors.
   "/fnTrackOrderChazkiPosition":
     get:
       tags:
@@ -43,37 +152,9 @@ paths:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
-          description: Successfully response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  response:
-                    type: number
-                    example: 1
-                  position:
-                    type: object
-                    properties:
-                      latitude:
-                        type: number
-                        example: -12.046502
-                      longitude:
-                        type: number
-                        example: -77.042716
-                  status:
-                    type: number
-                    example: ASSIGNED
-                  timestamp:
-                    type: string
-                    example: "2020-04-30T00:00:00.000Z"
-                  rd:
-                    type: string
-                    example: Nombre repartidor
+          "$ref": "#/components/responses/positionResponse400"
         "400":
-          "$ref": "#/components/responses/errorResponse400"
-        "204":
-          "$ref": "#/components/responses/response400"
+          "$ref": "#/components/responses/positionResponse400"
   "/fnOrderHistorialPublic":
     get:
       tags:
@@ -193,115 +274,6 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailfnOrderImages"
-  "/uploadClientOrders":
-    post:
-      tags:
-        - WebServices
-      description:
-        "This endpoint allows to register a delivery. Since the data can
-        be grouped into an array, multiple deliveries can be registered.Note: The
-        objects structure in the 'orders' array is the same as the one provided
-        in the schema for CSV loading. The following list of parameters may have more
-        or fewer fields. In any case, use the fields from the CSV scheme."
-      operationId: uploadClientOrders
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/Orders"
-      responses:
-        "200":
-          description: Successfully response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  ordersWithErrors:
-                    type: number
-                    example: 0
-                  ordersWithoutErrors:
-                    type: number
-                    example: 1
-  "/uploadOriginalOrdersFromIntegration":
-    post:
-      tags:
-        - WebServices
-      description:
-        Este endpoint permite registrar un originalOrder from Integration.
-        Dado que en el los datos se puegen agrupar en un arreglo, se pueden registrar
-        varios originalOrder
-      operationId: uploadOriginalOrdersFromIntegration
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/uploadOriginalOrdersFromIntegration"
-      responses:
-        "200":
-          description: Successfully response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  ordersWithErrors:
-                    type: number
-                    example: 0
-                  ordersWithoutErrors:
-                    type: number
-                    example: 1
-  "/cancelOrderForIntegration":
-    post:
-      tags:
-        - WebServices
-      description:
-        The endpoint allows to cancel an order by integration. 
-        As long as the order is not in a completed state
-      operationId: cancelOrderForIntegration
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/cancelOrderForIntegration"
-      responses:
-        "200":
-          description: Successfully response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "Cancelled Order"
-  "/orderStatusUpdateFun":
-    post:
-      tags:
-        - WebServices
-      description: This API allows us to UPDATE the Order status.
-      operationId: orderStatusUpdateFun
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/orderStatusUpdateFun"
-      responses:
-        "200":
-          description: Response object with ordersWithErrors, ordersWithoutErrors.
   "/createPDFByCSV":
     post:
       tags:
@@ -1245,7 +1217,6 @@ components:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Packages"
-
     cancelOrderForIntegration:
       type: object
       properties:
@@ -1724,22 +1695,41 @@ components:
             "$ref": "#/components/schemas/Orders"
       required: true
   responses:
-    errorResponse400:
+    positionResponse400:
       description: Query response with errors.
       content:
         application/json:
           schema:
             type: object
             "$ref": "#/components/schemas/FailFnResponse"
-    response400:
-      description: Query response with errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            oneOf:
-              - "$ref": "#/components/schemas/FailFnResponse"
-              - "$ref": "#/components/schemas/FailfnOrderImages"
+    positionResponse200:
+      description: Successfully response object.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                response:
+                  type: number
+                  example: 1
+                position:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                      example: -12.046502
+                    longitude:
+                      type: number
+                      example: -77.042716
+                status:
+                  type: number
+                  example: ASSIGNED
+                timestamp:
+                  type: string
+                  example: "2020-04-30T00:00:00.000Z"
+                rd:
+                  type: string
+                  example: Nombre repartidor
   parameters:
     queryCode:
       name: code
