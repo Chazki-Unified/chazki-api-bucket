@@ -39,7 +39,7 @@ paths:
         state.
       operationId: fnTrackOrderChazkiPosition
       security:
-        - chazki-api-key: []
+        - enterpriseKey: []
       parameters:
         - name: code
           in: query
@@ -49,7 +49,7 @@ paths:
           explode: false
           schema:
             type: string
-        - chazki-api-key: []
+        - enterpriseKey: []
         - name: enterpriseKey
           in: query
           description: |
