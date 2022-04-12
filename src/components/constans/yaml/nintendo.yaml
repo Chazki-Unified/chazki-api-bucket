@@ -77,6 +77,15 @@ paths:
               schema:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
+        "201": 
+          - "$ref": '#/components/requestBodies/errorResponse400'
+        "202":
+          description: Query response with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                "$ref": "#/components/requestBodies/errorResponse400"
   "/fnOrderHistorialPublic":
     get:
       tags:
@@ -1774,6 +1783,13 @@ components:
           schema:
             "$ref": "#/components/schemas/Orders"
       required: true
+    errorResponse400:
+      description: Query response with errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            "$ref": "#/components/schemas/FailFnResponse"
   parameters:
     queryCode:
       name: code
@@ -1796,7 +1812,6 @@ components:
       explode: false
       schema:
         type: string
-  
   securitySchemes:
     enterpriseKey:
       name: enterpriseKey
