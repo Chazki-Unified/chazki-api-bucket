@@ -38,6 +38,8 @@ paths:
         This API allows us to see all the Chazki movements and the delivery
         state.
       operationId: fnTrackOrderChazkiPosition
+      security:
+        - chazki-api-key: []
       parameters:
         - name: code
           in: query
@@ -47,6 +49,7 @@ paths:
           explode: false
           schema:
             type: string
+        - chazki-api-key: []
         - name: enterpriseKey
           in: query
           description: |
@@ -1791,3 +1794,9 @@ components:
           schema:
             "$ref": "#/components/schemas/Orders"
       required: true
+  securitySchemes:
+    enterpriseKey:
+      name: enterpriseKey
+      type: apiKey
+      in: query
+      description: Access key for api.
