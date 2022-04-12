@@ -78,7 +78,7 @@ paths:
                 type: object
                 "$ref": "#/components/schemas/FailFnResponse"
         "204": 
-          "$ref": "#/components/requestBodies/errorResponse400"
+          "$ref": "#/components/responses/errorResponse400"
   "/fnOrderHistorialPublic":
     get:
       tags:
