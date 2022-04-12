@@ -1738,8 +1738,10 @@ components:
           schema:
             type: object
             oneOf:
-              - "$ref": "#/components/schemas/FailFnResponse"
-              - "$ref": "#/components/schemas/FailfnOrderImages"
+              error1:
+                - "$ref": "#/components/schemas/FailFnResponse"
+              error2:
+                - "$ref": "#/components/schemas/FailfnOrderImages"
   parameters:
     queryCode:
       name: code
