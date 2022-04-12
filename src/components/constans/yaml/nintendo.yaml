@@ -1090,7 +1090,9 @@ components:
                 example: Caja
               packageWeight:
                 type: integer
-                description: Package weight, if the detail of the packages is sent, then it is the sum of them in the same unit.
+                description: |
+                  Package weight, if the detail of the packages is sent, 
+                  then it is the sum of them in the same unit.
                 example: 1
               packageSizeID:
                 type: string
@@ -1110,53 +1112,63 @@ components:
                 example: XL
               packageQuantity:
                 type: number
-                description: Order packages Quantity.
+                description: |
+                  Quantity of order packages, if the detail of the packages is sent, 
+                  then the sum of the detail quantities must be entered.
                 example: 1
               productDescription:
                 type: string
-                description: Products description.
+                description: Description of products or brief description of the set of packages.
                 example: xxxxxxxxxxxxxxx
               productPrice:
                 type: number
-                description: Approximate product price.
+                description: |
+                  Approximate price of the product, if the detail of the packages is sent, 
+                  then it is the sum of the total of each item.
                 example: 0
               reverseLogistic:
                 type: string
-                description: It can take the next values 'YES' or 'NO'
+                description: |
+                  Reverse logic indicator, allows us to carry out reverse logistics in 
+                  case it is necessary to collect orders returned by the customer. 
+                  It can take the following values 'YES' or 'NO'
                 example: "NO"
               crossdocking:
                 type: string
-                description:
-                  Field indicating if the order is crossdocking. It can
-                  take the next values "YES" or "NO".
+                description: |
+                  Field that indicates if the order is cross-docking, the cross-docking 
+                  service carries out the entry of the product to our warehouse for 
+                  distribution. It can take the following values "YES" or "NO".
                 example: "NO"
               pickUpBranchID:
                 type: string
-                description: Warehouse code where the packages are collected.
+                description: |
+                  Warehouse code where the packages are collected, 
+                  to obtain the warehouse code you must register the branch in our system.
                 example: ""
               pickUpAddress:
                 type: string
-                description: Client address.
+                description: Address of the client or address of collection of the products.
                 example: XXXXXXXXXXXXXXXXXXXXXXXXX
               pickUpPostalCode:
                 type: string
-                description: Recolection address postal code.
+                description: Postal code of the address where the products are picked up.
                 example: "000000"
               pickUpAddressReference:
                 type: string
-                description: Client address references.
+                description: References of customer addresses or collection of products.
                 example: "-"
               pickUpPrimaryReference:
                 type: string
-                description: Client address district.
+                description: District of address of the client or collection of products.
                 example: Distrito
               pickUpSecondaryReference:
                 type: string
-                description: Client address province.
+                description: Province of address of the client or collection of products.
                 example: Departamento
               pickUpNotes:
                 type: string
-                description: Package recollection notes.
+                description: Additional data that facilitate the collection of products.
                 example: ""
               pickUpContactName:
                 type: string
@@ -1168,9 +1180,21 @@ components:
                 example: "12345678"
               pickUpContactDocumentTypeID:
                 type: string
-                description:
+                description: |
                   Contact document type for the recollection. It can take
-                  the next values "DNI", "PAS", "PTP", "CR" and "CE".
+                  the next values: "DNI", "PAS", "PTP", "CR" and "CE".
+
+                  | Document Type | Description  |
+                  | ------------- | ------------ |
+                  | CE  | Immigration Card |
+                  | CR  | Refuge Card |
+                  | DNI | National identity document |
+                  | NIT | Tax identification number |
+                  | PAS | Passport |
+                  | PTP | Temporary Permanence Permit |
+                  | RFC | Federal taxpayer registration |
+                  | RUC | Single Taxpayer Registry |
+                  | RUT | Unique Roll Tributary |
                 example: RUC
               pickUpContactDocumentNumber:
                 type: string
