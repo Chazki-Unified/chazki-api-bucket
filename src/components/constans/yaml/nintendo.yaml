@@ -1221,6 +1221,7 @@ components:
             required:
               - trackCode
               - paymentMethodID
+              - paymentProofID
       required:
         - enterpriseKey
     cancelOrderForIntegration:
@@ -1759,7 +1760,7 @@ components:
       schema:
         type: string
   securitySchemes:
-    enterpriseKey:
+    enterprise-Key:
       name: enterpriseKey
       type: apiKey
       in: query
