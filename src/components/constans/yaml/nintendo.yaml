@@ -71,14 +71,9 @@ paths:
                     type: string
                     example: Nombre repartidor
         "400":
-          description: Query response with errors.
-          content:
-            application/json:
-              schema:
-                type: object
-                "$ref": "#/components/schemas/FailFnResponse"
-        "204": 
           "$ref": "#/components/responses/errorResponse400"
+        "204":
+          "$ref": "#/components/responses/response400"
   "/fnOrderHistorialPublic":
     get:
       tags:
@@ -1736,6 +1731,15 @@ components:
           schema:
             type: object
             "$ref": "#/components/schemas/FailFnResponse"
+    response400:
+      description: Query response with errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            oneOf:
+              - "$ref": "#/components/schemas/FailFnResponse"
+              - "$ref": "#/components/schemas/FailfnOrderImages"
   parameters:
     queryCode:
       name: code
