@@ -6,6 +6,47 @@ info:
     In order to place orders for Chazki's services, endpoints were enabled to record the delivery and check the orders status. These services are registered in the domain owned by chazki and are detailed in the section below.
     Find out more about [Chazki here](https://chazki.com/#/).
     See also our
+
+    | State | Description |
+    | ----- | ------------ |
+    | NEW | Shipment created but without any management. |.
+    | PICKUP | Shipping is located to assign a route to pick up. |
+    | GOTO_PICK | On the way to be picked up (the delivery person is going to the pick-up point). |
+    | ARRIVED_PICK | The driver (chazki) is located at the pick-up point/place. |
+    | PICKING | The package was picked up. |
+    | FAILED_PICK | Failed to pick up the package. |
+    | COLLECTED | Package(s) collected, found in Chazki's possession. |
+    | GOTO_DELIVER | On the way to be delivered (the delivery person is going to the destination of delivery). |
+    | ARRIVED_DELIVER | The delivery person is at the place/point of delivery. |
+    | DELIVERED | The shipment was completed. |
+    | FAILED_DROP | Failed to deliver the package. |
+    | RETURNED | Shipping management returned to the customer. | 
+    | CANCELED | Shipping cancelled. |
+
+    ## Webhook 
+
+    To access the notification mechanism via webhooks, you must tell us what will be the
+    url to which the status change notifications of an order will be sent.
+
+    It is important that the hook URL must start with the protocol (https) and take into account
+    Note that all pushes will be of type POST. All webhooks expect a
+    response with code 200.
+
+    It is recommended that the response with code 200 be done asynchronously to
+    avoid timeout errors.
+
+    ### STATE PUSH
+
+    This information will be sent each time the status of a shipment is updated and
+    will be sent with the following body:
+
+    >{
+    >  "delivery_code": "4957783420",
+    >  "delivery_status": "DELIVERED",
+    >  "timestamp": "2022-02-04T22:44:30.652Z",
+    >  "url_delivery_code": "https://nintendo.chazki.com/trackcodeTracking/4957783420"
+    >}
+    
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -943,7 +984,7 @@ components:
                 type: string
                 description: |
                   Order code or tracking code, with this code you can track the order.
-                example: ABCDEFI
+                example: ABCDEFI-1235
               paymentMethodID:
                 type: string
                 description: | 
@@ -1222,6 +1263,22 @@ components:
               - trackCode
               - paymentMethodID
               - paymentProofID
+              - serviceID
+              - packageEnvelope
+              - packageWeight
+              - packageSizeID
+              - packageQuantity
+              - productDescription
+              - pickUpAddress
+              - pickUpAddressReference
+              - pickUpPrimaryReference
+              - pickUpSecondaryReference
+              - pickUpNotes
+              - dropAddress
+              - dropAddressReference
+              - dropPrimaryReference
+              - dropSecondaryReference
+              - dropNotes
       required:
         - enterpriseKey
     cancelOrderForIntegration:
