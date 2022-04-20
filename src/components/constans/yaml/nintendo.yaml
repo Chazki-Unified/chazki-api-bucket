@@ -42,7 +42,6 @@ info:
     This information will be sent each time the status of a shipment is updated and
     will be sent with the following body:
 
-    json title="Passed via meta tag" lineNumbers
     ```
     {
       "delivery_code": "4957783420",
@@ -1029,18 +1028,12 @@ components:
                   | Service (Argentina) | Description  |
                   | ------------- | ------------ |
                   | REGULAR_ARG | The order will be shipped the next day. | 
-                  | SCHEDULED_ARG | s |
-
-                  | Service (Chile) | Description  |
-                  | ------------- | ------------ |
-                  | CONSOLIDADO | d. |
-                  | IDA Y VUELTA | d |
+                  | SCHEDULED_ARG | The order will be shipped the next day the schedule must be specified. |
 
                   | Service (Mexico) | Description  |
                   | ------------- | ------------ |
                   | DIA SIGUIENTE | The order will be shipped the next day. |
-                  | ECONOMICO | d |
-                  | MISMO DIA | d |
+                  | MISMO DIA | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
                   | REGULAR | The order will be shipped the next day. |
                 example: SAME DAY
               packageEnvelope:
@@ -1273,16 +1266,24 @@ components:
               - packageSizeID
               - packageQuantity
               - productDescription
-              - pickUpAddress
+              - reverseLogistic
+              - crossdocking
+              - pickUpBranchID
               - pickUpAddressReference
               - pickUpPrimaryReference
               - pickUpSecondaryReference
               - pickUpNotes
+              - pickUpContactDocumentTypeID
+              - pickUpContactDocumentNumber
+              - pickUpContactEmail
               - dropAddress
               - dropAddressReference
               - dropPrimaryReference
               - dropSecondaryReference
               - dropNotes
+              - dropContactDocumentTypeID
+              - dropContactDocumentNumber
+              - dropContactEmail
       required:
         - enterpriseKey
     cancelOrderForIntegration:
@@ -1600,6 +1601,10 @@ components:
           type: number
           description: Unitary package price.
           example: "38.5"
+      required: 
+        - ClientPackageID
+        - weightUnit
+        - name
     Service:
       type: object
       properties:
