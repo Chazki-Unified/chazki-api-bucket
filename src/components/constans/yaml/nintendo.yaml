@@ -302,30 +302,19 @@ paths:
                   file:
                     type: string
                     example: https://storage.googleapis.com/download/storage/v1/b/xxxxxxxxxxxxx/yyyyyyy
-  "/createPDFAcuseOrder":
-    post:
-      tags:
-        - PDFServices
-      description:
-        This endpoint allows to create PDF From Acuse Order. The file to
-        be generated is in PDF extension.
-      operationId: createPDFAcuseOrder
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                filename:
-                  type: string
-                  description: It's the name that was saved into the Firebase Storage.
-                filenameUrl:
-                  type: string
-                  description: Position on the storage.
-      responses:
-        "200":
-          description: Object ordersData with orderID and urlFile .
+        "400":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  file:
+                    type: string
+                    example: "No se encontró ningún trackcode"
   "/createAtariPDFFromCSV":
     post:
       tags:
@@ -681,6 +670,9 @@ components:
           type: string
           description: Order code
           example: ABCDEFI
+      required:
+        - enterpriseKey
+        - trackCode
     uploadOriginalOrdersFromIntegration:
       type: object
       properties:
@@ -1065,13 +1057,16 @@ components:
           description: Unique authorization code that identifies the customer.
           required: true
         filters:
-          type: array
-          description: Object with filters to generate tickets in PDF format.
-          items:
-            type: string
-          example:
-            - XXXXXXXX
-            - YYYYYYYYYY
+          type: object
+          properties:
+            trackCodes:
+              type: array
+              description: Object with filters to generate tickets in PDF format.
+              items:
+                type: string
+              example:
+                - XXXXXXXX
+                - YYYYYYYYYY
     Packages:
       type: object
       properties:
