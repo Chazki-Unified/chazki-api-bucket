@@ -1761,54 +1761,54 @@ components:
             "$ref": "#/components/schemas/FailFnResponse"
     positionResponse200:
       description: Successfully response object.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                response:
-                  type: number
-                  example: 1
-                position:
-                  type: object
-                  properties:
-                    latitude:
-                      type: number
-                      example: -12.046502
-                    longitude:
-                      type: number
-                      example: -77.042716
-                status:
-                  type: number
-                  example: ASSIGNED
-                timestamp:
-                  type: string
-                  example: "2020-04-30T00:00:00.000Z"
-                rd:
-                  type: string
-                  example: Nombre repartidor
-    uploadOrdersResponse200:
-      description: Successfully response object.
-          content:
-            application/json:
-              schema:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              response:
+                type: number
+                example: 1
+              position:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                    description: Indicates if the success is correct.
-                    example: true
-                  ordersWithErrors:
-                    description: Number of orders with errors.
+                  latitude:
                     type: number
-                    example: 0
-                  ordersWithoutErrors:
-                    description: Number of orders without error.
+                    example: -12.046502
+                  longitude:
                     type: number
-                    example: 1
-                  errorsDetails:
-                    description: Brief description of the errors found in the orders..
-                    type: array
+                    example: -77.042716
+              status:
+                type: number
+                example: ASSIGNED
+              timestamp:
+                type: string
+                example: "2020-04-30T00:00:00.000Z"
+              rd:
+                type: string
+                example: Nombre repartidor
+    uploadOrdersResponse200:
+      description: Successfully response object.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates if the success is correct.
+                example: true
+              ordersWithErrors:
+                description: Number of orders with errors.
+                type: number
+                example: 0
+              ordersWithoutErrors:
+                description: Number of orders without error.
+                type: number
+                example: 1
+              errorsDetails:
+                description: Brief description of the errors found in the orders..
+                type: array
   parameters:
     queryCode:
       name: code
