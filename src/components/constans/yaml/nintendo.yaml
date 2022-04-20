@@ -7,7 +7,9 @@ info:
     Find out more about [Chazki here](https://chazki.com/#/).
     See also our
 
-    | State | Description |
+    ## Order status 
+
+    | Status | Description |
     | ----- | ------------ |
     | NEW | Shipment created but without any management. |.
     | PICKUP | Shipping is located to assign a route to pick up. |
@@ -40,13 +42,16 @@ info:
     This information will be sent each time the status of a shipment is updated and
     will be sent with the following body:
 
-    >{
-    >  "delivery_code": "4957783420",
-    >  "delivery_status": "DELIVERED",
-    >  "timestamp": "2022-02-04T22:44:30.652Z",
-    >  "url_delivery_code": "https://nintendo.chazki.com/trackcodeTracking/4957783420"
-    >}
-    
+    json title="Passed via meta tag" lineNumbers
+    ```
+    {
+      "delivery_code": "4957783420",
+      "delivery_status": "DELIVERED",
+      "timestamp": "2022-02-04T22:44:30.652Z",
+      "url_delivery_code": "https://nintendo.chazki.com/trackcodeTracking/4957783420"
+    }
+    ```
+
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -992,10 +997,9 @@ components:
 
                   | PaymentMethod | Description  |
                   | ------------- | ------------ |
-                  | COD | d |
+                  | COD | Payment is made at the destination address (cash on delivery), the amount to be charged to the final recipient is indicated in the shipmentPrice field |
                   | PAGADO | The order is paid and only the products are delivered. |
-                  | CCOD | d |
-                  | PAY | d |
+                  | PAY | The order is paid and only the products are delivered. |
                 example: PAGADO
               paymentProofID:
                 type: string
