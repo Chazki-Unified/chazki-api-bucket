@@ -155,8 +155,7 @@ paths:
               "$ref": "#/components/schemas/orderStatusUpdateFun"
       responses:
         "200":
-          description: Response object with ordersWithErrors, ordersWithoutErrors.
-          
+          description: Response object with ordersWithErrors, ordersWithoutErrors.    
   "/fnTrackOrderChazkiPosition":
     get:
       tags:
@@ -1282,87 +1281,141 @@ components:
             properties:
               trackCode:
                 type: string
-                description: Order code
-                example: ABCDEFI
+                description: |
+                  Order code or tracking code, with this code you can track the order.
+                example: ABCDEFI-1235
               paymentMethodID:
                 type: string
-                description:
-                  Order payment method, It can take the next values COD,
-                  PAGADO, CCOD, PAY.
+                description: | 
+                  Order payment method, It can take the next values :
+
+                  | PaymentMethod | Description  |
+                  | ------------- | ------------ |
+                  | COD | Payment is made at the destination address (cash on delivery), the amount to be charged to the final recipient is indicated in the shipmentPrice field |
+                  | PAGADO | The order is paid and only the products are delivered. |
+                  | PAY | The order is paid and only the products are delivered. |
                 example: PAGADO
               paymentProofID:
                 type: string
-                description:
-                  Payment document, It can take the next values BOLETA,
-                  GUIA and FACTURA.
+                description: |
+                  Payment document, It can take the next values :
+
+                  | paymentProof | Description  |
+                  | ------------- | ------------ |
+                  | BOLETA | Proof of payment assigned to the order. |
+                  | FACTURA | Proof of payment assigned to the order. |
+                  | GUIA | Document used to support the transfer. |
                 example: BOLETA
               serviceID:
                 type: string
-                description:
-                  Service code. It can take the next values "REGULAR",
-                  "EXPRESS" or "PROGRAMMED", depending on the desired service type.
-                example: REGULAR
+                description: |
+                  Code of the delivery service type will be carried out. 
+                  It can take the following values :
+
+                  | Service (All the countries) | Description |
+                  | ------------- | ------------ |
+                  | EXPRESS | The order will be shipped the same day. |
+                  | NEXT DAY | The order will be shipped the next day. |
+                  | SAME DAY | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
+
+                  **Special services by country:**
+
+                  | Service (Argentina) | Description  |
+                  | ------------- | ------------ |
+                  | REGULAR_ARG | The order will be shipped the next day. | 
+                  | SCHEDULED_ARG | The order will be shipped the next day the schedule must be specified. |
+
+                  | Service (Mexico) | Description  |
+                  | ------------- | ------------ |
+                  | DIA SIGUIENTE | The order will be shipped the next day. |
+                  | MISMO DIA | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
+                  | REGULAR | The order will be shipped the next day. |
+                example: SAME DAY
               packageEnvelope:
                 type: string
-                description: Package wrap type.
+                description: Short description of the type of package wrapper.
                 example: Caja
               packageWeight:
                 type: integer
-                description: Package weight.
+                description: |
+                  Package weight, if the detail of the packages is sent, 
+                  then it is the sum of them in the same unit.
                 example: 1
               packageSizeID:
                 type: string
-                description: Order measure unit (XS, S, M, L).
+                description: |
+                  Unit of measure of the order, it can take the following values: (the dimensions are agreed with the commercial area).
+
+                  |   Argentina   |     Chile     |    Colombia   |     Mexico    |      Perú     |
+                  | ------------- | ------------- | ------------- | ------------- | ------------- |
+                  | XS_ARG | XS    | SOBRE       | XS    | XS    |
+                  | S_ARG  | S     | CAJA5KG     | S     | S     |
+                  | M_ARG  | SOBRE | CAJA15-10KG | SOBRE | SOBRE |
+                  | L_ARG  | M     | CAJA20KG    | M     | M     |
+                  | XL_ARG | L     | CAJA25KG    | L     | L     |
+                  |        | XL    | CAJA30KG    | XL    | XL    |
+                  |        | XXL   |             | XXL   | XXL   |
+                  |        | JUMBO |             | JUMBO | JUMBO |
                 example: XL
               packageQuantity:
                 type: number
-                description: Order packages Quantity.
+                description: |
+                  Quantity of order packages, if the detail of the packages is sent, 
+                  then the sum of the detail quantities must be entered.
                 example: 1
               productDescription:
                 type: string
-                description: Products description.
+                description: Description of products or brief description of the set of packages.
                 example: xxxxxxxxxxxxxxx
               productPrice:
                 type: number
-                description: Approximate product price.
+                description: |
+                  Approximate price of the product, if the detail of the packages is sent, 
+                  then it is the sum of the total of each item.
                 example: 0
               reverseLogistic:
                 type: string
-                description: It can take the next values 'YES' or 'NO'
+                description: |
+                  Reverse logic indicator, allows us to carry out reverse logistics in 
+                  case it is necessary to collect orders returned by the customer. 
+                  It can take the following values 'YES' or 'NO'
                 example: "NO"
               crossdocking:
                 type: string
-                description:
-                  Field indicating if the order is crossdocking. It can
-                  take the next values "YES" or "NO".
+                description: |
+                  Field that indicates if the order is cross-docking, the cross-docking 
+                  service carries out the entry of the product to our warehouse for 
+                  distribution. It can take the following values "YES" or "NO".
                 example: "NO"
               pickUpBranchID:
                 type: string
-                description: Warehouse code where the packages are collected.
+                description: |
+                  Warehouse code where the packages are collected, 
+                  to obtain the warehouse code you must register the branch in our system.
                 example: ""
               pickUpAddress:
                 type: string
-                description: Client address.
+                description: Address of the client or address of collection of the products.
                 example: XXXXXXXXXXXXXXXXXXXXXXXXX
               pickUpPostalCode:
                 type: string
-                description: Recolection address postal code.
+                description: Postal code of the address where the products are picked up.
                 example: "000000"
               pickUpAddressReference:
                 type: string
-                description: Client address references.
+                description: References of customer addresses or collection of products.
                 example: "-"
               pickUpPrimaryReference:
                 type: string
-                description: Client address district.
+                description: District of address of the client or collection of products.
                 example: Distrito
               pickUpSecondaryReference:
                 type: string
-                description: Client address province.
+                description: Province of address of the client or collection of products.
                 example: Departamento
               pickUpNotes:
                 type: string
-                description: Package recollection notes.
+                description: Additional data that facilitate the collection of products.
                 example: ""
               pickUpContactName:
                 type: string
@@ -1374,9 +1427,21 @@ components:
                 example: "12345678"
               pickUpContactDocumentTypeID:
                 type: string
-                description:
+                description: |
                   Contact document type for the recollection. It can take
-                  the next values "DNI", "PAS", "PTP", "CR" and "CE".
+                  the next values:
+
+                  | Document Type | Description  |
+                  | ------------- | ------------ |
+                  | CE  | Immigration Card |
+                  | CR  | Refuge Card |
+                  | DNI | National identity document |
+                  | NIT | Tax identification number |
+                  | PAS | Passport |
+                  | PTP | Temporary Permanence Permit |
+                  | RFC | Federal taxpayer registration |
+                  | RUC | Single Taxpayer Registry |
+                  | RUT | Unique Roll Tributary |
                 example: RUC
               pickUpContactDocumentNumber:
                 type: string
@@ -1388,19 +1453,21 @@ components:
                 example: xxxxxx@yyyyy.zzz
               dropBranchID:
                 type: string
-                description: Delivery warehouse code.
+                description: |
+                  Delivery warehouse code, to obtain the warehouse 
+                  code you must register the branch in our system.
                 example: ""
               dropAddress:
                 type: string
-                description: Final client delivery address.
+                description: Delivery address of the end customer or delivery address of the products.
                 example: Direccion
               dropPostalCode:
                 type: string
-                description: Recollection address's postal code.
+                description: Postal code of the delivery address.
                 example: "000000"
               dropAddressReference:
                 type: string
-                description: Final client address's references.
+                description: References for delivery address.
                 example: Referencia
               dropPrimaryReference:
                 type: string
@@ -1412,7 +1479,7 @@ components:
                 example: Departamento
               dropNotes:
                 type: string
-                description: Package delivery notes.
+                description: Additional data that facilitate the delivery of products.
                 example: Notas
               dropContactName:
                 type: string
@@ -1424,9 +1491,21 @@ components:
                 example: "12345678 "
               dropContactDocumentTypeID:
                 type: string
-                description:
+                description: |
                   Person's document type for delivery. It can take the
-                  next values "DNI", "PAS", "PTP","CR" and "CE".
+                  next values: 
+
+                  | Document Type | Description  |
+                  | ------------- | ------------ |
+                  | CE  | Immigration Card |
+                  | CR  | Refuge Card |
+                  | DNI | National identity document |
+                  | NIT | Tax identification number |
+                  | PAS | Passport |
+                  | PTP | Temporary Permanence Permit |
+                  | RFC | Federal taxpayer registration |
+                  | RUC | Single Taxpayer Registry |
+                  | RUT | Unique Roll Tributary |
                 example: DNI
               dropContactDocumentNumber:
                 type: string
@@ -1456,6 +1535,52 @@ components:
                 example:
                   - -99.17644241
                   - 19.509946148
+              shipmentPrice:
+                type: number
+                description: 
+                  Shipping Price Amount
+                example:
+                  0.0
+              pickUpLandMark:
+                type: string
+                description:
+                  Brief description of the store inside the warehouse or branch.
+                example:
+                  "Tienda ABCD #0000"
+              packages:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Packages"
+            required:
+              - trackCode
+              - paymentMethodID
+              - paymentProofID
+              - serviceID
+              - packageEnvelope
+              - packageWeight
+              - packageSizeID
+              - packageQuantity
+              - productDescription
+              - reverseLogistic
+              - crossdocking
+              - pickUpBranchID
+              - pickUpAddressReference
+              - pickUpPrimaryReference
+              - pickUpSecondaryReference
+              - pickUpNotes
+              - pickUpContactDocumentTypeID
+              - pickUpContactDocumentNumber
+              - pickUpContactEmail
+              - dropAddress
+              - dropAddressReference
+              - dropPrimaryReference
+              - dropSecondaryReference
+              - dropNotes
+              - dropContactDocumentTypeID
+              - dropContactDocumentNumber
+              - dropContactEmail
+      required:
+        - enterpriseKey
     orderStatusUpdateFun:
       type: object
       properties:
