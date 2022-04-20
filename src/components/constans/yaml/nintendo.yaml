@@ -112,21 +112,7 @@ paths:
               "$ref": "#/components/schemas/uploadOriginalOrdersFromIntegration"
       responses:
         "200":
-          description: Successfully response object.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  ordersWithErrors:
-                    type: number
-                    example: 0
-                  ordersWithoutErrors:
-                    type: number
-                    example: 1
+          "$ref": "#/components/responses/uploadOrdersResponse200"
   "/cancelOrderForIntegration":
     post:
       tags:
@@ -170,6 +156,7 @@ paths:
       responses:
         "200":
           description: Response object with ordersWithErrors, ordersWithoutErrors.
+          
   "/fnTrackOrderChazkiPosition":
     get:
       tags:
