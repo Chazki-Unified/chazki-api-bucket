@@ -1072,7 +1072,7 @@ components:
     Packages:
       type: object
       properties:
-        ClientPackageID:
+        clientPackageID:
           type: string
           description: Package code.
           example: "68473029"

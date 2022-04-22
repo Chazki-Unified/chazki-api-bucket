@@ -7,7 +7,7 @@ export const TonnyAPI: React.FC = () => {
   return (
     <API
       basePath="tonny"
-      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/components/constans/yaml/nintendo.yaml"
+      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/feature/ic-62/src/components/constans/yaml/nintendo.yaml"
     />
   );
 };
