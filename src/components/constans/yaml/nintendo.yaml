@@ -947,12 +947,6 @@ components:
                   Shipping Price Amount
                 example:
                   0.0
-              pickUpLandMark:
-                type: string
-                description:
-                  Brief description of the store inside the warehouse or branch.
-                example:
-                  "Tienda ABCD #0000"
               packages:
                 type: array
                 items:
