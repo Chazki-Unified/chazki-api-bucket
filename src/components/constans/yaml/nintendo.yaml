@@ -93,7 +93,7 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/uploadOrdersResponse200"
-  "/uploadOriginalOrdersFromIntegration":
+  "/uploadClientOriginalOrders":
     post:
       tags:
         - WebServices
@@ -1072,7 +1072,7 @@ components:
     Packages:
       type: object
       properties:
-        ClientPackageID:
+        clientPackageID:
           type: string
           description: Package code.
           example: "68473029"
