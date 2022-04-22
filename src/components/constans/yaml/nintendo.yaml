@@ -93,7 +93,7 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/uploadOrdersResponse200"
-  "/uploadOriginalOrdersFromIntegration":
+  "/uploadClientOriginalOrders":
     post:
       tags:
         - WebServices
