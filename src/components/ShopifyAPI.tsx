@@ -7,7 +7,7 @@ export const ShopifyAPI: React.FC = () => {
   return (
     <API
       basePath="shopify"
-      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/components/constans/yaml/chile-legacy.yaml"
+      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/feature/ic-124/src/components/constans/yaml/shopify.yaml"
     />
   );
 };
