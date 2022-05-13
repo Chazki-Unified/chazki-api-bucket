@@ -18,7 +18,7 @@ info:
   title: Shopify API
 
 tags:
-  - name: Register
+  - name: RegisterServices
     description: List of endpoints to register a shop
   - name: OrderServices
     description: List of endpoints to manage orders
@@ -27,7 +27,7 @@ paths:
   /shopify/url-register:
     get:
       tags:
-        - Register
+        - RegisterServices
       description: This endpoint redirects the user to a site in order to finish the integration
       operationId: url-register
       responses:
@@ -36,7 +36,7 @@ paths:
   /shopify/code-client:
     post:
       tags:
-        - Register
+        - RegisterServices
       description: 
         This endpoint completes the integration. Obtains data 
         needed to allow the communication between the API's.
@@ -62,7 +62,7 @@ paths:
   /shopify/register-webhook:
     post: 
       tags:
-        - Register
+        - RegisterServices
       description:
         This endpoint allows a shop to recieve webhooks and register an endpoint in which the 
         webhook will be sent
@@ -87,7 +87,7 @@ paths:
   /shopify/register-shipping-cost:
     post:
       tags:
-        - Register
+        - RegisterServices
       description: 
         This endpoint register an endpoint in which 
         a 'shipping cost' query will be sent
@@ -109,6 +109,71 @@ paths:
                   response:
                     type: object
                     example: 'object'
+        400:
+          description: Unsuccessfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'ERROR_MSG'
+  /shopify/shipping-cost:
+    post:
+      tags:
+        - OrderServices
+      description: 
+        This endpoint let the user obtain the shipping cost of a specific order
+      operationId: shiping-cost
+      responses:
+        200:
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    example: 'object'
+        400:
+          description: Unsuccessfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'ERROR_MSG'   
+  /shopify/send-webhook-shopify:
+    post:
+      tags:
+        - OrderServices
+      description: 
+        This endpoint send a webhook to the shopify API.
+      operationId: shiping-cost
+      responses:
+        200:
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "SEND WEBHOOK CORRECTLY."
         400:
           description: Unsuccessfull operation
           content:
