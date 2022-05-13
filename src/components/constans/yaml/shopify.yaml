@@ -1,0 +1,36 @@
+---
+openapi: 3.0.0
+servers:
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/nintendo-cf-integrations/api
+    description: Development server
+  - url: https://us-central1-chazki-link-beta.cloudfunctions.net/nintendo-cf-integrations/api
+    description: Beta server
+  - url: https://us-central1-chazki-link.cloudfunctions.net/nintendo-cf-integrations/api
+    description: Production server
+info:
+  version: 1.0.0
+  description: |
+    # Introduction
+    Placeholder
+    
+
+  # version: 1.0.0
+  title: Shopify API
+
+tags:
+  - name: Register
+    description: List of endpoints to register a shop
+  - name: OrderServices
+    description: List of endpoints to manage orders
+
+paths:
+  /shopify/url-register:
+    get:
+      tags:
+        - Register
+      summary: Register shop
+      description: This endpoint redirects the user in order to finish the integration
+      responses:
+        200:
+          description: Successfull operation
+            
