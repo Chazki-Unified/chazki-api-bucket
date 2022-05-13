@@ -28,9 +28,34 @@ paths:
     get:
       tags:
         - Register
-      summary: Register shop
-      description: This endpoint redirects the user in order to finish the integration
+      description: This endpoint redirects the user to a site in order to finish the integration
+      operationId: url-register
       responses:
         200:
           description: Successfull operation
-            
+  /shopify/code-client:
+    post:
+      tags:
+        - Register
+      description: 
+        This endpoint completes the integration. Obtains data 
+        needed to allow the communication between the API's.
+        Register new endpoints that will be used by the shop when an order
+        is generated.
+      operationId: code-client
+      responses:
+        200:
+          description: Successfull response
+        400:
+          description: Unsuccessfull response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                    example: false
+                  message: 
+                    type: string
+                    example: "ERROR_MSG"
