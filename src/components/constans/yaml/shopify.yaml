@@ -59,3 +59,66 @@ paths:
                   message: 
                     type: string
                     example: "ERROR_MSG"
+  /shopify/register-webhook:
+    post: 
+      tags:
+        - Register
+      description:
+        This endpoint allows a shop to recieve webhooks and register an endpoint in which the 
+        webhook will be sent
+      operationId: register-webhook
+      responses:
+        200: 
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message: 
+                    type: string
+                    example: "REGISTERED WEBHOOK CORRECTLY."
+                  response: 
+                    type: object
+                    example: 'asda'
+  /shopify/register-shipping-cost:
+    post:
+      tags:
+        - Register
+      description: 
+        This endpoint register an endpoint in which 
+        a 'shipping cost' query will be sent
+      operationId: register-shipping-cost
+      responses:
+        200:
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "SUCCESS."
+                  response:
+                    type: object
+                    example: 'object'
+        400:
+          description: Unsuccessfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'ERROR_MSG'
