@@ -81,36 +81,19 @@ paths:
         This endpoint register an endpoint in which 
         a 'shipping cost' query will be sent
       operationId: register-shipping-cost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyRegisterShippingCostRequest'
       responses:
         200:
-          description: Successfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "SUCCESS."
-                  response:
-                    type: object
-                    example: 'object'
+          "$ref": '#/components/responses/registershipcost200'
         400:
-          description: Unsuccessfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  message:
-                    type: string
-                    example: 'ERROR_MSG'
+          "$ref": '#/components/responses/registershipcost400'
+        500:
+          "$ref": '#/components/responses/registershipcost500'
   /shopify/shipping-cost:
     post:
       tags:
@@ -120,15 +103,7 @@ paths:
       operationId: shiping-cost
       responses:
         200:
-          description: Successfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  response:
-                    type: object
-                    example: 'object'
+          "$ref": '#/components/responses/shippingcost200'
         400:
           description: Unsuccessfull operation
           content:
@@ -223,6 +198,54 @@ components:
           type: string
           description: Key that allows query responses
           example: "XXXXX_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    DtoShopifyRegisterShippingCostRequest:
+      type: object
+      properties:
+        shop:
+          type: string
+          description: Url that identifies a shop
+          example: "https://pruebasintegracion.myshopify.com/"
+        access_token:
+          type: string
+          description: Key that allows query responses
+          example: "XXXXX_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    DtoShopifyShippingCostResponse:
+      "$ref": '#/components/schemas/DtoRateShippingCost'
+    DtoRateShippingCost:
+      "$ref": '#/components/schemas/DtoShippingCostResponse'
+    DtoShippingCostResponse:
+      type: object
+      properties:
+        service_name:
+          type: string
+          description: Name of the service
+          example: ''
+        description: 
+          description: ''
+          type: string
+          example: ''
+        service_code: 
+          type: string
+        currency: 
+          description: Currency used in the service
+          type: string
+          example: ''
+        total_price: 
+          description: Price of the service
+          type: number
+          example: ''
+        phone_required:
+          description: ''
+          type: string
+          example: ''
+        min_delivery_date:
+          description: ''
+          type: string
+          example: ''
+        max_delivery_date: 
+          description: ''
+          type: string
+          example: ''
   requestBodies:
     code-client:
       content:
@@ -269,7 +292,7 @@ components:
                 type: string
                 example: "ERROR_MSG"
     registerwebhook200:
-      description: Successfull regsitration
+      description: Successfull registration
       content:
         application/json:
           schema:
@@ -301,7 +324,7 @@ components:
                 type: object
                 example: ''
     registerwebhook500:
-      description: Unsuccessfull registration
+      description: Unsuccessfull operation
       content:
         application/json:
           schema:
@@ -313,6 +336,54 @@ components:
               message:
                 type: string
                 example: 'INTERNAL SERVER ERROR'
+    registershipcost200:
+      description: Successfull registration
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message: 
+                type: string
+                example: "SUCCESS"
+              response: 
+                type: object
+                example: ''
+    registershipcost400:
+      description: Unsuccessfull registration
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              response:
+                type: object
+                example: ''
+    registershipcost500:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'INTERNAL SERVER ERROR'
+    shippingcost200:
+      description: Successfull operation
+      content:
+        application/json:
+          schema:
+            "$ref": '#/components/schemas/DtoShippingCostResponse'
   parameters:
     queryshop: 
       name: shop
