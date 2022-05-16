@@ -101,22 +101,16 @@ paths:
       description: 
         This endpoint let the user obtain the shipping cost of a specific order
       operationId: shiping-cost
+      parameters:
+        - in: header
+          name: 'x-shopify-shop-domain'
+          schema:
+            type: string
       responses:
         200:
           "$ref": '#/components/responses/shippingcost200'
         400:
-          description: Unsuccessfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  message:
-                    type: string
-                    example: 'ERROR_MSG'   
+          "$ref": '#/components/responses/shippingcost400'
   /shopify/send-webhook-shopify:
     post:
       tags:
@@ -210,9 +204,15 @@ components:
           description: Key that allows query responses
           example: "XXXXX_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     DtoShopifyShippingCostResponse:
-      "$ref": '#/components/schemas/DtoRateShippingCost'
+      type: object
+      properties:
+        schema:
+          "$ref": '#/components/schemas/DtoRateShippingCost'
     DtoRateShippingCost:
-      "$ref": '#/components/schemas/DtoShippingCostResponse'
+      type: array
+      properties:
+        schema: 
+          "$ref": '#/components/schemas/DtoShippingCostResponse'
     DtoShippingCostResponse:
       type: object
       properties:
@@ -246,6 +246,118 @@ components:
           description: ''
           type: string
           example: ''
+    DtoLocationRate:
+      type: object
+      properties:
+        country: 
+          description: Country abbreviation for delivery
+          type: string
+          example: 'CL'
+        postal_code: 
+          description: Code to identify a zone 
+          type: string
+          example: 'XXXXXXX'
+        province: 
+          description: Province abbreviation for delivery
+          type: string
+          example: 'RM'
+        city: 
+          description: City for delivery
+          type: string
+          example: 'La Florida'
+        name: 
+          description: Person's contact name 
+          type: string
+          example: 'Juan Perez'
+        address1: 
+          type: string
+          example: ''
+        address2: 
+          type: string
+          example: ''
+        address3: 
+          type: string
+          example: ''
+        phone: 
+          description: Person's contact number
+          type: string
+          example: 123456789
+        fax: 
+          type: string
+          example: 
+        email: 
+          description: Person's email address
+          type: string
+          example: 'xxxxxxx@yyyyy.zzz'
+        address_type: 
+          type: string
+          example: 
+        company_name: 
+          type: string
+          example: 'XXXXXXXXXXXXX'
+    DtoItems:
+      type: object
+      properties:
+        id: 
+          description: Item identifier
+          type: number
+          example: 12345
+        admin_graphql_api_id: 
+          type: string
+        destination_location: 
+          type: string
+        fulfillable_quantity: 
+          type: number
+        fulfillment_service: 
+          type: string
+        fulfillment_status: 
+          type: string
+        gift_card: 
+          type: boolean
+        grams: 
+          type: number
+        name: 
+          type: string
+        origin_location: 
+          type: string
+        price: 
+          type: number
+        price_set: 
+          type: string
+        product_exists: 
+          type: boolean
+        product_id: 
+          type: number
+        properties: 
+          type: string
+        quantity: 
+          type: number
+        requires_shipping: 
+          type: boolean
+        sku: 
+          type: string
+        taxable: 
+          type: boolean
+        title: 
+          type: string
+        total_discount: 
+          type: number
+        total_discount_set: 
+          type: string
+        variant_id: 
+          type: number
+        variant_inventory_management: 
+          type: string
+        variant_title: 
+          type: string
+        vendor: 
+          type: string
+        tax_lines: 
+          type: string
+        duties: 
+          type: string
+        discount_allocations: 
+          type: string
   requestBodies:
     code-client:
       content:
@@ -384,6 +496,20 @@ components:
         application/json:
           schema:
             "$ref": '#/components/schemas/DtoShippingCostResponse'
+    shippingcost400:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: ''
+            
   parameters:
     queryshop: 
       name: shop
