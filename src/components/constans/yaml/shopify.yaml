@@ -106,6 +106,13 @@ paths:
           name: 'x-shopify-shop-domain'
           schema:
             type: string
+          example: 'https://pruebasintegracion.myshopify.com/'
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyShippingCostBody'
       responses:
         200:
           "$ref": '#/components/responses/shippingcost200'
@@ -148,7 +155,7 @@ paths:
 
 components:
   schemas:
-    ShopifyTokenRequest:
+    DtoShopifyTokenRequest:
       type: object
       properties:
         code:
@@ -206,13 +213,15 @@ components:
     DtoShopifyShippingCostResponse:
       type: object
       properties:
-        schema:
+        shippingcost:
           "$ref": '#/components/schemas/DtoRateShippingCost'
     DtoRateShippingCost:
       type: array
-      properties:
-        schema: 
-          "$ref": '#/components/schemas/DtoShippingCostResponse'
+      items: 
+        type: object
+        properties:
+          rates:
+            "$ref": '#/components/schemas/DtoShippingCostResponse'
     DtoShippingCostResponse:
       type: object
       properties:
@@ -304,60 +313,128 @@ components:
           example: 12345
         admin_graphql_api_id: 
           type: string
+          example: ''
         destination_location: 
           type: string
+          example: ''
         fulfillable_quantity: 
           type: number
+          example: ''
         fulfillment_service: 
           type: string
+          example: ''
         fulfillment_status: 
           type: string
+          example: ''
         gift_card: 
           type: boolean
+          example: ''
         grams: 
+          description: Grams per item
           type: number
+          example: '800'
         name: 
+          description: Name of the item
           type: string
+          example: 'XXXXXXXXXX'
         origin_location: 
           type: string
+          example: ''
         price: 
+          description: Price per item
           type: number
+          example: '400'
         price_set: 
           type: string
+          example: ''
         product_exists: 
           type: boolean
+          example: ''
         product_id: 
+          description: Number that identifies a product
           type: number
+          example: 'xxxxxxxxxx'
         properties: 
           type: string
+          example: ''
         quantity: 
           type: number
+          example: ''
         requires_shipping: 
+          description: Wether the item needs to me shipped or not
           type: boolean
+          example: 'true'
         sku: 
           type: string
+          example: ''
         taxable: 
+          description: Wether the item is taxable or not
           type: boolean
+          example: 'true'
         title: 
           type: string
+          example: ''
         total_discount: 
           type: number
+          example: ''
         total_discount_set: 
           type: string
+          example: ''
         variant_id: 
           type: number
+          example: 'xxxxxxxxxx'
         variant_inventory_management: 
           type: string
+          example: ''
         variant_title: 
           type: string
+          example: ''
         vendor: 
           type: string
+          example: 'XXXXXXXXXX'
         tax_lines: 
           type: string
+          example: ''
         duties: 
           type: string
+          example: ''
         discount_allocations: 
           type: string
+          example: ''
+    DtoRateShipping:
+      type: object
+      properties:
+        origin:
+          "$ref": '#/components/schemas/DtoLocationRate'
+        destination:
+          "$ref": '#/components/schemas/DtoLocationRate'
+        items:
+          type: array
+          items: 
+            type: object
+            properties:
+              item:
+                "$ref": '#/components/schemas/DtoItems'
+        currency:
+          description: Abbreviation of the currency used in the payment.
+          type: string
+          example: 'PEN'
+        locale:
+          type: string
+          example: ''
+    DtoShopifyShippingCostBody:
+      type: object
+      properties:
+        rate:
+          type: object
+          "$ref": '#/components/schemas/DtoRateShipping'
+        currency:
+          description: Abbreviation oof the currency used in the payment
+          type: string
+          example: 'PEN'
+        locale:
+          type: string
+          example: ''
   requestBodies:
     code-client:
       content:
