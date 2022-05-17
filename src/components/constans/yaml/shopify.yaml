@@ -217,11 +217,8 @@ components:
           "$ref": '#/components/schemas/DtoRateShippingCost'
     DtoRateShippingCost:
       type: array
-      items: 
-        type: object
-        properties:
-          rates:
-            "$ref": '#/components/schemas/DtoShippingCostResponse'
+      items:
+        "$ref": '#/components/schemas/DtoShippingCostResponse'
     DtoShippingCostResponse:
       type: object
       properties:
@@ -410,11 +407,7 @@ components:
           "$ref": '#/components/schemas/DtoLocationRate'
         items:
           type: array
-          items: 
-            type: object
-            properties:
-              item:
-                "$ref": '#/components/schemas/DtoItems'
+          "$ref": '#/components/schemas/DtoItems'
         currency:
           description: Abbreviation of the currency used in the payment.
           type: string
