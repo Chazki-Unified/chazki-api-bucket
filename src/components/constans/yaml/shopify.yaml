@@ -141,11 +141,9 @@ paths:
       operationId: order-receiver
       responses:
         200:
-          "$ref": '#components/responses/orderreciever200'
+          "$ref": '#/components/responses/orderreciever200'
         400:
-          "$ref": '#components/responses/orderreciever400'
-
-
+          "$ref": '#/components/responses/orderreciever400'
 components:
   schemas:
     DtoShopifyTokenRequest:
