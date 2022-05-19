@@ -36,20 +36,18 @@ paths:
         200:
           "$ref": '#/components/responses/urlregister200'
   /shopify/code-client:
-    post:
+    get:
       tags:
         - RegisterServices
       description: 
         This endpoint completes the integration. Obtains data 
         needed to allow the communication between the API's.
         Register new endpoints that will be used by the shop when an order
-        is generated.
+        is generated. Also it redirects to the shop page.
       operationId: code-client
       requestBody:
         "$ref": '#/components/requestBodies/code-client'
       responses:
-        200:
-          "$ref": '#/components/responses/codeclient200'
         400:
           "$ref": '#/components/responses/codeclient400'
   /shopify/register-webhook:
@@ -134,6 +132,19 @@ paths:
           "$ref": '#/components/responses/sendwebhookshopify200'
         400:
           "$ref": '#/components/responses/sendwebhookshopify400'
+  /shopify/order-receiver:
+    post:
+      tags:
+        - orderservices
+      description: 
+        This endpoint recieves data from shopify for the purpose of creating an order
+      operationId: order-receiver
+      responses:
+        200:
+          "$ref": '#components/responses/orderreciever200'
+        400:
+          "$ref": '#components/responses/orderreciever400'
+
 
 components:
   schemas:
@@ -233,13 +244,12 @@ components:
       required:
         - id
     DtoShopifyShippingCostResponse:
-      type: array
-      items:
-        "$ref": '#/components/schemas/DtoShippingCostResponse'
-    # DtoRateShippingCost:
-    #   type: array
-    #   items:
-    #     "$ref": '#/components/schemas/DtoShippingCostResponse'
+      type: object
+      properties:
+        shippingcost:
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoShippingCostResponse'
     DtoShippingCostResponse:
       type: object
       properties:
@@ -511,6 +521,122 @@ components:
         - delivery_code
         - delivery_status
         - url_delivery code
+    DtoOrderNintendo:
+      type: object
+      properties:
+        trackCode: 
+          type: string
+        paymentMethodID: 
+          type: string
+        paymentProofID:
+          type:  string
+        serviceID: 
+          type: string
+        packageEnvelope: 
+          type: string
+        packageWeight: 
+          type: number
+        packageSizeID: 
+          type: string
+        packageQuantity?: 
+          type: number
+        productDescription?: 
+          type: string
+        productPrice?: 
+          type: number
+        reverseLogistic?: 
+          type: string
+        crossdocking?: 
+          type: string
+        pickUpBranchID?: 
+          type: string
+        pickUpAddress?: 
+          type: string
+        pickUpPostalCode?: 
+          type: string
+        pickUpAddressReference?: 
+          type: string
+        pickUpPrimaryReference?: 
+          type: string
+        pickUpSecondaryReference?: 
+          type: string
+        pickUpNotes: 
+          type: string
+        pickUpContactName?: 
+          type: string
+        pickUpContactPhone?: 
+          type: string
+        pickUpContactDocumentTypeID?: 
+          type: string
+        pickUpContactDocumentNumber?: 
+          type: string
+        pickUpContactEmail?: 
+          type: string
+        dropBranchID?: 
+          type: string
+        dropAddress?: 
+          type: string
+        dropPostalCode?: 
+          type: string
+        dropAddressReference?: 
+          type: string
+        dropPrimaryReference?: 
+          type: string
+        dropSecondaryReference?: 
+          type: string
+        dropNotes?: 
+          type: string
+        dropContactName?: 
+          type: string
+        dropContactPhone?: 
+          type: string
+        dropContactDocumentTypeID?: 
+          type: string
+        dropContactDocumentNumber?: 
+          type: string
+        dropContactEmail?: 
+          type: string
+        pickUpPoint?: 
+          type: array
+          items:
+            type: number
+        dropPoint?: 
+          type: array
+          items:
+            type: number
+        packages?: 
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoPackages'
+      required:
+        - trackCode
+        - paymentMethodID
+        - paymentProofID          
+        - serviceID          
+        - packageEnvelope          
+        - packageWeight          
+        - packageSizeID
+    DtoPackages:
+      type: object
+      properties:
+        ClientPackageID: 
+          type: string
+        envelope: 
+          type: string
+        weight: 
+          type: number
+        weightUnit: 
+          type: string
+        size: 
+          type: number
+        quantity: 
+          type: number
+        name: 
+          type: string
+        currency: 
+          type: string
+        unitaryProductPrice: 
+          type: number
   requestBodies:
     code-client:
       content:
@@ -541,8 +667,6 @@ components:
   responses:
     urlregister200:
       description: Successfull operation
-    codeclient200:
-      description: Succesfull response
     codeclient400:
       description: Unsuccessfull response
       content:
@@ -676,6 +800,35 @@ components:
                 type: string
                 example: 'SEND WEBHOOK CORRECTLY.'
     sendwebhookshopify400:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: 'ERROR_MSG'
+    orderreciever200:
+      description: Successfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'Order Generated'
+              response:
+                type: object
+                "$ref": '#components/schemas/DtoOrderNintendo'
+    orderreciever400:
       description: Unsuccessfull operation
       content:
         application/json:
