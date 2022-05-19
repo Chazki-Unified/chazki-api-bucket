@@ -102,11 +102,7 @@ paths:
         This endpoint let the user obtain the shipping cost of a specific order
       operationId: shiping-cost
       parameters:
-        - in: header
-          name: 'x-shopify-shop-domain'
-          schema:
-            type: string
-          example: 'https://pruebasintegracion.myshopify.com/'
+        - "$ref": '#/components/parameters/x-shopify-shop-domain-header'
       requestBody: 
         required: true
         content:
@@ -125,6 +121,14 @@ paths:
       description: 
         This endpoint send a webhook to the shopify API.
       operationId: send-webhook-shopify
+      parameters:
+        - "$ref": '#/components/parameters/x-shopify-shop-domain-header'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyNotificationBodyFromNintendoRequest'
       responses:
         200:
           description: Successfull operation
@@ -223,15 +227,12 @@ components:
         - shop
         - access_token
     DtoShopifyShippingCostResponse:
-      type: object
-      properties:
-        shippingcost:
-          type: object
-          "$ref": '#/components/schemas/DtoRateShippingCost'
-    DtoRateShippingCost:
       type: array
-      items:
-        "$ref": '#/components/schemas/DtoShippingCostResponse'
+      "$ref": '#/components/schemas/DtoShippingCostResponse'
+    # DtoRateShippingCost:
+    #   type: array
+    #   items:
+    #     "$ref": '#/components/schemas/DtoShippingCostResponse'
     DtoShippingCostResponse:
       type: object
       properties:
@@ -274,7 +275,6 @@ components:
         - phone_required
         - min_delivery_date
         - max_delivery_date
-
     DtoLocationRate:
       type: object
       properties:
@@ -481,6 +481,29 @@ components:
       required:
         - currency
         - locale
+    DtoShopifyNotificationBodyFromNintendoRequest:
+      type: object
+      properties:
+        timestamp: 
+          description: ''
+          type: string
+          example: "2019-02-01T21:37:18.421Z"
+        delivery_code: 
+          description: Code identifier of the delivery. Also known as tracking code.
+          type: string
+          example: "4680858501355"
+        delivery_status: 
+          type: string
+          example: "GOTO_PICK"
+        url_delivery_code: 
+          description: ''
+          type: string
+          example: "https://xxxxxxxxxx.xxxxx.com/trackcodeTracking/xxxxxxxxxxxx"
+      required:
+        - timestamp
+        - delivery_code
+        - delivery_status
+        - url_delivery code
   requestBodies:
     code-client:
       content:
@@ -643,3 +666,9 @@ components:
       explode: false
       schema:
         type: string
+    x-shopify-shop-domain-header:
+      in: header
+      name: 'x-shopify-shop-domain'
+      schema:
+        type: string
+      example: 'https://pruebasintegracion.myshopify.com/'
