@@ -224,7 +224,10 @@ components:
         - access_token
     DtoShopifyShippingCostResponse:
       type: object
-      "$ref": '#/components/schemas/DtoRateShippingCost'
+      properties:
+        shippingcost:
+          type: object
+          "$ref": '#/components/schemas/DtoRateShippingCost'
     DtoRateShippingCost:
       type: array
       items:
