@@ -131,31 +131,9 @@ paths:
               "$ref": '#/components/schemas/DtoShopifyNotificationBodyFromNintendoRequest'
       responses:
         200:
-          description: Successfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "SEND WEBHOOK CORRECTLY."
+          "$ref": '#/components/responses/sendwebhookshopify200'
         400:
-          description: Unsuccessfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  message:
-                    type: string
-                    example: 'ERROR_MSG'
+          "$ref": '#/components/responses/sendwebhookshopify400'
 
 components:
   schemas:
@@ -212,6 +190,13 @@ components:
       required:
         - shop
         - access_token
+    DtoWebhookSubscription:
+      type: object
+      properties:
+        id:
+          description: Code used as a identifier of a webhook subscription
+          type: string
+          example: 'xxxxxxxxxxxx'
     DtoShopifyRegisterShippingCostRequest:
       type: object
       properties:
@@ -226,9 +211,31 @@ components:
       required:
         - shop
         - access_token
+    DtoCarrierService:
+      type: object
+      properties:
+        id: 
+          type: string #can also be number
+        name: 
+          type: string
+        active: 
+          type: boolean
+        service_discovery: 
+          type: boolean
+        carrier_service_type: 
+          type: string
+        admin_graphql_api_id: 
+          type: string
+        format: 
+          type: string
+        callback_url: 
+          type: string
+      required:
+        - id
     DtoShopifyShippingCostResponse:
       type: array
-      "$ref": '#/components/schemas/DtoShippingCostResponse'
+      items:
+        "$ref": '#/components/schemas/DtoShippingCostResponse'
     # DtoRateShippingCost:
     #   type: array
     #   items:
@@ -564,7 +571,7 @@ components:
                 example: "REGISTERED WEBHOOK CORRECTLY."
               response: 
                 type: object
-                example: ''
+                "$ref": '#/components/schemas/DtoWebhookSubscription'
     registerwebhook400:
       description: Unsuccessfull registration
       content:
@@ -609,7 +616,7 @@ components:
                 example: "SUCCESS"
               response: 
                 type: object
-                example: ''
+                "$ref": '#/components/schemas/DtoCarrierService'
     registershipcost400:
       description: Unsuccessfull registration
       content:
@@ -655,7 +662,32 @@ components:
               message:
                 type: string
                 example: ''
-            
+    sendwebhookshopify200:
+      description: Successfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'SEND WEBHOOK CORRECTLY.'
+    sendwebhookshopify400:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: 'ERROR_MSG'
   parameters:
     queryshop: 
       name: shop
