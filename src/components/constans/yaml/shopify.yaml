@@ -139,6 +139,12 @@ paths:
       description: 
         This endpoint recieves data from shopify for the purpose of creating an order
       operationId: order-receiver
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyWebhookCreateOrderBody'
       responses:
         200:
           "$ref": '#/components/responses/orderreciever200'
@@ -635,6 +641,371 @@ components:
           type: string
         unitaryProductPrice: 
           type: number
+    DtoShopifyWebhookCreateOrderBody:
+      type: object
+      properties:
+        id: 
+          type: number
+        admin_graphql_api_id: 
+          type: string
+        app_id: 
+          type: number
+        buyer_accepts_marketing: 
+          type: boolean
+        cancel_reason: 
+          type: string
+        cancelled_at: 
+          type: string
+        checkout_id: 
+          type: number
+        checkout_token: 
+          type: string
+        client_details: 
+          type: object
+          "$ref": '#/components/schemas/DtoClientDetails'
+        closed_at: 
+          type: string
+        confirmed: 
+          type: boolean
+        contact_email: 
+          type: string
+        created_at: 
+          type: string
+        currency: 
+          type: string
+        current_subtotal_price: 
+          type: string
+        current_subtotal_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_discounts: 
+          type: number
+        current_total_discounts_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_duties_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_price: 
+          type: number
+        current_total_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_tax:
+          type: number
+        current_total_tax_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        customer_locale: 
+          type: string
+        device_id: 
+          type: string
+        discount_codes: 
+          type: array
+          items:
+            type: string
+        email: 
+          type: string
+        estimated_taxes: 
+          type: boolean
+        financial_status: 
+          type: string
+        fulfillment_status: 
+          type: string
+        gateway: 
+          type: string
+        name: 
+          type: string
+        note: 
+          type: string
+        note_attributes: 
+          type: array
+          items: 
+            type: string
+        number: 
+          type: number
+        order_number: 
+          type: number
+        order_status_url: 
+          type: string
+        original_total_duties_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        payment_gateway_names: 
+          type: array
+          items: 
+            type: string
+        phone: 
+          type: string
+        presentment_currency: 
+          type: string
+        processed_at: 
+          type: string
+        processing_method: 
+          type: string
+        subtotal_price: 
+          type: number
+        subtotal_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        tags: 
+          type: string
+        tax_lines: 
+          type: object
+          "$ref": '#/components/schemas/DtoTax'
+        taxes_included: 
+          type: boolean
+        test: 
+          type: boolean
+        token: 
+          type: string
+        total_discounts: 
+          type: number
+        total_discounts_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_line_items_price: 
+          type: number
+        total_line_items_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_outstanding: 
+          type: number
+        total_price: 
+          type: number
+        total_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_price_usd: 
+          type: number
+        total_shipping_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_tax: 
+          type: number
+        total_tax_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_tip_received: 
+          type: number
+        total_weight: 
+          type: number
+        updated_at: 
+          type: string
+        user_id: 
+          type: number
+        billing_address: 
+          type: object
+          "$ref": '#/components/schemas/DtoAddress'
+        customer: 
+          type: object
+          "$ref": '#/components/schemas/DtoCustomer'
+        discount_applications: 
+          type: array
+          items: 
+            type: object
+        fulfillments: 
+          type: array
+          items: 
+            type: string
+        line_items: 
+          type: array
+          items:
+            type: object
+            "$ref": '#/components/schemas/DtoItems'
+        payment_terms: 
+          type: object
+        refunds: 
+          type: array
+          items: 
+            type: object
+        shipping_address: 
+          "$ref": '#/components/schemas/DtoAddress'
+        shipping_lines: 
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoShippingLine'
+    DtoClientDetails:
+      type: object
+      properties:
+        accept_language: 
+          type: string
+          example: 'es'
+        browser_height: 
+          type: string
+          example: '900'
+        browser_ip: 
+          type: string
+          example: 'xxx.xxx.xxx.xxx'
+        browser_width: 
+          type: string
+          example: '1000'
+        session_hash: 
+          type: string
+          example: ''
+        user_agent: 
+          type: string
+          example: 'Mozilla/X.0 (X11; Linux x86_64) AppleWebKit/xxxxx (KHTML, like Gecko) Chrome/xxxxxx Safari/xxxxx'
+    DtoCurrentSubTotalPriceSet:
+      type: object
+      properties:
+        shop_money:
+          type: object
+          "$ref": '#/components/schemas/DtoMoney'
+        presentment_money:
+          type: object
+          "$ref": '#/components/schemas/DtoMoney'
+    DtoMoney:
+      type: object
+      properties:
+        amount: 
+          type: number
+          example: '100'
+        currency_code: 
+          type: string
+          example: 'CLP'
+    DtoTax:
+      type: object
+      properties:
+        price: 
+          type: number
+        rate: 
+          type: number
+        title: 
+          type: string
+        price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        channel_liable: 
+          type: boolean
+    DtoAddress:
+      type: object
+      properties:
+        id: 
+          type: number
+        customer_id: 
+          type: number
+        first_name: 
+          type: string
+        last_name: 
+          type: string
+        company: 
+          type: string
+        address1: 
+          type: string
+        address2: 
+          type: string
+        city: 
+          type: string
+        province: 
+          type: string
+        country: 
+          type: string
+        zip: 
+          type: string
+        phone: 
+          type: string
+        name: 
+          type: string
+        latitude: 
+          type: number
+        longitude: 
+          type: number
+        country_code: 
+          type: string
+        province_code: 
+          type: string
+        country_name: 
+          type: string
+        default: 
+          type: boolean
+    DtoCustomer:
+      type: object
+      properties:
+        id: 
+          type: number
+        email: 
+          type: string
+        accepts_marketing: 
+          type: boolean
+        created_at: 
+          type: string
+        updated_at: 
+          type: string
+        first_name: 
+          type: string
+        last_name: 
+          type: string
+        orders_count: 
+          type: number
+        state: 
+          type: string
+        total_spent: 
+          type: number
+        last_order_id: 
+          type: number
+        note: 
+          type: string
+        verified_email: 
+          type: boolean
+        multipass_identifier: 
+          type: number
+        tax_exempt: 
+          type: boolean
+        phone: 
+          type: string
+        tags: 
+          type: string
+        last_order_name: 
+          type: string
+        currency: 
+          type: string
+        accepts_marketing_updated_at: 
+          type: string
+        tax_exemptions: 
+          type: array
+          items:
+            type: string
+        admin_graphql_api_id: 
+          type: string
+        default_address:
+          type: object
+          "$ref": '#/components/schemas/DtoAddress'
+    DtoShippingLine:
+      type: object
+      properties:
+        id: 
+          type: number
+        carrier_identifier: 
+          type: string
+        code: 
+          type: string
+        delivery_category: 
+          type: string
+        discounted_price: 
+          type: number
+        discounted_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoMoney'
+        phone: 
+          type: string
+        price: 
+          type: number
+        price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoMoney'
+        requested_fulfillment_service_id: 
+          type: object
+        source: 
+          type: string
+        title: 
+          type: string
+        tax_lines: 
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoTax'
+        discount_allocations: 
+          type: array 
   requestBodies:
     code-client:
       content:
@@ -825,7 +1196,7 @@ components:
                 example: 'Order Generated'
               response:
                 type: object
-                "$ref": '#components/schemas/DtoOrderNintendo'
+                "$ref": '#/components/schemas/DtoOrderNintendo'
     orderreciever400:
       description: Unsuccessfull operation
       content:
