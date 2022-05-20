@@ -11,9 +11,18 @@ info:
   version: 1.0.0
   description: |
     # Introduction
-    Placeholder
-    
+    This documentation for developers who want to use Chazki's endpoints for Shopify. This endpoints are used to complete integrations between Shopify
+    shops and Chaski's system. Also, to create and keep track of orders generated.
 
+    These services are registered in the domain owned by chazki and are detailed in the section below.
+    Find out more about [Chazki here](https://chazki.com/#/).
+    
+  termsOfService: https://chazki.com/tyc.html
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
   # version: 1.0.0
   title: Shopify API
 
@@ -544,82 +553,119 @@ components:
         paymentMethodID: 
           type: string
         paymentProofID:
-          type:  string
+          type: string
         serviceID: 
           type: string
         packageEnvelope: 
           type: string
         packageWeight: 
+          description: The weight of the package
           type: number
+          example: 800
         packageSizeID: 
           type: string
-        packageQuantity?: 
+        packageQuantity: 
+          description: The number of packages in the order
           type: number
-        productDescription?: 
+          example: 1
+        productDescription: 
+          description: A description of the product
           type: string
-        productPrice?: 
+        productPrice: 
+          description: The price of the product
           type: number
-        reverseLogistic?: 
+          example: 160
+        reverseLogistic: 
           type: string
-        crossdocking?: 
+        crossdocking: 
           type: string
-        pickUpBranchID?: 
+        pickUpBranchID: 
           type: string
-        pickUpAddress?: 
+        pickUpAddress: 
+          description: Address where the order is going to be picked up
           type: string
-        pickUpPostalCode?: 
+        pickUpPostalCode: 
+          description:  Code that identifies a zone
           type: string
-        pickUpAddressReference?: 
+        pickUpAddressReference:
+          description: Reference to find the address easily 
           type: string
-        pickUpPrimaryReference?: 
+        pickUpPrimaryReference: 
+          description: Reference to find the address easily
           type: string
-        pickUpSecondaryReference?: 
+        pickUpSecondaryReference: 
+          description: Reference to find the address easily
           type: string
         pickUpNotes: 
+          description: Notes explaining details about the pickup
           type: string
-        pickUpContactName?: 
+        pickUpContactName: 
+          description: Contact's name of the person who is sending the order
           type: string
-        pickUpContactPhone?: 
+        pickUpContactPhone: 
+          description: Contact's number of the person who is sending the order
           type: string
-        pickUpContactDocumentTypeID?: 
+          example: '123456789'
+        pickUpContactDocumentTypeID: 
+          description: Contact's document type of the person who is sending the order
           type: string
-        pickUpContactDocumentNumber?: 
+          example: 'DNI'
+        pickUpContactDocumentNumber: 
+          description: Contact's document number of the person who is sending the order
           type: string
-        pickUpContactEmail?: 
+          example: 'xxxxxxxxx'
+        pickUpContactEmail: 
+          description: Contact's email of the person who is sending the order
           type: string
-        dropBranchID?: 
+          example: 'xxxxxx@yyyyyy.zzz'
+        dropBranchID: 
           type: string
-        dropAddress?: 
+        dropAddress: 
+          description: Address where the drop is going to be received
           type: string
-        dropPostalCode?: 
+        dropPostalCode: 
+          description: Code that identifies a zone
           type: string
-        dropAddressReference?: 
+        dropAddressReference: 
+          description: Reference to find the address easily
           type: string
-        dropPrimaryReference?: 
+        dropPrimaryReference: 
+          description: Reference to find the address easily
           type: string
-        dropSecondaryReference?: 
+        dropSecondaryReference: 
+          description: Reference to find the address easily
           type: string
-        dropNotes?: 
+        dropNotes: 
+          description: Notes explaining details about the drop
           type: string
-        dropContactName?: 
+        dropContactName: 
+          description: Contact's name of the person who is going to receive the order
           type: string
-        dropContactPhone?: 
+        dropContactPhone: 
+          description: Contact's number of the person who is going to receive the order
           type: string
-        dropContactDocumentTypeID?: 
+          example: '123456789'
+        dropContactDocumentTypeID: 
+          description: Contact's document type of the person who is going to receive the order
           type: string
-        dropContactDocumentNumber?: 
+          example: 'DNI'
+        dropContactDocumentNumber: 
+          description: Contact's document number of the person who is going to receive the order
           type: string
-        dropContactEmail?: 
+          example: 'xxxxxxxxx'
+        dropContactEmail: 
+          description: Contact's email of the person who is going to receive the order
           type: string
-        pickUpPoint?: 
+          example: 'xxxxxx@yyyyyy.zzz'
+        pickUpPoint: 
           type: array
           items:
             type: number
-        dropPoint?: 
+        dropPoint: 
           type: array
           items:
             type: number
-        packages?: 
+        packages: 
           type: array
           items:
             "$ref": '#/components/schemas/DtoPackages'
