@@ -1091,7 +1091,7 @@ components:
             "$ref": '#/components/schemas/DtoItems'
         payment_terms: 
           type: object
-          descrition: The terms and conditions under which a payment should be processed.
+          description: The terms and conditions under which a payment should be processed.
           properties:
             amount: 
               type: number
@@ -1154,7 +1154,7 @@ components:
           description: A list of refunds applied to the order.
           items: 
             type: object
-            propeties:
+            properties:
               id:
                 type: number
                 description: The unique identifier for the refund.
@@ -1355,7 +1355,7 @@ components:
           example: true
     DtoCustomer:
       type: object
-      description:
+      description: ''
       properties:
         id: 
           type: number
