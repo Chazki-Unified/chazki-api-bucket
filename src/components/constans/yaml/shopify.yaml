@@ -148,6 +148,8 @@ paths:
       description: 
         This endpoint recieves data from shopify for the purpose of creating an order
       operationId: order-receiver
+      parameters:
+        - "$ref": '#/components/parameters/x-shopify-shop-domain-header'
       requestBody:
         required: true
         content:
