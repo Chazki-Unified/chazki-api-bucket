@@ -512,16 +512,6 @@ components:
         rate:
           type: object
           "$ref": '#/components/schemas/DtoRateShipping'
-        currency:
-          description: Abbreviation oof the currency used in the payment
-          type: string
-          example: 'PEN'
-        locale:
-          type: string
-          example: ''
-      required:
-        - currency
-        - locale
     DtoShopifyNotificationBodyFromNintendoRequest:
       type: object
       properties:
