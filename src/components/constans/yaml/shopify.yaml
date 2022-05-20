@@ -554,18 +554,23 @@ components:
           example: 4693237498081
         paymentMethodID: 
           type: string
+          example: 'PAGADO'
         paymentProofID:
           type: string
+          example: 'BOLETA'
         serviceID: 
           type: string
+          example: 'REGULAR'
         packageEnvelope: 
           type: string
+          example: 'Paquete'
         packageWeight: 
           description: The weight of the package
           type: number
           example: 800
         packageSizeID: 
           type: string
+          example: 'M'
         packageQuantity: 
           description: The number of packages in the order
           type: number
@@ -573,37 +578,47 @@ components:
         productDescription: 
           description: A description of the product
           type: string
+          example: 'Umbro Shirts | Authentic Umbro Mexico'
         productPrice: 
           description: The price of the product
           type: number
           example: 160
         reverseLogistic: 
           type: string
+          example: 'NO'
         crossdocking: 
           type: string
+          example: 'NO'
         pickUpBranchID: 
           type: string
+          example: ''
         pickUpAddress: 
           description: Address where the order is going to be picked up
           type: string
+          example: 'Siete de Noviembre, 07840 Ciudad de Mexico'
         pickUpPostalCode: 
           description:  Code that identifies a zone
           type: string
         pickUpAddressReference:
           description: Reference to find the address easily 
           type: string
+          example: 'Siete de Noviembre, 07840 Ciudad de Mexico,07840 Ciudad de Mexico DF,Mexico'
         pickUpPrimaryReference: 
           description: Reference to find the address easily
           type: string
+          example: 'Ciudad de Mexico'
         pickUpSecondaryReference: 
           description: Reference to find the address easily
           type: string
+          example: 'Ciudad de Mexico'
         pickUpNotes: 
           description: Notes explaining details about the pickup
           type: string
+          example: '1010'
         pickUpContactName: 
           description: Contact's name of the person who is sending the order
           type: string
+          example: 'sucursal Paseo'
         pickUpContactPhone: 
           description: Contact's number of the person who is sending the order
           type: string
@@ -625,24 +640,31 @@ components:
         dropAddress: 
           description: Address where the drop is going to be received
           type: string
+          example: 'Av. Ribera de San Cosme 74, San Rafael, 06470 Ciudad de Mexico, CDMX, Mexico'
         dropPostalCode: 
           description: Code that identifies a zone
           type: string
+          example: ''
         dropAddressReference: 
           description: Reference to find the address easily
           type: string
+          example: 'Av. Ribera de San Cosme 74, San Rafael, 06470 Ciudad de Mexico, CDMX, Mexico, mexico, Ciudad de Mexico, Mexico'
         dropPrimaryReference: 
           description: Reference to find the address easily
           type: string
+          example: 'MEXICO'
         dropSecondaryReference: 
           description: Reference to find the address easily
           type: string
+          example: 'CIUDAD DE MEXICO'
         dropNotes: 
           description: Notes explaining details about the drop
           type: string
+          example: ''
         dropContactName: 
           description: Contact's name of the person who is going to receive the order
           type: string
+          example: 'name_seller'
         dropContactPhone: 
           description: Contact's number of the person who is going to receive the order
           type: string
@@ -659,14 +681,6 @@ components:
           description: Contact's email of the person who is going to receive the order
           type: string
           example: 'xxxxxx@yyyyyy.zzz'
-        pickUpPoint: 
-          type: array
-          items:
-            type: number
-        dropPoint: 
-          type: array
-          items:
-            type: number
         packages: 
           type: array
           items:
