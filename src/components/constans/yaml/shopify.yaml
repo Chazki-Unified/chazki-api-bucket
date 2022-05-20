@@ -1009,12 +1009,70 @@ components:
           "$ref": '#/components/schemas/DtoCustomer'
         discount_applications: 
           type: array
+          description: |
+            An ordered list of stacked discount applications.
+            The discount_applications property includes 3 types: 
+            discount_code, manual, and script. All 3 types share a 
+            common structure and have some type specific attributes.
           items: 
             type: object
+            properties: 
+              allocation_method:
+                type: string
+                description: |
+                  The method by which the discount application value has been allocated to entitled lines.
+                example: across
+              code:
+                type: string
+                description: |
+                  The discount code that was used to apply the discount. 
+                  Available only for discount code applications.
+                example: TENOFF
+              description:
+                type: string
+                description: |
+                  The description of the discount application, as defined by the merchant or the Shopify Script. 
+                  Available only for manual and script discount applications.
+                example: customer deserved it
+              target_selection:
+                type: string
+                description: |
+                  The lines on the order, of the type defined by target_type, 
+                  that the discount is allocated over.
+                example: all
+              target_type:
+                type: string
+                description: The type of line on the order that the discount is applicable on. 
+                example: shipping_line
+              title:
+                type: string
+                description: |
+                  The title of the discount application, as defined by the merchant. 
+                  Available only for manual discount applications.
+                example: discount_code
+              type:
+                type: string
+                description: The discount application type.
+                example: script
+              value:
+                type: string
+                description: |
+                  The value of the discount application as a decimal. 
+                  This represents the intention of the discount application. 
+                  For example, if the intent was to apply a 20% discount, 
+                  then the value will be 20.0. If the intent was to apply a $15 discount, 
+                  then the value will be 15.0.
+                example: '10.0'
+              value_type:
+                type: string
+                description: The type of the value.
+                example: percentage
         fulfillments: 
           type: array
+          description: An array of fulfillments associated with the order. 
           items: 
             type: string
+          example: ["466157049", "466157078"]
         line_items: 
           type: array
           items:
@@ -1022,6 +1080,64 @@ components:
             "$ref": '#/components/schemas/DtoItems'
         payment_terms: 
           type: object
+          descrition: The terms and conditions under which a payment should be processed.
+          properties:
+            amount: 
+              type: number
+              description: The amount that is owed according to the payment terms.
+              example: 70
+            currency: 
+              type: string
+              description: The presentment currency for the payment.
+              example: CLP
+            payment_terms_name: 
+              type: string
+              description: The name of the selected payment terms template for the order.
+              example: NET_30
+            payment_terms_type: 
+              type: string
+              description: The type of selected payment terms template for the order.
+              example: NET
+            due_in_days: 
+              type: number
+              description: |  
+                The number of days between the invoice date and due date that is defined 
+                in the selected payment terms template.
+              example: 30
+            payment_schedules: 
+              type: array
+              description: An array of schedules associated to the payment terms.
+              items:
+                type: object
+                properties:
+                  amount:
+                    type: number
+                    description: The amount that is owed according to the payment terms.
+                    example: 70
+                  currency:
+                    type: string
+                    description: The presentment currency for the payment.
+                    example: CAD
+                  issued_at:
+                    type: string
+                    description: The date and time when the payment terms were initiated.
+                    example: '2020-07-29T13:02:43-04:00'
+                  due_at:
+                    type: string
+                    description: |
+                      The date and time when the payment is due. Calculated based on issued_at and 
+                      due_in_days or a customized fixed date if the type is fixed.
+                    example: '2020-08-29T13:02:43-04:00'
+                  completed_at:
+                    type: string
+                    description: |
+                      The date and time when the purchase is completed. Returns null 
+                      initially and updates when the payment is captured.
+                    example: null
+                  expected_payment_method:
+                    type: string
+                    description: The name of the payment method gateway.
+                    example: shopify_payments
         refunds: 
           type: array
           items: 
@@ -1196,53 +1312,125 @@ components:
           example: true
     DtoCustomer:
       type: object
+      description:
       properties:
         id: 
           type: number
+          description: A unique identifier for the customer.
+          example: 6087092306145
         email: 
           type: string
+          description: |
+            The unique email address of the customer. Attempting to assign the same 
+            email address to multiple customers returns an error.
+          example: test@shopping.com
         accepts_marketing: 
           type: boolean
+          description: |
+            As of API version 2022-04, this field is deprecated. Use email_marketing_consent instead. 
+            Whether the customer has consented to receive marketing material by email.
+          example: false
         created_at: 
           type: string
+          description: The date and time (ISO 8601 format) when the customer was created.
+          example: '2022-02-21T09:31:56-05:00'
         updated_at: 
           type: string
+          description: The date and time (ISO 8601 format) when the customer information was last updated
+          example: '2022-03-11T18:48:57-05:00'
         first_name: 
           type: string
+          description: The customer's first name.
+          example: pruebas envio
         last_name: 
           type: string
+          description: The customer's last name.
+          example: Chile
         orders_count: 
           type: number
+          description: |
+            The number of orders associated with this customer. Test and archived orders aren't counted.
+          example: 5
         state: 
           type: string
+          description: |
+            'The state of the customer's account with a shop. Default value: disabled. Valid values:'
+          example: disabled
         total_spent: 
           type: number
+          description: The total amount of money that the customer has spent across their order history.
+          example: 375.30
         last_order_id: 
           type: number
+          description: The ID of the customer's last order.
+          example: 234132602919
         note: 
           type: string
+          description: A note about the customer.
+          example: Placed an order that had a fraud warning
         verified_email: 
           type: boolean
+          description: Whether the customer has verified their email address.
+          example: true
         multipass_identifier: 
           type: number
+          description: A unique identifier for the customer that's used with ' 'Multipass login.
+          example: null
         tax_exempt: 
           type: boolean
+          description: |
+            Whether the customer is exempt from paying taxes on their order. 
+            If true, then taxes won't be applied to an order at checkout. 
+            If false, then taxes will be applied at checkout.
+          example: false
         phone: 
           type: string
+          description: |
+            The unique phone number (E.164 format) for this customer. 
+            Attempting to assign the same phone number to multiple customers returns an error. 
+            The property can be set using different formats, but each format must represent 
+            a number that can be dialed from anywhere in the world.
+          example: 555-625-1199
         tags: 
           type: string
+          description: |
+            Tags that the shop owner has attached to the customer, formatted as a string 
+            of comma-separated values. A customer can have up to 250 tags. Each tag can 
+            have up to 255 characters.
+          example: ''
         last_order_name: 
           type: string
+          description: |
+            The name of the customer's last order. This is directly related 
+            to the name field on the Order resource.
+          example: '#1169'
         currency: 
           type: string
+          description: |
+            he three-letter code (ISO 4217 format) for the currency that 
+            the customer used when they paid for their last order. 
+            Defaults to the shop currency. Returns the shop currency for test orders.
+          example: CLP
         accepts_marketing_updated_at: 
           type: string
+          description: |
+            As of API version 2022-04, this field is deprecated. 
+            Use email_marketing_consent instead. The date and time (ISO 8601 format) 
+            when the customer consented or objected to receiving marketing material by email. 
+            Set this value whenever the customer consents or objects to marketing materials.
+          example: '2022-02-21T09:31:56-05:00'
         tax_exemptions: 
           type: array
+          description: |
+            'Whether the customer is exempt from paying specific taxes on their order. 
+            Canadian taxes only. Valid values:'
           items:
             type: string
+          example: ["CA_STATUS_CARD_EXEMPTION", "CA_BC_RESELLER_EXEMPTION"]
         admin_graphql_api_id: 
           type: string
+          description: A unique identifier for the customer for Api GraphQl.
+          example: "gid://shopify/Customer/6087092306145"
         default_address:
           type: object
           "$ref": '#/components/schemas/DtoAddress'
