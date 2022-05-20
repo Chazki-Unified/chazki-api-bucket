@@ -833,7 +833,7 @@ components:
         note: 
           type: string
           description: An optional note that a shop owner can attach to the order.
-          example: null
+          example: Customer changed their mind.
         note_attributes: 
           type: array
           description: |
@@ -856,15 +856,24 @@ components:
           example: 32
         order_number: 
           type: number
+          description: |
+            The order 's position in the shop's count of orders starting at 1001. 
+            Order numbers are sequential and start at 1001. 
+          example: 1032
         order_status_url: 
           type: string
+          description: The URL pointing to the order status web page
+          example: https://checkout.shopify.com/112233/checkouts/4207896aad57dfb159/thank_you_token?key=753621327b9e8a64789651bf221dfe35
         original_total_duties_set: 
           type: object
+          description: The original total duties charged on the order in shop and presentment currencies.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         payment_gateway_names: 
           type: array
+          description: The list of payment gateways used for the order.
           items: 
             type: string
+          example: ["authorize_net", "bogus"]
         phone: 
           type: string
         presentment_currency: 
