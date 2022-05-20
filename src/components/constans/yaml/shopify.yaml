@@ -646,22 +646,39 @@ components:
       properties:
         id: 
           type: number
+          description: The globally-unique identifier of the Order in store within Shopify (used as trackCode)
+          example: 4693237498081
         admin_graphql_api_id: 
           type: string
+          description: The ID of the app in Shopify for graphQl
+          example: gid://shopify/Order/XXXXXXXXXXXXX
         app_id: 
           type: number
+          description: The ID of the app in Shopify
+          example: 580119
         buyer_accepts_marketing: 
           type: boolean
+          description: Whether the customer agreed to receive marketing materials.
+          example: false
         cancel_reason: 
           type: string
+          description: The reason provided when the order was canceled. Returns null if the order wasn't canceled.
+          example: 'null'
         cancelled_at: 
           type: string
+          description: The date and time when the order was canceled. Returns null if the order wasn't canceled.
+          example: 'null'
         checkout_id: 
           type: number
+          description: The ID of the checkout or payment.
+          example: 32514734653665
         checkout_token: 
           type: string
+          description: A unique value when referencing the checkout that's associated with the order.
+          example: ba416ed5402868d5a0fec4089f27ds7e
         client_details: 
           type: object
+          description: 'Information about the browser that the customer used when they placed their order:'
           "$ref": '#/components/schemas/DtoClientDetails'
         closed_at: 
           type: string
