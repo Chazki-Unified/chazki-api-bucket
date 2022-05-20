@@ -230,21 +230,43 @@ components:
       type: object
       properties:
         id: 
-          type: string #can also be number
+          type: number #can also be number
+          description: The ID for the Carrier Service.
+          example: 63000772833
         name: 
           type: string
+          description: The name of the shipping service as seen by merchants and their customers.
+          example: Chazki
         active: 
           type: boolean
+          description: Whether this carrier service is active.
+          example: true
         service_discovery: 
           type: boolean
+          description: |
+            Whether merchants are able to send dummy data to your 
+            service through the Shopify admin to see shipping rate examples.
+          example: true
         carrier_service_type: 
           type: string
+          description: Distinguishes between API or legacy carrier services.
+          example: api
         admin_graphql_api_id: 
           type: string
+          description: The GraphQL unique identifier for the carrier service.
+          example: 'gid://shopify/DeliveryCarrierService/63000772833'
         format: 
           type: string
+          description: |
+            The format of the data returned by the URL endpoint. 
+            Valid values: json and xml. Default value: json.
+          example: json
         callback_url: 
           type: string
+          description: |
+            The URL endpoint that Shopify needs to retrieve shipping rates. 
+            This must be a public URL.
+          example: 'https://us-central1-chazki-link-dev.cloudfunctions.net/nintendo-cf-integrations/api/shopify/shipping-cost'
       required:
         - id
     DtoShopifyShippingCostResponse:
@@ -1650,15 +1672,34 @@ components:
           schema:
             type: object
             properties:
-              success:
-                type: boolean
-                example: true
-              message: 
-                type: string
-                example: "SUCCESS"
-              response: 
-                type: object
-                "$ref": '#/components/schemas/DtoCarrierService'
+              rates:
+                type: array
+                items:
+                  type: object
+                  properties: 
+                    service_name:
+                      type: string
+                      description: The name of the rate, which customers see at checkout.
+                      example: CHAZKI - EXPRESS
+                    description:
+                      type: string
+                      description: A description of the rate, which customers see at checkout. 
+                      example: Servicio de entrega
+                    service_code:
+                      type: string
+                      description: A unique code associated with the rate. 
+                      example: EXPRESS
+                    currency:
+                      type: string
+                      description: The currency of the shipping rate.
+                      example: USD
+                    total_price:
+                      type: number
+                      description: |
+                        The total price expressed in subunits. If the currency does not use subunits, 
+                        the value must be multiplied by 100. For example: `"total_price": 500` for 5.00 CAD, 
+                        `"total_price": 100000` for 1000 JPY.
+                      example: 1000
     registershipcost400:
       description: Unsuccessfull registration
       content:
