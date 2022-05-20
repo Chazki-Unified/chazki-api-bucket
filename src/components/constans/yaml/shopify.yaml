@@ -1140,8 +1140,40 @@ components:
                     example: shopify_payments
         refunds: 
           type: array
+          description: A list of refunds applied to the order.
           items: 
             type: object
+            propeties:
+              id:
+                type: number
+                description: The unique identifier for the refund.
+                example: 18423447608
+              order_id:
+                type: string
+                description: The unique identifier for the order that the order adjustment is associated with.
+                example: 394481795128 
+              created_at:
+                type: string
+                description: The date and time (ISO 8601 format) when the refund was created.
+                example: '2018-03-06T09:35:37-05:00'
+              note:
+                type: string
+                description: An optional note attached to a refund.
+                example: null
+              user_id:
+                type: string
+                description: The unique identifier of the user who performed the refund.
+                example: null
+              processed_at:
+                type: string
+                description: |
+                  The date and time (ISO 8601 format) when the refund was imported. 
+                  This value can be set to a date in the past when importing from other systems. 
+                  If no value is provided, then it will be auto-generated as the current time in Shopify. 
+                  Public apps need to be granted permission by Shopify to import orders with the processed_at 
+                  timestamp set to a value earlier the created_at timestamp. Private apps can't be granted 
+                  permission by Shopify.
+                example: '2018-03-06T09:35:37-05:00'
         shipping_address: 
           "$ref": '#/components/schemas/DtoAddress'
         shipping_lines: 
@@ -1436,39 +1468,102 @@ components:
           "$ref": '#/components/schemas/DtoAddress'
     DtoShippingLine:
       type: object
+      description: |
+        'An array of objects, each of which details a shipping method used. 
+        Each object has the following properties:'
       properties:
         id: 
           type: number
+          description: A unique identifier for the shipping line.
+          example: 3908143841505
         carrier_identifier: 
           type: string
+          description: |
+            A reference to the carrier service that provided the rate. 
+            Present when the rate was computed by a third-party carrier service.
+          example: 2ef11aec7f5303b57bc02decab250d6d
         code: 
           type: string
+          description: A reference to the shipping method.
+          example: NEXT DAY
         delivery_category: 
           type: string
+          description: The general classification of the delivery method.
+          example: null
         discounted_price: 
           type: number
+          description: |
+            The price of the shipping method after line-level discounts have been applied. 
+            Doesn't reflect cart-level or order-level discounts.
+          example: 614
         discounted_price_set: 
           type: object
+          description: |
+            The price of the shipping method in both shop and presentment currencies 
+            after line-level discounts have been applied.
           "$ref": '#/components/schemas/DtoMoney'
         phone: 
           type: string
+          description: The phone number at the shipping address.
+          example: '999777004'
         price: 
           type: number
+          description: The price of this shipping method in the shop currency. Can't be negative.
+          example: 614
         price_set: 
           type: object
+          description: The price of the shipping method in shop and presentment currencies.
           "$ref": '#/components/schemas/DtoMoney'
         requested_fulfillment_service_id: 
-          type: object
+          type: string
+          description: |
+            A reference to the fulfillment service that is being requested for the shipping method. 
+            Present if the shipping method requires processing by a third party fulfillment service; 
+            null otherwise.
+          example: third_party_fulfillment_service_id
         source: 
           type: string
+          description: The source of the shipping method.
+          example: Chazki
         title: 
           type: string
+          description: The title of the shipping method.
+          example: CHAZKI - NEXT DAY
         tax_lines: 
           type: array
+          description: |
+            A list of tax line objects, each of which details a tax applicable to this shipping line.
           items:
             "$ref": '#/components/schemas/DtoTax'
         discount_allocations: 
           type: array 
+          description: The discounts that have been allocated to the shipping line.
+          items: 
+            type: object
+            properties: 
+              allocatedAmountSet:
+                type: object
+                description: |
+                  The money amount that's allocated to a line based on the 
+                  associated discount application in shop and presentment currencies.
+                "$ref": '#/components/schemas/DtoMoney'
+              discountApplication:
+                type: object
+                description: The discount application that the allocated amount originated from.
+                properties:
+                  amount: 
+                    type: string
+                    description: The discount amount allocated to the line in the shop currency.
+                    example: 5.00
+                  discount_application_index: 
+                    type: number
+                    description: |
+                      The index of the associated discount application in the order's discount_applications list.
+                    example: 2
+                  amount_set: 
+                    type: object
+                    description: The discount amount allocated to the line item in shop and presentment currencies.
+                    "$ref": '#/components/schemas/DtoMoney'
   requestBodies:
     code-client:
       content:
