@@ -876,63 +876,131 @@ components:
           example: ["authorize_net", "bogus"]
         phone: 
           type: string
+          description: The customer's phone number for receiving SMS notifications.
+          example: '+557734881234'
         presentment_currency: 
           type: string
+          description: The presentment currency that was used to display prices to the customer.
+          example: CLP
         processed_at: 
           type: string
+          description: |
+            The date and time (ISO 8601 format) when an order was processed. 
+            This value is the date that appears on your orders and that's 
+            used in the analytic reports. 
+          example: '2022-03-11T18:48:56-05:00'
         processing_method: 
           type: string
+          description: How the payment was processed. 
+          example: checkout
         subtotal_price: 
           type: number
+          description: |
+            The price of the order in the shop currency after discounts but 
+            before shipping, duties, taxes, and tips.
+          example: 100
         subtotal_price_set: 
           type: object
+          description: |
+            The subtotal of the order in shop and presentment currencies 
+            after discounts but before shipping, duties, taxes, and tips.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         tags: 
           type: string
+          description: |
+            Tags attached to the order, formatted as a string of 
+            comma-separated values. Tags are additional short descriptors, 
+            commonly used for filtering and searching. Each individual tag 
+            is limited to 40 characters in length.
+          example: loyal
         tax_lines: 
           type: object
           "$ref": '#/components/schemas/DtoTax'
         taxes_included: 
           type: boolean
+          description: Whether taxes are included in the order subtotal.
+          example: false
         test: 
           type: boolean
+          description: Whether this is a test order.
+          example: true
         token: 
           type: string
+          description: A unique value when referencing the order.
+          example: 912aa9359d838d6dc7d402158816ef50
         total_discounts: 
           type: number
+          description: The total discounts applied to the price of the order in the shop currency.
+          example: '0.00'
         total_discounts_set: 
           type: object
+          description: |
+            The total discounts applied to the price of 
+            the order in shop and presentment currencies.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         total_line_items_price: 
           type: number
+          description: The sum of all line item prices in the shop currency.
+          example: 100.00
         total_line_items_price_set: 
           type: object
+          description: The total of all line item prices in shop and presentment currencies.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         total_outstanding: 
           type: number
+          description: The total outstanding amount of the order in the shop currency.
+          example: 0
         total_price: 
           type: number
+          description: |
+            The sum of all line item prices, 
+            discounts, shipping, taxes, and tips in the shop currency. Must be positive.
+          example: 6268
         total_price_set: 
           type: object
+          description: The total price of the order in shop and presentment currencies.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         total_price_usd: 
           type: number
+          description: The total price of the order in USD.
+          example: 7.82
         total_shipping_price_set: 
           type: object
+          description: |
+            The total shipping price of the order, excluding discounts and returns, 
+            in shop and presentment currencies. 
+            If taxes_included is set to true, then total_shipping_price_set includes taxes.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         total_tax: 
           type: number
+          description: |
+            The sum of all the taxes applied to the order in the shop currency. Must be positive.
+          example: 19
         total_tax_set: 
           type: object
+          description: The total tax applied to the order in shop and presentment currencies.
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         total_tip_received: 
           type: number
+          description: The sum of all the tips in the order in the shop currency.
+          example: 0
         total_weight: 
           type: number
+          description: |
+            The sum of all line item weights in grams. 
+            The sum is not adjusted as items are removed from the order.
+          example: 360
         updated_at: 
           type: string
+          description: |
+            The date and time (ISO 8601 format) when the order was last modified.
+            Filtering orders by updated_at is not an effective method for fetching 
+            orders because its value can change when no visible fields of an order have been updated.
+          example: '2022-03-11T18:48:58-05:00'
         user_id: 
           type: number
+          description: The ID of the user logged into Shopify POS who processed the order, if applicable.
+          example: 31522279
         billing_address: 
           type: object
           "$ref": '#/components/schemas/DtoAddress'
@@ -1017,59 +1085,115 @@ components:
           example: 'CLP'
     DtoTax:
       type: object
+      description: An array of tax line objects, each of which details a tax applicable to the order. 
       properties:
         price: 
           type: number
+          description: The amount of tax to be charged in the shop currency.
+          example: 19
         rate: 
           type: number
+          description: The rate of tax to be applied.
+          example: 0.19
         title: 
           type: string
+          description: The name of the tax.
+          example: VAT
         price_set: 
           type: object
           "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
         channel_liable: 
           type: boolean
+          description: |
+            Whether the channel that submitted the tax line is liable for remitting. 
+            A value of null indicates unknown liability for the tax line.
+          example: false
     DtoAddress:
       type: object
+      description: |
+        'The mailing address associated with the payment method. 
+        This address is an optional field that won't be available 
+        on orders that do not require a payment method. It has the 
+        following properties:'
       properties:
         id: 
           type: number
+          description: A unique identifier for the address.
+          example: 7620158161121
         customer_id: 
           type: number
+          description: A unique identifier for the customer. 
+          example: 6087092306145
         first_name: 
           type: string
+          description: The first name of the person associated with the payment method.
+          example: pruebas envio
         last_name: 
           type: string
+          description: The last name of the person associated with the payment method.
+          example: Chile
         company: 
           type: string
+          description: The company of the person associated with the billing address. 
+          example: null
         address1: 
           type: string
+          description:  The street address of the billing address.
+          example: San Francisco 2511
         address2: 
           type: string
+          description: An optional additional field for the street address of the billing address.
+          example: Apartment 5
         city: 
           type: string
+          description: The city, town, or village of the billing address.
+          example: San Miguel
         province: 
           type: string
+          description: |
+            The name of the region (for example, province, state, or prefecture) of the billing address.
+          example: Santiago
         country: 
           type: string
+          description: The name of the country of the billing address.
+          example: Chile
         zip: 
           type: string
+          description: |
+            The postal code (for example, zip, postcode, or Eircode) of the billing address.
+          example: '8320000'
         phone: 
           type: string
+          description: The phone number at the billing address.
+          example: +(53)999888777
         name: 
           type: string
+          description: The full name of the person associated with the payment method.
+          example: pruebas envio Chile
         latitude: 
           type: number
+          description: The latitude of the billing address.
+          example: -33.4777172
         longitude: 
           type: number
+          description: The longitude of the billing address.
+          example: -70.6436693
         country_code: 
           type: string
+          description: The two-letter code (ISO 3166-1 format) for the country of the billing address.
+          example: CL
         province_code: 
           type: string
+          description: The two-letter abbreviation of the region of the billing address.
+          example: RM
         country_name: 
           type: string
+          description: The customer's normalized country name.
+          example: Chile
         default: 
           type: boolean
+          description: Returns true for each default address.
+          example: true
     DtoCustomer:
       type: object
       properties:
