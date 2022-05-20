@@ -1540,30 +1540,21 @@ components:
           description: The discounts that have been allocated to the shipping line.
           items: 
             type: object
-            properties: 
-              allocatedAmountSet:
-                type: object
+            description: The discount application that the allocated amount originated from.
+            properties:
+              amount: 
+                type: string
+                description: The discount amount allocated to the line in the shop currency.
+                example: 5.00
+              discount_application_index: 
+                type: number
                 description: |
-                  The money amount that's allocated to a line based on the 
-                  associated discount application in shop and presentment currencies.
-                "$ref": '#/components/schemas/DtoMoney'
-              discountApplication:
+                  The index of the associated discount application in the order's discount_applications list.
+                example: 2
+              amount_set: 
                 type: object
-                description: The discount application that the allocated amount originated from.
-                properties:
-                  amount: 
-                    type: string
-                    description: The discount amount allocated to the line in the shop currency.
-                    example: 5.00
-                  discount_application_index: 
-                    type: number
-                    description: |
-                      The index of the associated discount application in the order's discount_applications list.
-                    example: 2
-                  amount_set: 
-                    type: object
-                    description: The discount amount allocated to the line item in shop and presentment currencies.
-                    "$ref": '#/components/schemas/DtoMoney'
+                description: The discount amount allocated to the line item in shop and presentment currencies.
+                "$ref": '#/components/schemas/DtoMoney'
   requestBodies:
     code-client:
       content:
