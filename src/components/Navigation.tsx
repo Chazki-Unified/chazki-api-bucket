@@ -13,6 +13,7 @@ export const Navigation = () => {
       <NavLink to="/fifo">Chile Fifo API</NavLink>
       <NavLink to="/tonny">Tonny API</NavLink>
       <NavLink to="/peru">Perú Legacy API</NavLink>
+      <NavLink to="/shopify">Shopify API</NavLink>
       {/*<Search projectIds={['chazki-docs']} />*/}
     </nav>
   );

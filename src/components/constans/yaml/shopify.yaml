@@ -1,0 +1,1855 @@
+---
+openapi: 3.0.0
+servers:
+  - url: https://us-central1-chazki-link-dev.cloudfunctions.net/nintendo-cf-integrations/api
+    description: Shopify development 
+  - url: https://us-central1-chazki-link-beta.cloudfunctions.net/nintendo-cf-integrations/api
+    description: Shopify beta 
+  - url: https://us-central1-chazki-link.cloudfunctions.net/nintendo-cf-integrations/api
+    description: Shopify production
+info:
+  version: 1.0.0
+  description: |
+    # Introduction
+    This documentation for developers who want to use Chazki's endpoints for Shopify. This endpoints are used to complete integrations between Shopify
+    shops and Chaski's system. Also, to create and keep track of orders generated.
+
+    These services are registered in the domain owned by chazki and are detailed in the section below.
+    Find out more about [Chazki here](https://chazki.com/#/).
+    
+  termsOfService: https://chazki.com/tyc.html
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  # version: 1.0.0
+  title: Shopify API
+
+tags:
+  - name: RegisterServices
+    description: List of endpoints to register a shop
+  - name: OrderServices
+    description: List of endpoints to manage orders
+
+paths:
+  /shopify/url-register:
+    get:
+      tags:
+        - RegisterServices
+      description: This endpoint redirects the user to a site in order to finish the integration
+      operationId: url-register
+      parameters:
+        - "$ref": '#/components/parameters/queryshop'
+      responses:
+        200:
+          "$ref": '#/components/responses/urlregister200'
+  /shopify/code-client:
+    get:
+      tags:
+        - RegisterServices
+      description: 
+        This endpoint completes the integration. Obtains data 
+        needed to allow the communication between the API's.
+        Register new endpoints that will be used by the shop when an order
+        is generated. Also it redirects to the shop page.
+      operationId: code-client
+      requestBody:
+        "$ref": '#/components/requestBodies/code-client'
+      responses:
+        400:
+          "$ref": '#/components/responses/codeclient400'
+  /shopify/register-webhook:
+    post: 
+      tags:
+        - RegisterServices
+      description:
+        This endpoint allows a shop to recieve webhooks and register an endpoint in which the 
+        webhook will be sent
+      operationId: register-webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyRegisterWebhookShopifyRequest'
+      responses:
+        200: 
+          "$ref": '#/components/responses/registerwebhook200'
+        400:
+          "$ref": '#/components/responses/registerwebhook400'
+        500:
+          "$ref": '#/components/responses/registerwebhook500'
+  /shopify/register-shipping-cost:
+    post:
+      tags:
+        - RegisterServices
+      description: 
+        This endpoint register an endpoint in which 
+        a 'shipping cost' query will be sent
+      operationId: register-shipping-cost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyRegisterShippingCostRequest'
+      responses:
+        200:
+          "$ref": '#/components/responses/registershipcost200'
+        400:
+          "$ref": '#/components/responses/registershipcost400'
+        500:
+          "$ref": '#/components/responses/registershipcost500'
+  /shopify/shipping-cost:
+    post:
+      tags:
+        - OrderServices
+      description: 
+        This endpoint let the user obtain the shipping cost of a specific order
+      operationId: shiping-cost
+      parameters:
+        - "$ref": '#/components/parameters/x-shopify-shop-domain-header'
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyShippingCostBody'
+      responses:
+        200:
+          "$ref": '#/components/responses/shippingcost200'
+        400:
+          "$ref": '#/components/responses/shippingcost400'
+  /shopify/send-webhook-shopify:
+    post:
+      tags:
+        - OrderServices
+      description: 
+        This endpoint send a webhook to the shopify API.
+      operationId: send-webhook-shopify
+      parameters:
+        - "$ref": '#/components/parameters/x-shopify-shop-domain-header'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyNotificationBodyFromNintendoRequest'
+      responses:
+        200:
+          "$ref": '#/components/responses/sendwebhookshopify200'
+        400:
+          "$ref": '#/components/responses/sendwebhookshopify400'
+  /shopify/order-receiver:
+    post:
+      tags:
+        - orderservices
+      description: 
+        This endpoint recieves data from shopify for the purpose of creating an order
+      operationId: order-receiver
+      parameters:
+        - "$ref": '#/components/parameters/x-shopify-shop-domain-header'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/DtoShopifyWebhookCreateOrderBody'
+      responses:
+        200:
+          "$ref": '#/components/responses/orderreciever200'
+        400:
+          "$ref": '#/components/responses/orderreciever400'
+components:
+  schemas:
+    DtoShopifyTokenRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code used to generate a shopify token for the first time.
+          example: "XXXXXXXXXXXXXXXXXXXXXXX"
+        hmac:
+          type: string
+          description: Security code that identifies an authentic shopify client.
+          example: "XXXXXXXXXXXXXXXXXXXXXXXX"
+        host:
+          type: string
+          description: Security code that is stored.
+          example: "XXXXXXXXXXXXXXXXXXXXXXXX"
+        state:
+          type: string
+          description: Security method that identifies a client from chazki to shopify.
+          example: "s%3Apruebasintegracionmyshopifycomcreandochazki1015"
+        shop:
+          type: string
+          description: Url that identifies a shop
+          example: "https://pruebasintegracion.myshopify.com/"
+        access_token:
+          type: string
+          description: Key that allows query responses
+          example: "XXXXX_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        enterpriseKey:
+          type: string
+          description: 
+            Company identifier, it is a hash generated by Chazki to identify the company, 
+            it is obtained once the company has been generated within Chazki by the commercial area.
+          example: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      required:
+        - code
+        - hmac
+        - host
+        - state
+        - shop
+    DtoShopifyRegisterWebhookShopifyRequest:
+      type: object
+      properties:
+        shop:
+          type: string
+          description: Url that identifies a shop
+          example: "https://pruebasintegracion.myshopify.com/"
+        access_token:
+          type: string
+          description: Key that allows query responses
+          example: "XXXXX_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      required:
+        - shop
+        - access_token
+    DtoWebhookSubscription:
+      type: object
+      properties:
+        id:
+          description: Code used as a identifier of a webhook subscription
+          type: string
+          example: 'xxxxxxxxxxxx'
+    DtoShopifyRegisterShippingCostRequest:
+      type: object
+      properties:
+        shop:
+          type: string
+          description: Url that identifies a shop
+          example: "https://pruebasintegracion.myshopify.com/"
+        access_token:
+          type: string
+          description: Key that allows query responses
+          example: "XXXXX_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      required:
+        - shop
+        - access_token
+    DtoCarrierService:
+      type: object
+      properties:
+        id: 
+          type: number #can also be number
+          description: The ID for the Carrier Service.
+          example: 63000772833
+        name: 
+          type: string
+          description: The name of the shipping service as seen by merchants and their customers.
+          example: Chazki
+        active: 
+          type: boolean
+          description: Whether this carrier service is active.
+          example: true
+        service_discovery: 
+          type: boolean
+          description: |
+            Whether merchants are able to send dummy data to your 
+            service through the Shopify admin to see shipping rate examples.
+          example: true
+        carrier_service_type: 
+          type: string
+          description: Distinguishes between API or legacy carrier services.
+          example: api
+        admin_graphql_api_id: 
+          type: string
+          description: The GraphQL unique identifier for the carrier service.
+          example: 'gid://shopify/DeliveryCarrierService/63000772833'
+        format: 
+          type: string
+          description: |
+            The format of the data returned by the URL endpoint. 
+            Valid values: json and xml. Default value: json.
+          example: json
+        callback_url: 
+          type: string
+          description: |
+            The URL endpoint that Shopify needs to retrieve shipping rates. 
+            This must be a public URL.
+          example: 'https://us-central1-chazki-link-dev.cloudfunctions.net/nintendo-cf-integrations/api/shopify/shipping-cost'
+      required:
+        - id
+    DtoShopifyShippingCostResponse:
+      type: object
+      properties:
+        shippingcost:
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoShippingCostResponse'
+    DtoShippingCostResponse:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            type: object
+            properties: 
+              service_name:
+                type: string
+                description: The name of the rate, which customers see at checkout.
+                example: CHAZKI - EXPRESS
+              description:
+                type: string
+                description: A description of the rate, which customers see at checkout. 
+                example: Servicio de entrega
+              service_code:
+                type: string
+                description: A unique code associated with the rate. 
+                example: EXPRESS
+              currency:
+                type: string
+                description: The currency of the shipping rate.
+                example: USD
+              total_price:
+                type: number
+                description: |
+                  The total price expressed in subunits. If the currency does not use subunits, 
+                  the value must be multiplied by 100. For example: `"total_price": 500` for 5.00 CAD, 
+                  `"total_price": 100000` for 1000 JPY.
+                example: 1000
+    DtoLocationRate:
+      type: object
+      properties:
+        country: 
+          description: Country abbreviation for delivery
+          type: string
+          example: 'CL'
+        postal_code: 
+          description: Code to identify a zone 
+          type: string
+          example: 'XXXXXXX'
+        province: 
+          description: Province abbreviation for delivery
+          type: string
+          example: 'RM'
+        city: 
+          description: City for delivery
+          type: string
+          example: 'La Florida'
+        name: 
+          description: Person's contact name 
+          type: string
+          example: 'Juan Perez'
+        address1: 
+          type: string
+          example: ''
+        address2: 
+          type: string
+          example: ''
+        address3: 
+          type: string
+          example: ''
+        phone: 
+          description: Person's contact number
+          type: string
+          example: 123456789
+        fax: 
+          type: string
+          example: 
+        email: 
+          description: Person's email address
+          type: string
+          example: 'xxxxxxx@yyyyy.zzz'
+        address_type: 
+          type: string
+          example: 
+        company_name: 
+          type: string
+          example: 'XXXXXXXXXXXXX'
+      required:
+        - country
+        - postal_code
+        - province
+        - city
+        - name
+        - address1
+        - address2
+        - address3
+        - phone
+        - fax
+        - email
+        - address_type
+        - company_name      
+    DtoItems:
+      type: object
+      properties:
+        id: 
+          description: Item identifier
+          type: number
+          example: 12345
+        admin_graphql_api_id: 
+          type: string
+          example: ''
+        destination_location: 
+          type: string
+          example: ''
+        fulfillable_quantity: 
+          type: number
+          example: ''
+        fulfillment_service: 
+          type: string
+          example: ''
+        fulfillment_status: 
+          type: string
+          example: ''
+        gift_card: 
+          type: boolean
+          example: ''
+        grams: 
+          description: Grams per item
+          type: number
+          example: '800'
+        name: 
+          description: Name of the item
+          type: string
+          example: 'XXXXXXXXXX'
+        origin_location: 
+          type: string
+          example: ''
+        price: 
+          description: Price per item
+          type: number
+          example: '400'
+        price_set: 
+          type: string
+          example: ''
+        product_exists: 
+          type: boolean
+          example: ''
+        product_id: 
+          description: Number that identifies a product
+          type: number
+          example: 'xxxxxxxxxx'
+        properties: 
+          type: string
+          example: ''
+        quantity: 
+          type: number
+          example: ''
+        requires_shipping: 
+          description: Wether the item needs to me shipped or not
+          type: boolean
+          example: 'true'
+        sku: 
+          type: string
+          example: ''
+        taxable: 
+          description: Wether the item is taxable or not
+          type: boolean
+          example: 'true'
+        title: 
+          type: string
+          example: ''
+        total_discount: 
+          type: number
+          example: ''
+        total_discount_set: 
+          type: string
+          example: ''
+        variant_id: 
+          type: number
+          example: 'xxxxxxxxxx'
+        variant_inventory_management: 
+          type: string
+          example: ''
+        variant_title: 
+          type: string
+          example: ''
+        vendor: 
+          type: string
+          example: 'XXXXXXXXXX'
+        tax_lines: 
+          type: string
+          example: ''
+        duties: 
+          type: string
+          example: ''
+        discount_allocations: 
+          type: string
+          example: ''
+      required:
+        - id
+        - name
+        - quantity
+        - grams
+        - price
+        - product_id
+        - variant_id
+        - vendor
+    DtoRateShipping:
+      type: object
+      properties:
+        origin:
+          "$ref": '#/components/schemas/DtoLocationRate'
+        destination:
+          "$ref": '#/components/schemas/DtoLocationRate'
+        items:
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoItems'
+        currency:
+          description: Abbreviation of the currency used in the payment.
+          type: string
+          example: 'PEN'
+        locale:
+          type: string
+          example: ''
+      required:
+        - currency
+        - locale
+    DtoShopifyShippingCostBody:
+      type: object
+      properties:
+        rate:
+          type: object
+          "$ref": '#/components/schemas/DtoRateShipping'
+    DtoShopifyNotificationBodyFromNintendoRequest:
+      type: object
+      properties:
+        timestamp: 
+          description: ''
+          type: string
+          example: "2019-02-01T21:37:18.421Z"
+        delivery_code: 
+          description: Code identifier of the delivery. Also known as tracking code.
+          type: string
+          example: "4680858501355"
+        delivery_status: 
+          type: string
+          example: "GOTO_PICK"
+        url_delivery_code: 
+          description: ''
+          type: string
+          example: "https://xxxxxxxxxx.xxxxx.com/trackcodeTracking/xxxxxxxxxxxx"
+      required:
+        - timestamp
+        - delivery_code
+        - delivery_status
+        - url_delivery code
+    DtoOrderNintendo:
+      type: object
+      properties:
+        trackCode: 
+          description: A unique identifier of the order
+          type: string
+          example: 4693237498081
+        paymentMethodID: 
+          type: string
+          example: 'PAGADO'
+        paymentProofID:
+          type: string
+          example: 'BOLETA'
+        serviceID: 
+          type: string
+          example: 'REGULAR'
+        packageEnvelope: 
+          type: string
+          example: 'Paquete'
+        packageWeight: 
+          description: The weight of the package
+          type: number
+          example: 800
+        packageSizeID: 
+          type: string
+          example: 'M'
+        packageQuantity: 
+          description: The number of packages in the order
+          type: number
+          example: 1
+        productDescription: 
+          description: A description of the product
+          type: string
+          example: 'Umbro Shirts | Authentic Umbro Mexico'
+        productPrice: 
+          description: The price of the product
+          type: number
+          example: 160
+        reverseLogistic: 
+          type: string
+          example: 'NO'
+        crossdocking: 
+          type: string
+          example: 'NO'
+        pickUpBranchID: 
+          type: string
+          example: ''
+        pickUpAddress: 
+          description: Address where the order is going to be picked up
+          type: string
+          example: 'Siete de Noviembre, 07840 Ciudad de Mexico'
+        pickUpPostalCode: 
+          description:  Code that identifies a zone
+          type: string
+        pickUpAddressReference:
+          description: Reference to find the address easily 
+          type: string
+          example: 'Siete de Noviembre, 07840 Ciudad de Mexico,07840 Ciudad de Mexico DF,Mexico'
+        pickUpPrimaryReference: 
+          description: Reference to find the address easily
+          type: string
+          example: 'Ciudad de Mexico'
+        pickUpSecondaryReference: 
+          description: Reference to find the address easily
+          type: string
+          example: 'Ciudad de Mexico'
+        pickUpNotes: 
+          description: Notes explaining details about the pickup
+          type: string
+          example: '1010'
+        pickUpContactName: 
+          description: Contact's name of the person who is sending the order
+          type: string
+          example: 'sucursal Paseo'
+        pickUpContactPhone: 
+          description: Contact's number of the person who is sending the order
+          type: string
+          example: '123456789'
+        pickUpContactDocumentTypeID: 
+          description: Contact's document type of the person who is sending the order
+          type: string
+          example: 'DNI'
+        pickUpContactDocumentNumber: 
+          description: Contact's document number of the person who is sending the order
+          type: string
+          example: 'xxxxxxxxx'
+        pickUpContactEmail: 
+          description: Contact's email of the person who is sending the order
+          type: string
+          example: 'xxxxxx@yyyyyy.zzz'
+        dropBranchID: 
+          type: string
+        dropAddress: 
+          description: Address where the drop is going to be received
+          type: string
+          example: 'Av. Ribera de San Cosme 74, San Rafael, 06470 Ciudad de Mexico, CDMX, Mexico'
+        dropPostalCode: 
+          description: Code that identifies a zone
+          type: string
+          example: ''
+        dropAddressReference: 
+          description: Reference to find the address easily
+          type: string
+          example: 'Av. Ribera de San Cosme 74, San Rafael, 06470 Ciudad de Mexico, CDMX, Mexico, mexico, Ciudad de Mexico, Mexico'
+        dropPrimaryReference: 
+          description: Reference to find the address easily
+          type: string
+          example: 'MEXICO'
+        dropSecondaryReference: 
+          description: Reference to find the address easily
+          type: string
+          example: 'CIUDAD DE MEXICO'
+        dropNotes: 
+          description: Notes explaining details about the drop
+          type: string
+          example: ''
+        dropContactName: 
+          description: Contact's name of the person who is going to receive the order
+          type: string
+          example: 'name_seller'
+        dropContactPhone: 
+          description: Contact's number of the person who is going to receive the order
+          type: string
+          example: '123456789'
+        dropContactDocumentTypeID: 
+          description: Contact's document type of the person who is going to receive the order
+          type: string
+          example: 'DNI'
+        dropContactDocumentNumber: 
+          description: Contact's document number of the person who is going to receive the order
+          type: string
+          example: 'xxxxxxxxx'
+        dropContactEmail: 
+          description: Contact's email of the person who is going to receive the order
+          type: string
+          example: 'xxxxxx@yyyyyy.zzz'
+        packages: 
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoPackages'
+      required:
+        - trackCode
+        - paymentMethodID
+        - paymentProofID          
+        - serviceID          
+        - packageEnvelope          
+        - packageWeight          
+        - packageSizeID
+    DtoPackages:
+      type: object
+      properties:
+        ClientPackageID: 
+          description: Unique number that identifies a client's package
+          type: string
+          example: '34572399894'
+        envelope: 
+          type: string
+          example: 'PAQUETE'
+        weight: 
+          description: Weight of the package
+          type: number
+          example: 200
+        weightUnit: 
+          description: Units in which the weight is measured
+          type: string
+          example: 'gramos'
+        size: 
+          type: number
+          example: 'M'
+        quantity: 
+          description: Number of packages
+          type: number
+          example: 1
+        name: 
+          type: string
+          example: 'Umbro Shirts | Authentic Umbro Mexico'
+        currency: 
+          type: string
+          example: 'CLP'
+        unitaryProductPrice: 
+          type: number
+          example: '150'
+    DtoShopifyWebhookCreateOrderBody:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: |
+            The globally-unique identifier of the Order in store within Shopify (used as trackCode)
+          example: 4693237498081
+        admin_graphql_api_id: 
+          type: string
+          description: The ID of the app in Shopify for graphQl.
+          example: gid://shopify/Order/XXXXXXXXXXXXX
+        app_id: 
+          type: number
+          description: The ID of the app that created the order.
+          example: 580119
+        buyer_accepts_marketing: 
+          type: boolean
+          description: Whether the customer agreed to receive marketing materials.
+          example: false
+        cancel_reason: 
+          type: string
+          description: |
+            The reason provided when the order was canceled. 
+            Returns null if the order wasn't canceled.
+          example: null
+        cancelled_at: 
+          type: string
+          description: |
+            The date and time when the order was canceled. 
+            Returns null if the order wasn't canceled.
+          example: 'null'
+        checkout_id: 
+          type: number
+          description: A unique value when referencing the checkout that's associated with the order.
+          example: 32514734653665
+        checkout_token: 
+          type: string
+          description: A unique value when referencing the checkout that's associated with the order.
+          example: ba416ed5402868d5a0fec4089f27ds7e
+        client_details: 
+          type: object
+          "$ref": '#/components/schemas/DtoClientDetails'
+        closed_at: 
+          type: string
+          description: |
+            The date and time (ISO 8601 format) when the order was closed. 
+            Returns null if the order isn't closed.
+          example: '2008-01-10T11:00:00-05:00'
+        confirmed: 
+          type: boolean
+          description: Whether inventory has been reserved for the order.
+          example: true
+        contact_email: 
+          type: string
+          description: The email address associated with the customer or contact.
+          example: "test@mail.example.com"
+        created_at: 
+          type: string
+          description: |
+            The autogenerated date and time (ISO 8601 format) when the order was created in Shopify. 
+            The value for this property cannot be changed.
+          example: "2012-03-13T16:09:55-04:00"
+        currency: 
+          type: string
+          description: The three-letter code (ISO 4217 format) for the shop currency.
+          example: CLP
+        current_subtotal_price: 
+          type: string
+          description: |
+            The current subtotal price of the order in the shop currency. 
+            The value of this field reflects order edits, returns, and refunds.
+          example: 100
+        current_subtotal_price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_discounts: 
+          type: number
+          description: |
+            The current total discounts on the order in the shop currency. 
+            The value of this field reflects order edits, returns, and refunds.
+          example: 0
+        current_total_discounts_set: 
+          type: object
+          description: |
+            The current total discounts on the order in shop and presentment currencies. 
+            The amount values associated with this field reflect order edits, returns, and refunds.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_duties_set: 
+          type: object
+          description: |
+            The current total duties charged on the order in shop and presentment currencies. 
+            The amount values associated with this field reflect order edits, returns, and refunds.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_price: 
+          type: number
+          description: |
+            The current total price of the order in the shop currency. 
+            The value of this field reflects order edits, returns, and refunds.
+          example: 626
+        current_total_price_set: 
+          type: object
+          description: |
+            The current total price of the order in shop and presentment currencies. 
+            The amount values associated with this field reflect order edits, returns, and refunds.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        current_total_tax:
+          type: number
+          description: |
+            The current total taxes charged on the order in the shop currency. 
+            The value of this field reflects order edits, returns, or refunds.
+          example: 19
+        current_total_tax_set: 
+          type: object
+          description: |
+            The current total taxes charged on the order in shop and presentment currencies. 
+            The amount values associated with this field reflect order edits, returns, and refunds.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        customer_locale: 
+          type: string
+          description: The two or three-letter language code, optionally followed by a region modifier.
+          example: es
+        device_id: 
+          type: string
+          description: The ID for the device.
+          example: null
+        discount_codes: 
+          type: array
+          description: |
+            A list of discounts applied to the order. Each discount object includes the 
+            following properties:
+          items:
+            type: object
+            description: |
+              'Information about the browser that the customer used when they placed their order:'
+            properties:
+              code:
+                type: string
+                description: |
+                  When the associated discount application is of type code, 
+                  this property returns the discount code that was entered at checkout. 
+                  Otherwise this property returns the title of the discount that was applied.
+                example: 'SPRING30'
+              amount:
+                type: string
+                description: |
+                  The amount that's deducted from the order total. 
+                  When you create an order, this value is the percentage or monetary amount to deduct. 
+                  After the order is created, this property returns the calculated amount.
+                example: '30.00'
+              type:
+                type: string
+                description: 'The type of discount. Default value: fixed_amount.'
+                example: 'fixed_amount'
+        email: 
+          type: string
+          description: The customer's email address.
+          example: shopping@mail.example.com
+        estimated_taxes: 
+          type: boolean
+          description: |
+            Whether taxes on the order are estimated. 
+            Many factors can change between the time a customer places an order and the 
+            time the order is shipped, which could affect the calculation of taxes. 
+            This property returns false when taxes on the order are 
+            finalized and aren't subject to any changes.
+          example: false
+        financial_status: 
+          type: string
+          description: |
+            The status of payments associated with the order. 
+            Can only be set when the order is created.
+          example: paid
+        fulfillment_status: 
+          type: string
+          description: The order's status in terms of fulfilled line items.
+          example: fulfilled
+        gateway: 
+          type: string
+          description: The payment gateway used.
+          example: shopify_payments
+        name: 
+          type: string
+          description: |
+            The order name, generated by combining the order_number property with the order 
+            prefix and suffix that are set in the merchant's general settings. This is different 
+            from the id property, which is the ID of the order used by the API. This field can 
+            also be set by the API to be any string value.
+          example: '#1032'
+        note: 
+          type: string
+          description: An optional note that a shop owner can attach to the order.
+          example: Customer changed their mind.
+        note_attributes: 
+          type: array
+          description: |
+            Extra information that is added to the order. Appears in the Additional 
+            details section of an order details page. Each array entry must contain 
+            a hash with name and value keys.
+          items: 
+            type: object
+            properties:
+              name:
+                type: string
+                example: custom name
+              value:
+                type: string
+                example: custom value
+        number: 
+          type: number
+          description: |
+            The order's position in the shop's count of orders. Numbers are sequential and start at 1.
+          example: 32
+        order_number: 
+          type: number
+          description: |
+            The order 's position in the shop's count of orders starting at 1001. 
+            Order numbers are sequential and start at 1001. 
+          example: 1032
+        order_status_url: 
+          type: string
+          description: The URL pointing to the order status web page
+          example: https://checkout.shopify.com/112233/checkouts/4207896aad57dfb159/thank_you_token?key=753621327b9e8a64789651bf221dfe35
+        original_total_duties_set: 
+          type: object
+          description: The original total duties charged on the order in shop and presentment currencies.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        payment_gateway_names: 
+          type: array
+          description: The list of payment gateways used for the order.
+          items: 
+            type: string
+          example: ["authorize_net", "bogus"]
+        phone: 
+          type: string
+          description: The customer's phone number for receiving SMS notifications.
+          example: '+557734881234'
+        presentment_currency: 
+          type: string
+          description: The presentment currency that was used to display prices to the customer.
+          example: CLP
+        processed_at: 
+          type: string
+          description: |
+            The date and time (ISO 8601 format) when an order was processed. 
+            This value is the date that appears on your orders and that's 
+            used in the analytic reports. 
+          example: '2022-03-11T18:48:56-05:00'
+        processing_method: 
+          type: string
+          description: How the payment was processed. 
+          example: checkout
+        subtotal_price: 
+          type: number
+          description: |
+            The price of the order in the shop currency after discounts but 
+            before shipping, duties, taxes, and tips.
+          example: 100
+        subtotal_price_set: 
+          type: object
+          description: |
+            The subtotal of the order in shop and presentment currencies 
+            after discounts but before shipping, duties, taxes, and tips.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        tags: 
+          type: string
+          description: |
+            Tags attached to the order, formatted as a string of 
+            comma-separated values. Tags are additional short descriptors, 
+            commonly used for filtering and searching. Each individual tag 
+            is limited to 40 characters in length.
+          example: loyal
+        tax_lines: 
+          type: object
+          "$ref": '#/components/schemas/DtoTax'
+        taxes_included: 
+          type: boolean
+          description: Whether taxes are included in the order subtotal.
+          example: false
+        test: 
+          type: boolean
+          description: Whether this is a test order.
+          example: true
+        token: 
+          type: string
+          description: A unique value when referencing the order.
+          example: 912aa9359d838d6dc7d402158816ef50
+        total_discounts: 
+          type: number
+          description: The total discounts applied to the price of the order in the shop currency.
+          example: '0.00'
+        total_discounts_set: 
+          type: object
+          description: |
+            The total discounts applied to the price of 
+            the order in shop and presentment currencies.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_line_items_price: 
+          type: number
+          description: The sum of all line item prices in the shop currency.
+          example: 100.00
+        total_line_items_price_set: 
+          type: object
+          description: The total of all line item prices in shop and presentment currencies.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_outstanding: 
+          type: number
+          description: The total outstanding amount of the order in the shop currency.
+          example: 0
+        total_price: 
+          type: number
+          description: |
+            The sum of all line item prices, 
+            discounts, shipping, taxes, and tips in the shop currency. Must be positive.
+          example: 6268
+        total_price_set: 
+          type: object
+          description: The total price of the order in shop and presentment currencies.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_price_usd: 
+          type: number
+          description: The total price of the order in USD.
+          example: 7.82
+        total_shipping_price_set: 
+          type: object
+          description: |
+            The total shipping price of the order, excluding discounts and returns, 
+            in shop and presentment currencies. 
+            If taxes_included is set to true, then total_shipping_price_set includes taxes.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_tax: 
+          type: number
+          description: |
+            The sum of all the taxes applied to the order in the shop currency. Must be positive.
+          example: 19
+        total_tax_set: 
+          type: object
+          description: The total tax applied to the order in shop and presentment currencies.
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        total_tip_received: 
+          type: number
+          description: The sum of all the tips in the order in the shop currency.
+          example: 0
+        total_weight: 
+          type: number
+          description: |
+            The sum of all line item weights in grams. 
+            The sum is not adjusted as items are removed from the order.
+          example: 360
+        updated_at: 
+          type: string
+          description: |
+            The date and time (ISO 8601 format) when the order was last modified.
+            Filtering orders by updated_at is not an effective method for fetching 
+            orders because its value can change when no visible fields of an order have been updated.
+          example: '2022-03-11T18:48:58-05:00'
+        user_id: 
+          type: number
+          description: The ID of the user logged into Shopify POS who processed the order, if applicable.
+          example: 31522279
+        billing_address: 
+          type: object
+          "$ref": '#/components/schemas/DtoAddress'
+        customer: 
+          type: object
+          "$ref": '#/components/schemas/DtoCustomer'
+        discount_applications: 
+          type: array
+          description: |
+            An ordered list of stacked discount applications.
+            The discount_applications property includes 3 types: 
+            discount_code, manual, and script. All 3 types share a 
+            common structure and have some type specific attributes.
+          items: 
+            type: object
+            properties: 
+              allocation_method:
+                type: string
+                description: |
+                  The method by which the discount application value has been allocated to entitled lines.
+                example: across
+              code:
+                type: string
+                description: |
+                  The discount code that was used to apply the discount. 
+                  Available only for discount code applications.
+                example: TENOFF
+              description:
+                type: string
+                description: |
+                  The description of the discount application, as defined by the merchant or the Shopify Script. 
+                  Available only for manual and script discount applications.
+                example: customer deserved it
+              target_selection:
+                type: string
+                description: |
+                  The lines on the order, of the type defined by target_type, 
+                  that the discount is allocated over.
+                example: all
+              target_type:
+                type: string
+                description: The type of line on the order that the discount is applicable on. 
+                example: shipping_line
+              title:
+                type: string
+                description: |
+                  The title of the discount application, as defined by the merchant. 
+                  Available only for manual discount applications.
+                example: discount_code
+              type:
+                type: string
+                description: The discount application type.
+                example: script
+              value:
+                type: string
+                description: |
+                  The value of the discount application as a decimal. 
+                  This represents the intention of the discount application. 
+                  For example, if the intent was to apply a 20% discount, 
+                  then the value will be 20.0. If the intent was to apply a $15 discount, 
+                  then the value will be 15.0.
+                example: '10.0'
+              value_type:
+                type: string
+                description: The type of the value.
+                example: percentage
+        fulfillments: 
+          type: array
+          description: An array of fulfillments associated with the order. 
+          items: 
+            type: string
+          example: ["466157049", "466157078"]
+        line_items: 
+          type: array
+          items:
+            type: object
+            "$ref": '#/components/schemas/DtoItems'
+        payment_terms: 
+          type: object
+          description: The terms and conditions under which a payment should be processed.
+          properties:
+            amount: 
+              type: number
+              description: The amount that is owed according to the payment terms.
+              example: 70
+            currency: 
+              type: string
+              description: The presentment currency for the payment.
+              example: CLP
+            payment_terms_name: 
+              type: string
+              description: The name of the selected payment terms template for the order.
+              example: NET_30
+            payment_terms_type: 
+              type: string
+              description: The type of selected payment terms template for the order.
+              example: NET
+            due_in_days: 
+              type: number
+              description: |  
+                The number of days between the invoice date and due date that is defined 
+                in the selected payment terms template.
+              example: 30
+            payment_schedules: 
+              type: array
+              description: An array of schedules associated to the payment terms.
+              items:
+                type: object
+                properties:
+                  amount:
+                    type: number
+                    description: The amount that is owed according to the payment terms.
+                    example: 70
+                  currency:
+                    type: string
+                    description: The presentment currency for the payment.
+                    example: CAD
+                  issued_at:
+                    type: string
+                    description: The date and time when the payment terms were initiated.
+                    example: '2020-07-29T13:02:43-04:00'
+                  due_at:
+                    type: string
+                    description: |
+                      The date and time when the payment is due. Calculated based on issued_at and 
+                      due_in_days or a customized fixed date if the type is fixed.
+                    example: '2020-08-29T13:02:43-04:00'
+                  completed_at:
+                    type: string
+                    description: |
+                      The date and time when the purchase is completed. Returns null 
+                      initially and updates when the payment is captured.
+                    example: null
+                  expected_payment_method:
+                    type: string
+                    description: The name of the payment method gateway.
+                    example: shopify_payments
+        refunds: 
+          type: array
+          description: A list of refunds applied to the order.
+          items: 
+            type: object
+            properties:
+              id:
+                type: number
+                description: The unique identifier for the refund.
+                example: 18423447608
+              order_id:
+                type: string
+                description: The unique identifier for the order that the order adjustment is associated with.
+                example: 394481795128 
+              created_at:
+                type: string
+                description: The date and time (ISO 8601 format) when the refund was created.
+                example: '2018-03-06T09:35:37-05:00'
+              note:
+                type: string
+                description: An optional note attached to a refund.
+                example: null
+              user_id:
+                type: string
+                description: The unique identifier of the user who performed the refund.
+                example: null
+              processed_at:
+                type: string
+                description: |
+                  The date and time (ISO 8601 format) when the refund was imported. 
+                  This value can be set to a date in the past when importing from other systems. 
+                  If no value is provided, then it will be auto-generated as the current time in Shopify. 
+                  Public apps need to be granted permission by Shopify to import orders with the processed_at 
+                  timestamp set to a value earlier the created_at timestamp. Private apps can't be granted 
+                  permission by Shopify.
+                example: '2018-03-06T09:35:37-05:00'
+        shipping_address: 
+          "$ref": '#/components/schemas/DtoAddress'
+        shipping_lines: 
+          type: array
+          items:
+            "$ref": '#/components/schemas/DtoShippingLine'
+    DtoClientDetails:
+      type: object
+      description: 'Information about the browser that the customer used when they placed their order:'
+      properties:
+        accept_language: 
+          type: string
+          description: The languages and locales that the browser understands.
+          example: 'es'
+        browser_height: 
+          type: string
+          description: The browser screen height in pixels, if available.
+          example: '900'
+        browser_ip: 
+          type: string
+          description: The browser IP address.
+          example: 'xxx.xxx.xxx.xxx'
+        browser_width: 
+          type: string
+          description: The browser screen width in pixels, if available.
+          example: '1000'
+        session_hash: 
+          type: string
+          description: A hash of the session.
+          example: '9ad4d1f4e6a8977b9dd98eed1e477643'
+        user_agent: 
+          type: string
+          description: Details of the browsing client, including software and operating versions.
+          example: 'Mozilla/X.0 (X11; Linux x86_64) AppleWebKit/xxxxx (KHTML, like Gecko) Chrome/xxxxxx Safari/xxxxx'
+    DtoCurrentSubTotalPriceSet:
+      type: object
+      description: The current subtotal price of the order in shop and presentment currencies. The amount values associated with this field reflect order edits, returns, and refunds.
+      properties:
+        shop_money:
+          type: object
+          description: Amount in shop currency.
+          "$ref": '#/components/schemas/DtoMoney'
+        presentment_money:
+          type: object
+          description: Amount in presentment currency.
+          "$ref": '#/components/schemas/DtoMoney'
+    DtoMoney:
+      type: object
+      properties:
+        amount: 
+          type: number
+          description: Decimal money amount.
+          example: '100'
+        currency_code: 
+          type: string
+          description: Currency of the money.
+          example: 'CLP'
+    DtoTax:
+      type: object
+      description: An array of tax line objects, each of which details a tax applicable to the order. 
+      properties:
+        price: 
+          type: number
+          description: The amount of tax to be charged in the shop currency.
+          example: 19
+        rate: 
+          type: number
+          description: The rate of tax to be applied.
+          example: 0.19
+        title: 
+          type: string
+          description: The name of the tax.
+          example: VAT
+        price_set: 
+          type: object
+          "$ref": '#/components/schemas/DtoCurrentSubTotalPriceSet'
+        channel_liable: 
+          type: boolean
+          description: |
+            Whether the channel that submitted the tax line is liable for remitting. 
+            A value of null indicates unknown liability for the tax line.
+          example: false
+    DtoAddress:
+      type: object
+      description: |
+        'The mailing address associated with the payment method. 
+        This address is an optional field that won't be available 
+        on orders that do not require a payment method. It has the 
+        following properties:'
+      properties:
+        id: 
+          type: number
+          description: A unique identifier for the address.
+          example: 7620158161121
+        customer_id: 
+          type: number
+          description: A unique identifier for the customer. 
+          example: 6087092306145
+        first_name: 
+          type: string
+          description: The first name of the person associated with the payment method.
+          example: pruebas envio
+        last_name: 
+          type: string
+          description: The last name of the person associated with the payment method.
+          example: Chile
+        company: 
+          type: string
+          description: The company of the person associated with the billing address. 
+          example: null
+        address1: 
+          type: string
+          description:  The street address of the billing address.
+          example: San Francisco 2511
+        address2: 
+          type: string
+          description: An optional additional field for the street address of the billing address.
+          example: Apartment 5
+        city: 
+          type: string
+          description: The city, town, or village of the billing address.
+          example: San Miguel
+        province: 
+          type: string
+          description: |
+            The name of the region (for example, province, state, or prefecture) of the billing address.
+          example: Santiago
+        country: 
+          type: string
+          description: The name of the country of the billing address.
+          example: Chile
+        zip: 
+          type: string
+          description: |
+            The postal code (for example, zip, postcode, or Eircode) of the billing address.
+          example: '8320000'
+        phone: 
+          type: string
+          description: The phone number at the billing address.
+          example: +(53)999888777
+        name: 
+          type: string
+          description: The full name of the person associated with the payment method.
+          example: pruebas envio Chile
+        latitude: 
+          type: number
+          description: The latitude of the billing address.
+          example: -33.4777172
+        longitude: 
+          type: number
+          description: The longitude of the billing address.
+          example: -70.6436693
+        country_code: 
+          type: string
+          description: The two-letter code (ISO 3166-1 format) for the country of the billing address.
+          example: CL
+        province_code: 
+          type: string
+          description: The two-letter abbreviation of the region of the billing address.
+          example: RM
+        country_name: 
+          type: string
+          description: The customer's normalized country name.
+          example: Chile
+        default: 
+          type: boolean
+          description: Returns true for each default address.
+          example: true
+    DtoCustomer:
+      type: object
+      description: ''
+      properties:
+        id: 
+          type: number
+          description: A unique identifier for the customer.
+          example: 6087092306145
+        email: 
+          type: string
+          description: |
+            The unique email address of the customer. Attempting to assign the same 
+            email address to multiple customers returns an error.
+          example: test@shopping.com
+        accepts_marketing: 
+          type: boolean
+          description: |
+            As of API version 2022-04, this field is deprecated. Use email_marketing_consent instead. 
+            Whether the customer has consented to receive marketing material by email.
+          example: false
+        created_at: 
+          type: string
+          description: The date and time (ISO 8601 format) when the customer was created.
+          example: '2022-02-21T09:31:56-05:00'
+        updated_at: 
+          type: string
+          description: The date and time (ISO 8601 format) when the customer information was last updated
+          example: '2022-03-11T18:48:57-05:00'
+        first_name: 
+          type: string
+          description: The customer's first name.
+          example: pruebas envio
+        last_name: 
+          type: string
+          description: The customer's last name.
+          example: Chile
+        orders_count: 
+          type: number
+          description: |
+            The number of orders associated with this customer. Test and archived orders aren't counted.
+          example: 5
+        state: 
+          type: string
+          description: |
+            'The state of the customer's account with a shop. Default value: disabled. Valid values:'
+          example: disabled
+        total_spent: 
+          type: number
+          description: The total amount of money that the customer has spent across their order history.
+          example: 375.30
+        last_order_id: 
+          type: number
+          description: The ID of the customer's last order.
+          example: 234132602919
+        note: 
+          type: string
+          description: A note about the customer.
+          example: Placed an order that had a fraud warning
+        verified_email: 
+          type: boolean
+          description: Whether the customer has verified their email address.
+          example: true
+        multipass_identifier: 
+          type: number
+          description: A unique identifier for the customer that's used with ' 'Multipass login.
+          example: null
+        tax_exempt: 
+          type: boolean
+          description: |
+            Whether the customer is exempt from paying taxes on their order. 
+            If true, then taxes won't be applied to an order at checkout. 
+            If false, then taxes will be applied at checkout.
+          example: false
+        phone: 
+          type: string
+          description: |
+            The unique phone number (E.164 format) for this customer. 
+            Attempting to assign the same phone number to multiple customers returns an error. 
+            The property can be set using different formats, but each format must represent 
+            a number that can be dialed from anywhere in the world.
+          example: 555-625-1199
+        tags: 
+          type: string
+          description: |
+            Tags that the shop owner has attached to the customer, formatted as a string 
+            of comma-separated values. A customer can have up to 250 tags. Each tag can 
+            have up to 255 characters.
+          example: ''
+        last_order_name: 
+          type: string
+          description: |
+            The name of the customer's last order. This is directly related 
+            to the name field on the Order resource.
+          example: '#1169'
+        currency: 
+          type: string
+          description: |
+            he three-letter code (ISO 4217 format) for the currency that 
+            the customer used when they paid for their last order. 
+            Defaults to the shop currency. Returns the shop currency for test orders.
+          example: CLP
+        accepts_marketing_updated_at: 
+          type: string
+          description: |
+            As of API version 2022-04, this field is deprecated. 
+            Use email_marketing_consent instead. The date and time (ISO 8601 format) 
+            when the customer consented or objected to receiving marketing material by email. 
+            Set this value whenever the customer consents or objects to marketing materials.
+          example: '2022-02-21T09:31:56-05:00'
+        tax_exemptions: 
+          type: array
+          description: |
+            'Whether the customer is exempt from paying specific taxes on their order. 
+            Canadian taxes only. Valid values:'
+          items:
+            type: string
+          example: ["CA_STATUS_CARD_EXEMPTION", "CA_BC_RESELLER_EXEMPTION"]
+        admin_graphql_api_id: 
+          type: string
+          description: A unique identifier for the customer for Api GraphQl.
+          example: "gid://shopify/Customer/6087092306145"
+        default_address:
+          type: object
+          "$ref": '#/components/schemas/DtoAddress'
+    DtoShippingLine:
+      type: object
+      description: |
+        'An array of objects, each of which details a shipping method used. 
+        Each object has the following properties:'
+      properties:
+        id: 
+          type: number
+          description: A unique identifier for the shipping line.
+          example: 3908143841505
+        carrier_identifier: 
+          type: string
+          description: |
+            A reference to the carrier service that provided the rate. 
+            Present when the rate was computed by a third-party carrier service.
+          example: 2ef11aec7f5303b57bc02decab250d6d
+        code: 
+          type: string
+          description: A reference to the shipping method.
+          example: NEXT DAY
+        delivery_category: 
+          type: string
+          description: The general classification of the delivery method.
+          example: null
+        discounted_price: 
+          type: number
+          description: |
+            The price of the shipping method after line-level discounts have been applied. 
+            Doesn't reflect cart-level or order-level discounts.
+          example: 614
+        discounted_price_set: 
+          type: object
+          description: |
+            The price of the shipping method in both shop and presentment currencies 
+            after line-level discounts have been applied.
+          "$ref": '#/components/schemas/DtoMoney'
+        phone: 
+          type: string
+          description: The phone number at the shipping address.
+          example: '999777004'
+        price: 
+          type: number
+          description: The price of this shipping method in the shop currency. Can't be negative.
+          example: 614
+        price_set: 
+          type: object
+          description: The price of the shipping method in shop and presentment currencies.
+          "$ref": '#/components/schemas/DtoMoney'
+        requested_fulfillment_service_id: 
+          type: string
+          description: |
+            A reference to the fulfillment service that is being requested for the shipping method. 
+            Present if the shipping method requires processing by a third party fulfillment service; 
+            null otherwise.
+          example: third_party_fulfillment_service_id
+        source: 
+          type: string
+          description: The source of the shipping method.
+          example: Chazki
+        title: 
+          type: string
+          description: The title of the shipping method.
+          example: CHAZKI - NEXT DAY
+        tax_lines: 
+          type: array
+          description: |
+            A list of tax line objects, each of which details a tax applicable to this shipping line.
+          items:
+            "$ref": '#/components/schemas/DtoTax'
+        discount_allocations: 
+          type: array 
+          description: The discounts that have been allocated to the shipping line.
+          items: 
+            type: object
+            description: The discount application that the allocated amount originated from.
+            properties:
+              amount: 
+                type: string
+                description: The discount amount allocated to the line in the shop currency.
+                example: 5.00
+              discount_application_index: 
+                type: number
+                description: |
+                  The index of the associated discount application in the order's discount_applications list.
+                example: 2
+              amount_set: 
+                type: object
+                description: The discount amount allocated to the line item in shop and presentment currencies.
+                "$ref": '#/components/schemas/DtoMoney'
+  requestBodies:
+    code-client:
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                type: string
+                description: Code used to generate a shopify token for the first time.
+                example: "XXXXXXXXXXXXXXXXXXXXXXX"
+              hmac:
+                type: string
+                description: Security code that identifies an authentic shopify client.
+                example: "XXXXXXXXXXXXXXXXXXXXXXXX"
+              host:
+                type: string
+                description: Security code that is stored.
+                example: "XXXXXXXXXXXXXXXXXXXXXXXX"
+              state:
+                type: string
+                description: Security method that identifies a client from chazki to shopify.
+                example: "s%3Apruebasintegracionmyshopifycomcreandochazki1015"
+              shop:
+                type: string
+                description: Url that identifies a shop
+                example: "https://pruebasintegracion.myshopify.com/"
+      required: true
+  responses:
+    urlregister200:
+      description: Successfull operation
+    codeclient400:
+      description: Unsuccessfull response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: false
+              message: 
+                type: string
+                example: "ERROR_MSG"
+    registerwebhook200:
+      description: Successfull registration
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message: 
+                type: string
+                example: "REGISTERED WEBHOOK CORRECTLY."
+              response: 
+                type: object
+                "$ref": '#/components/schemas/DtoWebhookSubscription'
+    registerwebhook400:
+      description: Unsuccessfull registration
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'ERRORS REGISTERING WEBHOOK.'
+              response:
+                type: object
+                example: ''
+    registerwebhook500:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'INTERNAL SERVER ERROR'
+    registershipcost200:
+      description: Successfull registration
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message: 
+                type: string
+                example: "SUCCESS"
+              response: 
+                type: object
+                "$ref": '#/components/schemas/DtoCarrierService'
+    registershipcost400:
+      description: Unsuccessfull registration
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              response:
+                type: object
+                example: ''
+    registershipcost500:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'INTERNAL SERVER ERROR'
+    shippingcost200:
+      description: Successfull operation
+      content:
+        application/json:
+          schema:
+            "$ref": '#/components/schemas/DtoShippingCostResponse'
+    shippingcost400:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: ''
+    sendwebhookshopify200:
+      description: Successfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'SEND WEBHOOK CORRECTLY.'
+    sendwebhookshopify400:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: 'ERROR_MSG'
+    orderreciever200:
+      description: Successfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 'Order Generated'
+              response:
+                type: object
+                "$ref": '#/components/schemas/DtoOrderNintendo'
+    orderreciever400:
+      description: Unsuccessfull operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: 'ERROR_MSG'
+  parameters:
+    queryshop: 
+      name: shop
+      in: query
+      description: Url that identifies a shop
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    x-shopify-shop-domain-header:
+      in: header
+      name: 'x-shopify-shop-domain'
+      schema:
+        type: string
+      example: 'https://pruebasintegracion.myshopify.com/'
