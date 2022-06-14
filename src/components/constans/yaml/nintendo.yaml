@@ -387,8 +387,8 @@ components:
               serviceID:
                 type: string
                 description: |
-                  Code of the delivery service type will be carried out.
-                  It can take the following values :
+                  Code of the delivery service type will be carried out. This code is mandatory to be one of the hired services,
+                  otherwise the order will not pass. It can take the following values :
 
                   | Service (All the countries) | Description |
                   | ------------- | ------------ |
