@@ -59,8 +59,6 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-  - url: https://us-central1-chazki-link-dev.cloudfunctions.net
-    description: Tonny Development
   - url: https://us-central1-chazki-link-beta.cloudfunctions.net
     description: Tonny Beta
   - url: https://us-central1-chazki-link.cloudfunctions.net
