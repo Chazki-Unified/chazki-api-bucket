@@ -318,6 +318,45 @@ paths:
                   file:
                     type: string
                     example: "No se encontró ningún trackcode"
+  "/fnGetLabelOrder":
+    get:
+      tags:
+        - PDFServices
+      description:
+        This endpoint allows to generate tickets using the standar Chazki
+        format.The file to be generated is in PDF extension.
+        This endpoint retreives the ticekt generated 
+      operationId: createPDFByOrders
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
+        - "$ref": '#/components/parameters/queryTrackCode'
+      responses:
+        "200":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  file:
+                    type: string
+                    example: https://storage.googleapis.com/download/storage/v1/b/xxxxxxxxxxxxx/yyyyyyy
+        "400":
+          description: Successfully response object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  file:
+                    type: string
+                    example: "No se encontró ningún trackcode"
   "/createAtariPDFFromCSV":
     post:
       tags:
@@ -1264,6 +1303,21 @@ components:
         type:
           type: string
           description: type of Staffing
+    FailfnGetLabelOrderResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          example: "Bad Request"
+        errors:
+          type: object
+          properties:
+            type:
+              type: string
+              example: "Error on request"
+            message:
+              type: string
+              example: "No se envio el trackCode"
   requestBodies:
     uploadClientOrders:
       description: Pet object that needs to be added to the store
@@ -1273,6 +1327,21 @@ components:
             "$ref": "#/components/schemas/Orders"
       required: true
   responses:
+    fnGetLabelOrder200:
+      description: The label was retreived successfully
+      content:
+        application/pdf:
+          schema:
+            type: string
+            format: byte
+            description: Returns the base64-encoded string which can be decoded for some use or rendered by the navegator to see the pdf file.
+    fnGetLabelOrder400:
+      description: Query response with errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            "$ref": "#/components/schemas/FailfnGetLabelOrderResponse"
     positionResponse400:
       description: Query response with errors.
       content:
@@ -1333,6 +1402,15 @@ components:
   parameters:
     queryCode:
       name: code
+      in: query
+      description: Delivery track code.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    queryTrackCode:
+      name: trackCode
       in: query
       description: Delivery track code.
       required: true
