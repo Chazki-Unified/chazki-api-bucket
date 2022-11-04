@@ -326,7 +326,7 @@ paths:
         This endpoint allows to generate tickets using the standar Chazki
         format.The file to be generated is in PDF extension.
         This endpoint retreives the ticekt generated 
-      operationId: createPDFByOrders
+      operationId: fnGetLabelOrder
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
         - "$ref": '#/components/parameters/queryTrackCode'
