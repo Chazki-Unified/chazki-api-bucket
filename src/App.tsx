@@ -27,9 +27,9 @@ class App extends Component {
                                 <Route exact path="/">
                                     <Redirect to="/tonny"/>
                                 </Route>
-                                <Route path="/maximo" component={MaximoAPI}/>
-                                <Route path="/aventon" component={AventonAPI}/>
-                                <Route path="/chile" component={ChileAPI}/>
+                                {/*<Route path="/maximo" component={MaximoAPI}/>*/}
+                                {/*<Route path="/aventon" component={AventonAPI}/>*/}
+                                {/*<Route path="/chile" component={ChileAPI}/>*/}
                                 <Route path="/fifo" component={ChileFifoAPI}/>
                                 <Route path="/tonny" component={TonnyAPI}/>
                                 <Route path="/peru" component={PeruAPI}/>
