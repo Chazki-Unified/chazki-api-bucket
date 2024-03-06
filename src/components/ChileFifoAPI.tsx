@@ -7,7 +7,7 @@ export const ChileFifoAPI: React.FC = () => {
   return (
     <API
       basePath="fifo"
-      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/components/constans/yaml/chile-fifo.yaml"
+      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki-Unified/chazki-api-bucket/main/src/components/constans/yaml/chile-fifo.yaml"
     />
   );
 };

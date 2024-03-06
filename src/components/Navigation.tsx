@@ -6,7 +6,7 @@ import { Search } from './Search';
 export const Navigation = () => {
   return (
     <nav className="topnav">
-      <NavLink to="/tonny"><img src={"https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/resources/logo.png"} style={{width:"95px"}}></img></NavLink>
+      <NavLink to="/tonny"><img src={"https://raw.githubusercontent.com/Chazki-Unified/chazki-api-bucket/main/src/resources/logo.png"} style={{width:"95px"}}></img></NavLink>
       {/*<NavLink to="/maximo">Maximo API</NavLink>*/}
       {/*<NavLink to="/aventon">Aventon API</NavLink>*/}
       {/*<NavLink to="/chile">Chile Legacy API</NavLink>*/}

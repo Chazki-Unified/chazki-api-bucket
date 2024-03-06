@@ -7,7 +7,7 @@ export const AventonAPI: React.FC = () => {
   return (
     <API
       basePath="aventon"
-      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/components/constans/yaml/aventon.yaml"
+      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki-Unified/chazki-api-bucket/main/src/components/constans/yaml/aventon.yaml"
     />
   );
 };

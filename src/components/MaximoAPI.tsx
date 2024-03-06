@@ -7,7 +7,7 @@ export const MaximoAPI: React.FC = () => {
   return (
     <API
       basePath="maximo"
-      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki/chazki-api-bucket/main/src/components/constans/yaml/maximo.yaml"
+      apiDescriptionUrl="https://raw.githubusercontent.com/Chazki-Unified/chazki-api-bucket/main/src/components/constans/yaml/maximo.yaml"
     />
   );
 };
